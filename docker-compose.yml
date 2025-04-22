@@ -1,0 +1,5 @@
+services:
+  horaro:
+    network_mode: host
+    build:
+      context: .

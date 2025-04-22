@@ -4,7 +4,7 @@ SET NAMES utf8;
 INSERT INTO `users` (`id`, `login`, `password`, `display_name`, `gravatar_hash`, `language`, `role`, `created_at`, `max_events`) VALUES
 	(1, 'operator', '$2y$11$sItgjzvoNnRrnJw1zzKOde6n3.qwaBSAJDeu9Cg2EreFnxrf/AVVi', 'System Operator', NULL, 'en_us', 'ROLE_OP', '2014-10-11 04:20:00', 10);
 
-INSERT INTO `config` (`key`, `value`) VALUES
+INSERT INTO `config` (`keyname`, `value`) VALUES
 	('bcrypt_cost',         '11'),
 	('cookie_lifetime',     '86400'),
 	('csrf_token_name',     '"_csrf_token"'),
