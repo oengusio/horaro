@@ -25,3 +25,4 @@
 ###< symfony/asset-mapper ###
 
 /config/parameters.yml
+maintenance
