@@ -1,5 +1,7 @@
 services:
   horaro:
     network_mode: host
+    volumes:
+      - /coding/docker/mysql/horaro_parameters.yml:/var/www/horaro/resources/config/parameters.yml:ro
     build:
       context: .
