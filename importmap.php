@@ -16,13 +16,27 @@ return [
         'path' => './assets/app.js',
         'entrypoint' => true,
     ],
-    '@hotwired/stimulus' => [
-        'version' => '3.2.2',
-    ],
     '@symfony/stimulus-bundle' => [
         'path' => './vendor/symfony/stimulus-bundle/assets/dist/loader.js',
     ],
+    '@hotwired/stimulus' => [
+        'version' => '3.2.2',
+    ],
     '@hotwired/turbo' => [
-        'version' => '7.3.0',
+        'version' => '8.0.13',
+    ],
+    /*'bootstrap' => [
+        'version' => '5.3.5',
+    ],*/
+    '@popperjs/core' => [
+        'version' => '2.11.8',
+    ],
+    'bootswatch/yeti/bootstrap.min.css' => [
+        'version' => '3.2.0',
+        'type' => 'css',
+    ],
+    'font-awesome/css/font-awesome.min.css' => [
+        'version' => '4.7.0',
+        'type' => 'css',
     ],
 ];

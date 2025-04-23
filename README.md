@@ -42,6 +42,9 @@ the ``www`` directory.
 Installation
 ------------
 
+## Migrating from v1 (0.7.0)
+TODO :)
+
 You need quite a few tools to build horaro (just downloading the source won't be
 enough to get it running). Make sure you have ``npm``, ``grunt-cli``, ``bower``
 and Composer installed globally on your system. Then, perform the following steps

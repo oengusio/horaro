@@ -1,0 +1,1 @@
+var horaroTimeFormat = "H:i a";

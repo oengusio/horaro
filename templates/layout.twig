@@ -1,0 +1,90 @@
+{% import "macros.twig" as macros %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>{% block fulltitle %}{% block title %}Welcome{% endblock %} &ndash; Horaro{% endblock %}</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	{% block favicons %}
+	<!-- Ugh... -->
+	<link rel="apple-touch-icon" sizes="57x57" href="{{ macros.asset('images/favicons/apple-touch-icon-57x57.png') }}">
+	<link rel="apple-touch-icon" sizes="114x114" href="{{ macros.asset('images/favicons/apple-touch-icon-114x114.png') }}">
+	<link rel="apple-touch-icon" sizes="72x72" href="{{ macros.asset('images/favicons/apple-touch-icon-72x72.png') }}">
+	<link rel="apple-touch-icon" sizes="144x144" href="{{ macros.asset('images/favicons/apple-touch-icon-144x144.png') }}">
+	<link rel="apple-touch-icon" sizes="60x60" href="{{ macros.asset('images/favicons/apple-touch-icon-60x60.png') }}">
+	<link rel="apple-touch-icon" sizes="120x120" href="{{ macros.asset('images/favicons/apple-touch-icon-120x120.png') }}">
+	<link rel="apple-touch-icon" sizes="76x76" href="{{ macros.asset('images/favicons/apple-touch-icon-76x76.png') }}">
+	<link rel="apple-touch-icon" sizes="152x152" href="{{ macros.asset('images/favicons/apple-touch-icon-152x152.png') }}">
+	<link rel="apple-touch-icon" sizes="180x180" href="{{ macros.asset('images/favicons/apple-touch-icon-180x180.png') }}">
+	<link rel="shortcut icon" href="{{ macros.asset('images/favicons/favicon.ico') }}">
+	<link rel="icon" type="image/png" href="{{ macros.asset('images/favicons/favicon-192x192.png') }}" sizes="192x192">
+	<link rel="icon" type="image/png" href="{{ macros.asset('images/favicons/favicon-160x160.png') }}" sizes="160x160">
+	<link rel="icon" type="image/png" href="{{ macros.asset('images/favicons/favicon-96x96.png') }}" sizes="96x96">
+	<link rel="icon" type="image/png" href="{{ macros.asset('images/favicons/favicon-16x16.png') }}" sizes="16x16">
+	<link rel="icon" type="image/png" href="{{ macros.asset('images/favicons/favicon-32x32.png') }}" sizes="32x32">
+	{% endblock %}
+	{% block meta %}{% endblock %}
+
+    {% block importmap %}{{ importmap('app') }}{% endblock %}
+
+    <link href="{{ asset('styles/app-common.css') }}" rel="stylesheet">
+	{% block styles %}{% endblock %}
+</head>
+<body{% block body_attr %} class="theme-horaro"{% endblock %}>
+	{% block navbar %}
+	<nav class="navbar navbar-default navbar-static-top" id="top" role="navigation">
+		<div class="{{ fluid|default(false) ? 'container-fluid' : 'container' }}">
+			{% block navheader %}
+			<div class="navbar-header">
+				<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#h-collapse-nav">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				{% block brand %}<a href="/" class="navbar-brand">Horaro</a>{% endblock %}
+			</div>
+			{% endblock %}
+
+			<div class="collapse navbar-collapse" id="h-collapse-nav">
+				{% block navigation %}{% include "navigation.twig" %}{% endblock %}
+			</div>
+		</div>
+	</nav>
+	{% endblock %}
+
+	<div class="{{ fluid|default(false) ? 'container-fluid' : 'container' }}" id="content">
+		{% block content %}{% endblock %}
+
+		{% block footer %}
+		<footer class="text-muted">
+			<div class="row">
+				<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+					<small>
+						Horaro – <span>open source scheduling.</span> <span>Because we ♥ open data.</span><br>
+						<span><a href="/-/contact"><i class="fa fa-envelope-o"></i> Contact</a></span> – <span><a href="https://github.com/oengusio/horaro" target="_blank"><i class="fa fa-github"></i> GitHub</a></span> – <span><a href="/-/api"><i class="fa fa-plug"></i> API</a></span> – <span><a href="/-/licenses"><i class="fa fa-legal"></i> Acknowledgments</a></span>
+					</small>
+				</div>
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-right">
+					<small>{{ utils.appVersion }}</small>
+				</div>
+			</div>
+		</footer>
+		{% endblock %}
+	</div>
+
+	{% block scripts %}{% endblock %}
+
+	{% block flashes %}
+	{% if app.user %}
+		{% set flashes = app.session.flashbag.all %}
+		{% if flashes|length > 0 %}
+		<script type="application/json" id="h-flashes">
+		{{ flashes|json_encode|raw }}
+		</script>
+		{% endif %}
+	{% endif %}
+	{% endblock %}
+</body>
+</html>

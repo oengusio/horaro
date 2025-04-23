@@ -1,0 +1,179 @@
+{% extends "frontend.twig" %}
+{% import "macros.twig" as macros %}
+
+{# Make sure we have the backend assets when a user is logged in, or else the #}
+{# growl message after account creation would not show up. Or we'd have to    #}
+{# duplicate code and blow up the frontend.js :/                              #}
+{% block scripts %}
+    {% if app.user %}
+        <script src="{{ asset('trd_party/jquery.min.js') }}"></script>
+        <script src="{{ asset('trd_party/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('trd_party/knockout-min.js') }}"></script>
+        <script src="{{ asset('trd_party/bootstrap-editable.min.js') }}"></script>
+        <script src="{{ asset('trd_party/select2.min.js') }}"></script>
+        <script src="{{ asset('trd_party/remarkable.min.js') }}"></script>
+
+        <script src="{{ macros.asset('js/vendor-backend.min.js') }}"></script>
+        <script src="{{ macros.asset('js/i18n/' ~ app.language ~ '.min.js') }}"></script>
+        <script src="{{ macros.asset('js/app-backend.min.js') }}"></script>
+    {% else %}
+        {{ parent() }}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-5 col-md-5">
+            {% if app.user %}
+                <h3>Your Recent Schedules</h3>
+
+                {% if recent|length > 0 %}
+                    <ul class="h-mru">
+                        {% for schedule in recent %}
+                            <li class="h-jail">
+                                <a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}" class="item"><i class="fa fa-calendar"></i> {{ schedule.name|shorten(25) }}</a>
+                                <small class="text-muted">{{ schedule.event.name|shorten(45) }}</small>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <p class="text-center">
+                        <a href="/-/events/new" class="btn btn-sm btn-default"><i class="fa fa-plus"></i> Create New Event</a>
+                    </p>
+                {% else %}
+                    <p>It seems like you have not created anything yet.</p>
+                    <p class="text-center">
+                        <a href="/-/events/new" class="btn btn-primary"><i class="fa fa-gamepad"></i> Create Your First Event</a>
+                    </p>
+                {% endif %}
+            {% else %}
+                <div class="jumbotron">
+                    <h1>Welcome to Horaro</h1>
+                    {% if not noRegister %}
+                        <p>This tool allows you to create schedules (specifically tailored towards live stream marathons).
+                           It's free (as in free beer) and available both as a hosted service and as an
+                            <a href="https://github.com/sgt-kabukiman/horaro" target="_blank">open-source application</a>.</p>
+                    {% endif %}
+                    {% if noRegister %}
+                        <p><small><em>User registration is not available in this installation.</em></small></p>
+                    {% else %}
+                        {% if oauth_settings is empty %}
+                            <p><a href="/-/register" class="btn btn-primary btn-md" role="button"><i class="fa fa-user"></i> Create an Account</a>
+                                <small>or log-in with your existing account.</small></p>
+                        {% else %}
+                            <p class="h-small">
+                                {{ macros.twitch_oauth_starter() }} to create your own schedules. Your
+                                                                    e-mail address and password are never revealed to Horaro.
+                            </p>
+                            <p>
+                                <small>&hellip;or instead <a href="/-/register">create a classic account</a> without
+                                       Twitch, if you like.</small>
+                            </p>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-7 col-md-7">
+            {% if live|length > 0 %}
+                <h3>LIVE!</h3>
+
+                <ul class="h-eventlist">
+                    {% for row in live %}
+                        <li class="h-jail">
+                            <a href="/{{ row.event.slug }}" class="item"><i class="fa fa-gamepad"></i> {{ row.event.name|shorten(60) }}</a>
+                            ({% for schedule in row.schedules %}<i class="fa fa-calendar"></i> <a href="/{{ row.event.slug }}/{{ schedule.slug }}">{{ schedule.name|shorten(45) }}</a>{% if not loop.last %}, {% endif %}{% endfor %})
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <h3>Upcoming Events (<a href="/-/calendar/{{ date()|date('Y/m') }}">Calendar</a>)</h3>
+
+            {% if upcoming|length > 0 %}
+                <ul class="h-eventlist">
+                    {% for row in upcoming %}
+                        <li class="h-jail">
+                            {% set start = row.schedules[0].localStart %}
+                            <a href="/{{ row.event.slug }}" class="item"><i class="fa fa-gamepad"></i> {{ row.event.name|shorten(45) }}</a>
+                            <time datetime="{{ start.format('Y-m-d\\TH:i:sP') }}" title="{{ start.format('l, F d, Y \\a\\t H:i') }} ({{ row.schedules[0].timezone }} time)" class="h-relative h-fuzzy text-muted">on {{ start.format('l, F d, Y') }}</time>
+                            ({% for schedule in row.schedules %}<i class="fa fa-calendar"></i> <a href="/{{ row.event.slug }}/{{ schedule.slug }}">{{ schedule.name|shorten(45) }}</a>{% if not loop.last %}, {% endif %}{% endfor %})
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="alert alert-info">
+                    There are no upcoming events with schedules here, sorry.
+                </div>
+            {% endif %}
+
+            <h3>Past Events</h3>
+
+            {% if featured|length > 0 %}
+                <ul class="h-eventlist">
+                    {% for event in featured %}
+                        <li class="h-jail"><a href="/{{ event.slug }}" class="item"><i class="fa fa-gamepad"></i> {{ event.name|shorten(45) }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if not app.user %}
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                <h3>Some Features</h3>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 text-center">
+                <h4>Responsive</h4>
+                <p><img src="{{ macros.asset('images/feature-responsive.png') }}" alt="Screenshot showing a schedule on a small screen" class="img-thumbnail"></p>
+                <p><small>Schedules work well even on tablets and phones.</small></p>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 text-center">
+                <h4>Always Up-to-Date</h4>
+                <p><img src="{{ macros.asset('images/feature-up-to-date.png') }}" alt="Screenshot showing the current/next item in a schedule" class="img-thumbnail"></p>
+                <p><small>See immediately what's on right now and what's next to come.</small></p>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 text-center">
+                <h4>Open Data</h4>
+                <p><img src="{{ macros.asset('images/feature-exports.png') }}" alt="Screenshot showing the JSON export of a schedule" class="img-thumbnail"></p>
+                <p><small>Access all schedules as JSON(P), XML or CSV.</small></p>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 text-center">
+                <h4>Flexible</h4>
+                <p><img src="{{ macros.asset('images/feature-flexible.png') }}" alt="Screenshot showing the JSON export of a schedule" class="img-thumbnail"></p>
+                <p><small>You can control the schedule columns as you see fit.</small></p>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 text-center">
+                <h4>Keep Your Privacy</h4>
+                <p><img src="{{ macros.asset('images/feature-privacy.png') }}" alt="" class="img-thumbnail"></p>
+                <p><small>No Facebook, no Twitter, no Google+, no Adsense, no nothing.</small></p>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 text-center">
+                <h4>Themes</h4>
+                <p><img src="{{ macros.asset('images/feature-themes.png') }}" alt="Screenshot of a schedule using the Amelia theme" class="img-thumbnail"></p>
+                <p><small>Select from a number of different themes for your schedules.</small></p>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 text-center">
+                <h4>Private Schedules</h4>
+                <p><img src="{{ macros.asset('images/feature-private.png') }}" alt="" class="img-thumbnail"></p>
+                <p><small>Mark schedules as private and only share them with people you want to.</small></p>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 text-center">
+                <h4>iCal Feeds</h4>
+                <p><img src="{{ macros.asset('images/feature-ical.png') }}" alt="Screenshot showing the default Android calendar showing imported schedule items" class="img-thumbnail"></p>
+                <p><small>Subscribe to a schedule to get all dates constantly updated in your personal calendar.</small></p>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

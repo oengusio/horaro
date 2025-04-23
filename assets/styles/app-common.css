@@ -1,0 +1,65 @@
+.theme-horaro .h-formhelp legend {
+  margin-top: 20px
+}
+
+.theme-horaro .h-avatar {
+  margin-left: 5px;
+  margin-top: -4px
+}
+
+.theme-horaro .h-jail {
+  overflow-y: hidden
+}
+
+h2.theme-horaro .h-jail {
+  line-height: 130%;
+  margin-top: 10px
+}
+
+.theme-horaro .h-jail-li {
+  overflow-y: hidden;
+  list-style-position: inside;
+  margin-left: -15px
+}
+
+.theme-horaro .navbar .btn-link {
+  font-weight: inherit;
+  padding: 12px 15px;
+  font-size: 13px
+}
+
+.theme-horaro .navbar .btn-link:hover, .theme-horaro .navbar .btn-link:focus, .theme-horaro .navbar .btn-link:active {
+  color: #ffffff;
+  background-color: #272727;
+  text-decoration: none
+}
+
+.theme-horaro .navbar .dropdown-menu > li > a {
+  padding-top: 7px;
+  padding-bottom: 7px
+}
+
+.theme-horaro .dropdown-menu .divider {
+  margin: 5.5px 0
+}
+
+.theme-horaro .alert {
+  padding: 5px;
+  font-size: 13px;
+  line-height: 23px
+}
+
+.theme-horaro .apidocs a code, .theme-horaro .apidocs h3 code {
+  color: inherit;
+  background-color: inherit;
+  padding: 0
+}
+
+.theme-horaro .apidocs h3 {
+  margin-top: 50px
+}
+
+.theme-horaro .apidocs h3 span {
+  opacity: .3;
+  font-size: 80%
+}

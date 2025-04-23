@@ -1,0 +1,819 @@
+dl.h-indented dd {
+  padding-left: 20px
+}
+
+.h-tooltip {
+  cursor: help;
+  border-bottom: 1px dotted #aaaaaa
+}
+
+.bootstrap-growl {
+  overflow-y: hidden
+}
+
+.h-importlog {
+  padding-left: 0
+}
+
+.h-importlog li {
+  list-style-type: none
+}
+
+span.h-link {
+  cursor: help;
+  color: #008cba
+}
+
+footer {
+  padding: 10px 0 15px 0;
+  margin-top: 20px;
+  border-top: 1px solid #dddddd;
+  line-height: 120%
+}
+
+footer small span {
+  white-space: pre
+}
+
+.h-phpinfo {
+  border: 0;
+  width: 100%;
+  height: 600px
+}
+
+.nav-tabs {
+  margin-bottom: 10px
+}
+
+.h-node-list {
+  padding-left: 0
+}
+
+.h-node-list li {
+  list-style-type: none
+}
+
+.h-node-list h4 {
+  margin: 0
+}
+
+.h-node-list small {
+  white-space: nowrap
+}
+
+.h-node-list .badge {
+  vertical-align: middle
+}
+
+.h-role {
+  font-size: inherit;
+  padding-left: inherit;
+  padding-right: inherit
+}
+
+#h-scheduler-container {
+  display: none
+}
+
+#h-scheduler-container table:first-child {
+  margin: 0
+}
+
+#h-scheduler-container thead th {
+  border-bottom-width: 1px;
+  padding: 3px 5px
+}
+
+table.h-scheduler {
+  font-size: 12px
+}
+
+table.h-scheduler .h-m {
+  width: 25px;
+  text-align: center;
+  cursor: move
+}
+
+table.h-scheduler thead th {
+  padding: 3px 5px !important
+}
+
+table.h-scheduler > tbody + tbody {
+  border-top: 1px solid #dddddd
+}
+
+table.h-scheduler tbody td {
+  padding: 3px 5px;
+  vertical-align: middle
+}
+
+table.h-scheduler .h-item-more div {
+  line-height: 20px
+}
+
+table.h-scheduler .h-co {
+  white-space: nowrap;
+  width: 150px;
+  text-align: right
+}
+
+table.h-scheduler .h-l.h-has-errors .editable {
+  color: red
+}
+
+table.h-scheduler .h-l .editable-input input {
+  width: 90px
+}
+
+table.h-scheduler dl {
+  margin-top: 2px;
+  margin-bottom: 2px
+}
+
+table.h-scheduler dt, table.h-scheduler dd {
+  line-height: 150%
+}
+
+table.h-scheduler dd {
+  margin-left: 15px
+}
+
+.h-s, .h-l {
+  white-space: nowrap;
+  width: 50px;
+  overflow: hidden;
+  text-overflow: ellipsis
+}
+
+.h-new-day td {
+  background: #dddddd !important;
+  padding: 7px;
+  font-weight: bold
+}
+
+.h-1, .h-2, .h-3, .h-4, .h-5, .h-6, .h-7, .h-8, .h-9 {
+  display: none
+}
+
+.h-l1 .h-co span {
+  display: none
+}
+
+@media (min-width: 650px) {
+  .h-1 {
+    display: table-cell
+  }
+
+  .h-l2 .h-co span {
+    display: none !important
+  }
+
+  .h-l2 .h-secondary {
+    display: none
+  }
+
+  .h-e-1 {
+    display: none
+  }
+}
+
+@media (min-width: 800px) {
+  .h-2 {
+    display: table-cell
+  }
+
+  .h-l3 .h-co span {
+    display: none !important
+  }
+
+  .h-l3 .h-secondary {
+    display: none
+  }
+
+  .h-e-1 {
+    display: none
+  }
+
+  .h-e-2 {
+    display: none
+  }
+}
+
+@media (min-width: 768px) {
+  table.h-scheduler dt {
+    width: 200px
+  }
+
+  table.h-scheduler dd {
+    margin-left: 220px
+  }
+}
+
+@media (min-width: 1100px) {
+  .h-3 {
+    display: table-cell
+  }
+
+  .h-l4 .h-co span {
+    display: none !important
+  }
+
+  .h-l4 .h-secondary {
+    display: none
+  }
+
+  .h-e-1 {
+    display: none
+  }
+
+  .h-e-2 {
+    display: none
+  }
+
+  .h-e-3 {
+    display: none
+  }
+}
+
+@media (min-width: 1300px) {
+  .h-4 {
+    display: table-cell
+  }
+
+  .h-l5 .h-co span {
+    display: none !important
+  }
+
+  .h-l5 .h-secondary {
+    display: none
+  }
+
+  .h-e-1 {
+    display: none
+  }
+
+  .h-e-2 {
+    display: none
+  }
+
+  .h-e-3 {
+    display: none
+  }
+
+  .h-e-4 {
+    display: none
+  }
+}
+
+@media (min-width: 1500px) {
+  .h-5 {
+    display: table-cell
+  }
+
+  .h-l6 .h-co span {
+    display: none !important
+  }
+
+  .h-l6 .h-secondary {
+    display: none
+  }
+
+  .h-e-1 {
+    display: none
+  }
+
+  .h-e-2 {
+    display: none
+  }
+
+  .h-e-3 {
+    display: none
+  }
+
+  .h-e-4 {
+    display: none
+  }
+
+  .h-e-5 {
+    display: none
+  }
+}
+
+@media (min-width: 1700px) {
+  .h-6 {
+    display: table-cell
+  }
+
+  .h-l7 .h-co span {
+    display: none !important
+  }
+
+  .h-l7 .h-secondary {
+    display: none
+  }
+
+  .h-e-1 {
+    display: none
+  }
+
+  .h-e-2 {
+    display: none
+  }
+
+  .h-e-3 {
+    display: none
+  }
+
+  .h-e-4 {
+    display: none
+  }
+
+  .h-e-5 {
+    display: none
+  }
+
+  .h-e-6 {
+    display: none
+  }
+}
+
+@media (min-width: 1900px) {
+  .h-7 {
+    display: table-cell
+  }
+
+  .h-l8 .h-co span {
+    display: none !important
+  }
+
+  .h-l8 .h-secondary {
+    display: none
+  }
+
+  .h-e-1 {
+    display: none
+  }
+
+  .h-e-2 {
+    display: none
+  }
+
+  .h-e-3 {
+    display: none
+  }
+
+  .h-e-4 {
+    display: none
+  }
+
+  .h-e-5 {
+    display: none
+  }
+
+  .h-e-6 {
+    display: none
+  }
+
+  .h-e-7 {
+    display: none
+  }
+}
+
+@media (min-width: 2100px) {
+  .h-8 {
+    display: table-cell
+  }
+
+  .h-l9 .h-co span {
+    display: none !important
+  }
+
+  .h-l9 .h-secondary {
+    display: none
+  }
+
+  .h-e-1 {
+    display: none
+  }
+
+  .h-e-2 {
+    display: none
+  }
+
+  .h-e-3 {
+    display: none
+  }
+
+  .h-e-4 {
+    display: none
+  }
+
+  .h-e-5 {
+    display: none
+  }
+
+  .h-e-6 {
+    display: none
+  }
+
+  .h-e-7 {
+    display: none
+  }
+
+  .h-e-8 {
+    display: none
+  }
+}
+
+@media (min-width: 2300px) {
+  .h-9 {
+    display: table-cell
+  }
+
+  .h-l10 .h-co span {
+    display: none !important
+  }
+
+  .h-l10 .h-secondary {
+    display: none
+  }
+
+  .h-e-1 {
+    display: none
+  }
+
+  .h-e-2 {
+    display: none
+  }
+
+  .h-e-3 {
+    display: none
+  }
+
+  .h-e-4 {
+    display: none
+  }
+
+  .h-e-5 {
+    display: none
+  }
+
+  .h-e-6 {
+    display: none
+  }
+
+  .h-e-7 {
+    display: none
+  }
+
+  .h-e-8 {
+    display: none
+  }
+
+  .h-e-9 {
+    display: none
+  }
+}
+
+.h-scheduler-header .btn-group a {
+  font-size: 14px
+}
+
+.h-scheduler-header div:last-child {
+  margin-top: 11px
+}
+
+tbody.h-odd td {
+  background: #f8f8f8
+}
+
+#h-columnist-container table {
+  font-size: 14px
+}
+
+#h-columnist-container table > tbody + tbody {
+  border-top: 1px solid #dddddd
+}
+
+#h-columnist-container thead th {
+  padding: 3px 5px
+}
+
+#h-columnist-container tbody td {
+  padding: 3px 5px;
+  vertical-align: middle
+}
+
+#h-columnist-container tbody .h-handle {
+  width: 25px
+}
+
+#h-columnist-container .h-controls {
+  white-space: nowrap;
+  max-width: 110px;
+  width: 110px
+}
+
+#h-columnist-container .h-ishidden {
+  width: 65px;
+  text-align: center
+}
+
+#h-columnist-container table:first-child {
+  margin: 0
+}
+
+table.h-columnist tbody .h-handle {
+  text-align: center;
+  cursor: move
+}
+
+.h-formhelp-columnist {
+  margin-top: 30px;
+  font-size: 14px
+}
+
+.h-scheduler td, .h-columnist td, .h-scheduler th, .h-columnist th, .h-scheduler dt, .h-columnist dt, .h-scheduler dd, .h-columnist dd {
+  overflow-y: hidden
+}
+
+.h-tiles .well {
+  padding: 12px 9px
+}
+
+.h-tiles .well > div {
+  display: table;
+  width: 100%
+}
+
+.h-tiles h4 {
+  margin: 0;
+  height: 62px;
+  overflow: hidden
+}
+
+.h-tiles h4 span {
+  display: table-cell
+}
+
+.h-tiles h4 span:last-child {
+  vertical-align: middle
+}
+
+.h-tiles .h-adder {
+  border: 1px solid transparent;
+  background: transparent;
+  box-shadow: none;
+  padding: 12px 9px
+}
+
+.h-tiles .fa {
+  margin-right: 10px
+}
+
+.spinner {
+  margin: 20px auto 0;
+  width: 70px;
+  text-align: center
+}
+
+.spinner > div {
+  width: 18px;
+  height: 18px;
+  background-color: #333333;
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: bouncedelay 1.4s infinite ease-in-out;
+  animation: bouncedelay 1.4s infinite ease-in-out;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both
+}
+
+.spinner .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s
+}
+
+.spinner .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s
+}
+
+@-webkit-keyframes bouncedelay {
+  0%, 80%, 100% {
+    -webkit-transform: scale(0)
+  }
+  40% {
+    -webkit-transform: scale(1)
+  }
+}
+
+@keyframes bouncedelay {
+  0%, 80%, 100% {
+    transform: scale(0);
+    -webkit-transform: scale(0)
+  }
+  40% {
+    transform: scale(1);
+    -webkit-transform: scale(1)
+  }
+}
+
+.picker__input {
+  cursor: pointer !important;
+  background-color: white !important
+}
+
+.picker__holder {
+  min-width: 250px
+}
+
+.picker--time {
+  min-width: 50px
+}
+
+.picker--time .picker__holder {
+  min-width: 50px
+}
+
+.picker__day, .picker__list-item {
+  font-size: 12px
+}
+
+a.editable-click {
+  border-bottom: dashed 1px #5bc0de;
+  cursor: pointer;
+  color: #222222
+}
+
+a.editable-click.editable-empty {
+  color: #bbbbbb;
+  border-bottom-color: #85dbf5
+}
+
+a.editable-click:hover {
+  border-bottom-style: solid
+}
+
+.editable-unsaved {
+  font-weight: normal
+}
+
+.editable-buttons {
+  line-height: 30px
+}
+
+.editable-buttons button {
+  vertical-align: baseline
+}
+
+.editableform .editable-input input {
+  height: 30px;
+  padding: 5px
+}
+
+@media (min-width: 350px) {
+  .editableform .editable-input input {
+    width: 250px
+  }
+}
+
+@media (min-width: 600px) {
+  .editableform .editable-input input {
+    width: 450px
+  }
+}
+
+@media (min-width: 800px) {
+  .editableform .editable-input input {
+    width: 650px
+  }
+}
+
+@media (min-width: 1000px) {
+  .editableform .editable-input input {
+    width: 850px
+  }
+}
+
+@media (min-width: 1200px) {
+  .editableform .editable-input input {
+    width: 1050px
+  }
+}
+
+@media (min-width: 1400px) {
+  .editableform .editable-input input {
+    width: 1250px
+  }
+}
+
+body[data-ui="columnist"] .editableform .editable-input input {
+  width: 300px
+}
+
+.popover {
+  font-weight: normal
+}
+
+.sortable-placeholder.active {
+  opacity: .5;
+  filter: alpha(opacity=50)
+}
+
+.select2-chosen, .select2-result, .select2-input {
+  font-size: 14px
+}
+
+.select2-container .select2-choice {
+  height: 33px;
+  line-height: 33px
+}
+
+.select2-container .select2-choice .select2-arrow b {
+  background-position: 0 3px
+}
+
+.select2-dropdown-open .select2-choice .select2-arrow b {
+  background-position: -18px 3px
+}
+
+.dropdown-menu > li > a {
+  padding-top: 4px;
+  padding-bottom: 4px
+}
+
+.form-control-static {
+  font-size: 12px
+}
+
+.form-group {
+  margin-bottom: 12px
+}
+
+.form-control {
+  height: 35px;
+  padding: 6px 8px
+}
+
+.help-block {
+  margin-bottom: 0
+}
+
+.breadcrumb {
+  font-size: 14px;
+  margin-bottom: 5px
+}
+
+.remarkable-preview {
+  padding: 10px
+}
+
+.remarkable-preview > *:first-child {
+  margin-top: 0
+}
+
+.remarkable-preview > *:last-child {
+  margin-bottom: 0
+}
+
+.remarkable-preview p {
+  font-size: 13px
+}
+
+.remarkable-preview h1 {
+  font-size: 25px
+}
+
+.remarkable-preview h2 {
+  font-size: 22px
+}
+
+.remarkable-preview h3 {
+  font-size: 20px
+}
+
+.remarkable-preview h4 {
+  font-size: 18px
+}
+
+.remarkable-preview h5 {
+  font-size: 15px
+}
+
+.remarkable-preview h6 {
+  font-size: 14px
+}
+
+.remarkable-preview hr {
+  margin-top: 10px;
+  margin-bottom: 10px
+}
+
+.remarkable-preview-panel {
+  margin-bottom: 0
+}
+
+.filter-form {
+  margin-bottom: 20px
+}

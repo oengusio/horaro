@@ -1,0 +1,76 @@
+<?php
+
+namespace App\Controller;
+
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Attribute\Route;
+
+final class IndexController extends BaseController
+{
+    #[Route('/', name: 'app_welcome')]
+    public function welcome(Request $request): Response
+    {
+        // find schedules that are currently happening
+
+        // $scheduleRepo = $this->getRepository('Schedule');
+        $schedules = []; // $scheduleRepo->findCurrentlyRunning();
+        $live = [];
+
+        // group by event
+        foreach ($schedules as $schedule) {
+            $event = $schedule->getEvent();
+            $eventID = $event->getID();
+
+            $live[$eventID]['event'] = $event;
+            $live[$eventID]['schedules'][] = $schedule;
+        }
+
+        // find upcoming event schedules (blatenly ignoring that the starting times
+        // in the database are not in UTC).
+
+        $schedules = [];// $scheduleRepo->findUpcoming(365);
+        $upcoming = [];
+
+        // group by event
+        foreach ($schedules as $schedule) {
+            $event = $schedule->getEvent();
+            $eventID = $event->getID();
+
+            $upcoming[$eventID]['event'] = $event;
+            $upcoming[$eventID]['schedules'][] = $schedule;
+        }
+
+        // find featured, old events
+        // $ids       = $this->app['runtime-config']->get('featured_events', []);
+        // $eventRepo = $this->getRepository('Event');
+        $featured  = []; //$eventRepo->findById($ids);
+
+        // remove featured events that are already included in the live/upcoming lists
+        foreach ($featured as $idx => $event) {
+            $eventID = $event->getID();
+
+            if (isset($live[$eventID]) || isset($upcoming[$eventID]) || !$event->isPublic()) {
+                unset($featured[$idx]);
+            }
+        }
+
+        // if someone is logged in, find their recent activity
+        $user   = $this->getCurrentUser();
+        $recent = [];
+
+        if ($user) {
+            $recent = []; //$scheduleRepo->findRecentlyUpdated($user, 7);
+        }
+
+        $html = $this->render('index/welcome.twig', [
+            'noRegister' => $this->exceedsMaxUsers(),
+            'live'       => array_slice($live, 0, 5),
+            'upcoming'   => array_slice($upcoming, 0, 5),
+            'featured'   => array_slice($featured, 0, 5),
+            'recent'     => $recent,
+        ]);
+
+        return $this->setCachingHeader($html, 'homepage');
+    }
+}

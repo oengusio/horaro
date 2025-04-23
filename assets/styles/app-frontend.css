@@ -1,0 +1,1251 @@
+.nope {
+  display: none
+}
+
+.img-thumbnail.pull-right {
+  margin-left: 10px;
+  margin-bottom: 10px
+}
+
+.h-schedule-list {
+  padding-left: 0
+}
+
+.h-schedule-list li {
+  list-style-type: none
+}
+
+.h-schedule-list h3 {
+  margin: 0
+}
+
+.h-schedule-list small {
+  white-space: nowrap
+}
+
+.h-schedule-list .badge {
+  vertical-align: middle
+}
+
+footer {
+  padding: 10px 0 15px 0;
+  margin-top: 20px;
+  border-top: 1px solid #dddddd;
+  line-height: 120%
+}
+
+footer small span {
+  white-space: pre
+}
+
+.license {
+  margin-bottom: 30px
+}
+
+@media screen {
+  .license pre {
+    max-height: 120px;
+    font-size: 80%;
+    overflow-y: scroll
+  }
+}
+
+.h-calendar, .h-calendar-vertical {
+  width: 100%
+}
+
+.h-calendar th, .h-calendar-vertical th {
+  font-size: 16px;
+  padding: 0 0 5px 5px;
+  font-weight: normal
+}
+
+.h-cal-cell {
+  height: 93px;
+  width: 14.28571429%;
+  border: 1px solid #aaaaaa;
+  position: relative;
+  vertical-align: top;
+  background: rgba(175, 175, 175, 0.2)
+}
+
+.h-cal-cell.height-4 {
+  height: 149px
+}
+
+.h-cal-cell.height-5 {
+  height: 177px
+}
+
+.h-cal-cell.height-6 {
+  height: 205px
+}
+
+.h-cal-cell.height-7 {
+  height: 233px
+}
+
+.h-cal-cell.height-8 {
+  height: 261px
+}
+
+.h-cal-cell.height-9 {
+  height: 289px
+}
+
+.h-cal-cell.height-10 {
+  height: 317px
+}
+
+.h-cal-cell .day {
+  position: absolute;
+  color: #777777;
+  right: 4px;
+  bottom: 2px;
+  font-size: 20px
+}
+
+.h-cal-cell.weekend {
+  background: rgba(175, 175, 175, 0.4)
+}
+
+.h-cal-cell.overflow {
+  background: transparent
+}
+
+.h-cal-cell.overflow .day {
+  color: #dddddd
+}
+
+.h-cal-cell .bar {
+  height: 24px;
+  margin: 2px 0;
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  position: relative
+}
+
+.h-cal-cell .bar .jail {
+  line-height: 22px;
+  padding: 0 5px;
+  position: absolute;
+  right: 0;
+  left: 0;
+  white-space: nowrap
+}
+
+.h-cal-cell .bar .jail a {
+  color: #222222
+}
+
+.h-cal-cell .bar.fill {
+  border-color: transparent
+}
+
+.h-cal-cell .bar.state-begin {
+  margin-left: 2px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-left-width: 1px;
+  border-left-style: solid
+}
+
+.h-cal-cell .bar.state-end {
+  margin-right: 2px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border-right-width: 1px;
+  border-right-style: solid
+}
+
+.h-cal-cell .bar.state-end .jail {
+  overflow: hidden
+}
+
+.h-cal-cell.sunday .jail {
+  overflow: hidden
+}
+
+.bar-theme-a {
+  background: rgba(26, 188, 156, 0.4);
+  border-color: rgba(26, 188, 156, 0.8)
+}
+
+.bar-theme-b {
+  background: rgba(52, 152, 219, 0.4);
+  border-color: rgba(52, 152, 219, 0.8)
+}
+
+.bar-theme-c {
+  background: rgba(155, 89, 182, 0.4);
+  border-color: rgba(155, 89, 182, 0.8)
+}
+
+.bar-theme-d {
+  background: rgba(52, 73, 94, 0.4);
+  border-color: rgba(52, 73, 94, 0.8)
+}
+
+.bar-theme-e {
+  background: rgba(241, 196, 15, 0.4);
+  border-color: rgba(241, 196, 15, 0.8)
+}
+
+.bar-theme-f {
+  background: rgba(230, 126, 34, 0.4);
+  border-color: rgba(230, 126, 34, 0.8)
+}
+
+.bar-theme-g {
+  background: rgba(231, 76, 60, 0.4);
+  border-color: rgba(231, 76, 60, 0.8)
+}
+
+.bar-theme-h {
+  background: rgba(127, 140, 141, 0.4);
+  border-color: rgba(127, 140, 141, 0.8)
+}
+
+.h-day td {
+  border: 1px solid #aaaaaa;
+  vertical-align: top;
+  padding: 3px
+}
+
+.h-day.weekend td {
+  background: rgba(175, 175, 175, 0.1)
+}
+
+.h-day .day {
+  width: 70px
+}
+
+.h-day .day .num {
+  font-size: 18px
+}
+
+.h-day .day .name {
+  float: right;
+  font-size: 13px;
+  line-height: 24px
+}
+
+.h-day .schedules ul {
+  padding-left: 0;
+  margin-bottom: 0
+}
+
+.h-day .schedule {
+  list-style-type: none;
+  font-size: 14px;
+  line-height: 24px
+}
+
+.h-day .schedule a {
+  padding: 2px;
+  border-radius: 4px;
+  color: #222222
+}
+
+.h-day .schedule small {
+  padding-left: 3px
+}
+
+.h-calendar-nav {
+  margin: 10px 0
+}
+
+.h-calendar-nav > span:first-child {
+  margin-right: 10px
+}
+
+.h-calendar-nav select {
+  display: inline-block;
+  width: auto;
+  font-size: 18px;
+  padding: 4px 0;
+  height: auto;
+  border: 0 none;
+  box-shadow: none;
+  vertical-align: middle
+}
+
+.h-calendar-nav a, .h-calendar-nav span {
+  vertical-align: middle
+}
+
+.h-schedule tbody td {
+  vertical-align: middle
+}
+
+.h-schedule .h-co {
+  text-align: right
+}
+
+.h-schedule .h-co button[rel=less], .h-schedule .h-co button[disabled] {
+  display: none
+}
+
+.h-schedule .h-co.expanded button[rel=less] {
+  display: inline-block
+}
+
+.h-schedule .h-co.expanded button[rel=more] {
+  display: none
+}
+
+.h-schedule .h-s, .h-schedule .h-l {
+  width: 40px
+}
+
+.h-schedule dl {
+  margin-top: 2px;
+  margin-bottom: 2px
+}
+
+.h-schedule dt, .h-schedule dd {
+  line-height: 150%
+}
+
+.h-schedule tr.danger td {
+  font-weight: bold
+}
+
+.h-schedule tr.danger td.h-co {
+  font-weight: inherit
+}
+
+.h-s, .h-l {
+  white-space: nowrap
+}
+
+.h-new-day td {
+  font-weight: bold
+}
+
+@media print {
+  .h-schedule .h-co {
+    display: none
+  }
+}
+
+@media screen {
+  .js .h-1, .js .h-2, .js .h-3, .js .h-4, .js .h-5, .js .h-6, .js .h-7, .js .h-8, .js .h-9, .js .h-l {
+    display: none
+  }
+}
+
+@media screen and (min-width: 10px) {
+  .js .h-0 {
+    display: table-cell
+  }
+
+  .js .h-i-l0 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l0 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l0 .h-co, .js .h-e-0, .js .h-i-l0 .h-secondary {
+    display: none
+  }
+}
+
+@media screen and (min-width: 550px) {
+  .js .h-1 {
+    display: table-cell
+  }
+
+  .js .h-i-l0 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l0 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l0 .h-co, .js .h-e-0, .js .h-i-l0 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l1 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l1 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l1 .h-co, .js .h-e-1, .js .h-i-l1 .h-secondary {
+    display: none
+  }
+}
+
+@media screen and (min-width: 550px) {
+  .js .h-l0 .h-l {
+    display: table-cell
+  }
+
+  .js .h-l0 .h-e-l {
+    display: none
+  }
+}
+
+@media screen and (min-width: 595px) {
+  .js .h-l {
+    display: table-cell
+  }
+
+  .js .h-e-l {
+    display: none
+  }
+}
+
+@media screen and (min-width: 750px) {
+  .js .h-2 {
+    display: table-cell
+  }
+
+  .js .h-i-l0 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l0 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l0 .h-co, .js .h-e-0, .js .h-i-l0 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l1 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l1 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l1 .h-co, .js .h-e-1, .js .h-i-l1 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l2 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l2 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l2 .h-co, .js .h-e-2, .js .h-i-l2 .h-secondary {
+    display: none
+  }
+}
+
+@media screen and (min-width: 1050px) {
+  .js .h-3 {
+    display: table-cell
+  }
+
+  .js .h-i-l0 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l0 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l0 .h-co, .js .h-e-0, .js .h-i-l0 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l1 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l1 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l1 .h-co, .js .h-e-1, .js .h-i-l1 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l2 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l2 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l2 .h-co, .js .h-e-2, .js .h-i-l2 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l3 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l3 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l3 .h-co, .js .h-e-3, .js .h-i-l3 .h-secondary {
+    display: none
+  }
+}
+
+@media screen and (min-width: 1250px) {
+  .js .h-4 {
+    display: table-cell
+  }
+
+  .js .h-i-l0 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l0 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l0 .h-co, .js .h-e-0, .js .h-i-l0 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l1 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l1 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l1 .h-co, .js .h-e-1, .js .h-i-l1 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l2 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l2 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l2 .h-co, .js .h-e-2, .js .h-i-l2 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l3 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l3 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l3 .h-co, .js .h-e-3, .js .h-i-l3 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l4 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l4 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l4 .h-co, .js .h-e-4, .js .h-i-l4 .h-secondary {
+    display: none
+  }
+}
+
+@media screen and (min-width: 1450px) {
+  .js .h-5 {
+    display: table-cell
+  }
+
+  .js .h-i-l0 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l0 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l0 .h-co, .js .h-e-0, .js .h-i-l0 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l1 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l1 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l1 .h-co, .js .h-e-1, .js .h-i-l1 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l2 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l2 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l2 .h-co, .js .h-e-2, .js .h-i-l2 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l3 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l3 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l3 .h-co, .js .h-e-3, .js .h-i-l3 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l4 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l4 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l4 .h-co, .js .h-e-4, .js .h-i-l4 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l5 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l5 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l5 .h-co, .js .h-e-5, .js .h-i-l5 .h-secondary {
+    display: none
+  }
+}
+
+@media screen and (min-width: 1650px) {
+  .js .h-6 {
+    display: table-cell
+  }
+
+  .js .h-i-l0 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l0 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l0 .h-co, .js .h-e-0, .js .h-i-l0 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l1 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l1 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l1 .h-co, .js .h-e-1, .js .h-i-l1 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l2 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l2 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l2 .h-co, .js .h-e-2, .js .h-i-l2 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l3 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l3 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l3 .h-co, .js .h-e-3, .js .h-i-l3 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l4 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l4 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l4 .h-co, .js .h-e-4, .js .h-i-l4 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l5 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l5 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l5 .h-co, .js .h-e-5, .js .h-i-l5 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l6 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l6 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l6 .h-co, .js .h-e-6, .js .h-i-l6 .h-secondary {
+    display: none
+  }
+}
+
+@media screen and (min-width: 1850px) {
+  .js .h-7 {
+    display: table-cell
+  }
+
+  .js .h-i-l0 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l0 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l0 .h-co, .js .h-e-0, .js .h-i-l0 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l1 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l1 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l1 .h-co, .js .h-e-1, .js .h-i-l1 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l2 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l2 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l2 .h-co, .js .h-e-2, .js .h-i-l2 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l3 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l3 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l3 .h-co, .js .h-e-3, .js .h-i-l3 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l4 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l4 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l4 .h-co, .js .h-e-4, .js .h-i-l4 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l5 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l5 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l5 .h-co, .js .h-e-5, .js .h-i-l5 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l6 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l6 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l6 .h-co, .js .h-e-6, .js .h-i-l6 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l7 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l7 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l7 .h-co, .js .h-e-7, .js .h-i-l7 .h-secondary {
+    display: none
+  }
+}
+
+@media screen and (min-width: 2050px) {
+  .js .h-8 {
+    display: table-cell
+  }
+
+  .js .h-i-l0 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l0 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l0 .h-co, .js .h-e-0, .js .h-i-l0 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l1 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l1 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l1 .h-co, .js .h-e-1, .js .h-i-l1 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l2 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l2 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l2 .h-co, .js .h-e-2, .js .h-i-l2 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l3 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l3 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l3 .h-co, .js .h-e-3, .js .h-i-l3 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l4 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l4 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l4 .h-co, .js .h-e-4, .js .h-i-l4 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l5 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l5 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l5 .h-co, .js .h-e-5, .js .h-i-l5 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l6 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l6 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l6 .h-co, .js .h-e-6, .js .h-i-l6 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l7 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l7 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l7 .h-co, .js .h-e-7, .js .h-i-l7 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l8 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l8 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l8 .h-co, .js .h-e-8, .js .h-i-l8 .h-secondary {
+    display: none
+  }
+}
+
+@media screen and (min-width: 2250px) {
+  .js .h-9 {
+    display: table-cell
+  }
+
+  .js .h-i-l0 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l0 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l0 .h-co, .js .h-e-0, .js .h-i-l0 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l1 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l1 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l1 .h-co, .js .h-e-1, .js .h-i-l1 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l2 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l2 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l2 .h-co, .js .h-e-2, .js .h-i-l2 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l3 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l3 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l3 .h-co, .js .h-e-3, .js .h-i-l3 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l4 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l4 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l4 .h-co, .js .h-e-4, .js .h-i-l4 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l5 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l5 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l5 .h-co, .js .h-e-5, .js .h-i-l5 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l6 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l6 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l6 .h-co, .js .h-e-6, .js .h-i-l6 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l7 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l7 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l7 .h-co, .js .h-e-7, .js .h-i-l7 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l8 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l8 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l8 .h-co, .js .h-e-8, .js .h-i-l8 .h-secondary {
+    display: none
+  }
+
+  .js .h-i-l9 .h-co button {
+    display: none !important
+  }
+
+  .js .h-i-l9 .h-co button[disabled] {
+    display: inline-block !important
+  }
+
+  .js .h-l9 .h-co, .js .h-e-9, .js .h-i-l9 .h-secondary {
+    display: none
+  }
+}
+
+.h-ticker {
+  display: none
+}
+
+.h-ticker .panel-heading, .h-ticker .panel-body {
+  padding: 6px
+}
+
+.h-ticker .panel {
+  margin-bottom: 10px
+}
+
+.h-schedule tbody + tbody {
+  border-top-width: 1px
+}
+
+.container .jumbotron {
+  padding: 10px 30px;
+  margin-bottom: 10px
+}
+
+.container .jumbotron h1 {
+  font-size: 40px
+}
+
+.container .jumbotron p {
+  font-size: 17px
+}
+
+.container .jumbotron .h-small {
+  font-size: 14px;
+  margin-bottom: 10px
+}
+
+.container .jumbotron small {
+  font-size: 13px
+}
+
+.h-eventlist, .h-mru {
+  padding-left: 10px
+}
+
+.h-eventlist li, .h-mru li {
+  list-style-type: none;
+  margin-bottom: 5px
+}
+
+.h-eventlist .item, .h-mru .item {
+  font-size: 20px
+}
+
+button[disabled] {
+  opacity: .4 !important
+}
+
+.h-odd td {
+  background: #f9f9f9
+}
+
+@media screen and (max-width: 991px) {
+  body table.h-schedule td, body table.h-schedule th {
+    font-size: 12px;
+    padding: 3px;
+    line-height: 25px
+  }
+
+  body table.h-schedule .btn-xs {
+    padding: 3px 0
+  }
+
+  body table.h-schedule dd {
+    margin-left: 15px
+  }
+
+  body .h-ticker {
+    font-size: 12px
+  }
+
+  body .h-ticker h3 {
+    font-size: 13px
+  }
+
+  body .btn-xs {
+    font-size: 12px
+  }
+}
+
+@media screen and (min-width: 768px) {
+  body table.h-schedule dt {
+    width: 200px
+  }
+
+  body table.h-schedule dd {
+    margin-left: 220px
+  }
+}
+
+@media screen and (min-width: 992px) {
+  body table.h-schedule td, body table.h-schedule th {
+    font-size: 13px;
+    padding: 3px;
+    line-height: 27px
+  }
+
+  body .h-ticker {
+    font-size: 13px
+  }
+
+  body .h-ticker h3 {
+    font-size: 14px
+  }
+}
+
+.h-schedule td, .h-schedule th, .h-schedule dt, .h-schedule dd {
+  overflow-y: hidden
+}
+
+.theme-amelia .h-odd td {
+  background: #0f7f88
+}
+
+.theme-cyborg .h-schedule {
+  background: transparent
+}
+
+.theme-cyborg .h-odd td {
+  background: #181818
+}
+
+.theme-darkly .h-schedule {
+  background: transparent
+}
+
+.theme-darkly tbody + tbody {
+  border-top-width: 0
+}
+
+.theme-darkly tbody.h-odd td {
+  background: #303030
+}
+
+.theme-flatly .h-schedule {
+  background: transparent
+}
+
+.theme-flatly tbody + tbody {
+  border-top-width: 0
+}
+
+.theme-lumen .h-schedule {
+  background: transparent
+}
+
+.theme-lumen tbody + tbody {
+  border-top-width: 0
+}
+
+.theme-sandstone tbody.h-odd td {
+  background: #f8f5f0
+}
+
+.theme-slate tbody.h-odd td {
+  background: #353a41
+}
+
+.theme-superhero tbody.h-odd td {
+  background: #4e5d6c
+}
+
+.theme-superhero .text-muted {
+  color: #8e9dac
+}
