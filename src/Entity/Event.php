@@ -198,7 +198,8 @@ class Event
         return $this;
     }
 
-    public function isPublic(): bool {
+    public function isPublic(): bool
+    {
         return !$this->getSecret();
     }
 
@@ -230,5 +231,29 @@ class Event
         }
 
         return $this;
+    }
+
+    // Custom functions
+
+    public function getLink(): string
+    {
+        $url = '/'.$this->getSlug();
+
+        if ($this->getSecret()) {
+            $url .= '?key='.$this->getSecret();
+        }
+
+        return $url;
+    }
+
+    public function getWebsiteHost(): ?string
+    {
+        $website = $this->getWebsite();
+
+        if (!$website) {
+            return null;
+        }
+
+        return parse_url($website, PHP_URL_HOST);
     }
 }

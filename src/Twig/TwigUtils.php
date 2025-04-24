@@ -3,12 +3,16 @@
 namespace App\Twig;
 
 use App\Horaro\Library\ReadableTime;
+use App\Repository\ConfigRepository;
 
 class TwigUtils {
     protected $versions = [];
     protected $app;
 
-    public function __construct() {
+    // TODO: cache values
+    public function __construct(
+        protected ConfigRepository $configRepository
+    ) {
     }
 
     public function asset($path) {
@@ -150,5 +154,9 @@ class TwigUtils {
         $filename = HORARO_ROOT.'/version';
 
         return file_exists($filename) ? trim(file_get_contents($filename)) : 'version N/A';
+    }
+
+    public function csrfParamName(): string {
+        return $this->configRepository->getByKey('csrf_token_name', '_csrf_token')->getValue();
     }
 }
