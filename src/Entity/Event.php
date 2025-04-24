@@ -3,11 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\EventRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: EventRepository::class)]
 #[ORM\Table(name: 'events')]
+#[ORM\Entity(repositoryClass: EventRepository::class)]
 class Event
 {
     #[ORM\Id]
@@ -47,6 +49,17 @@ class Event
 
     #[ORM\Column(nullable: true)]
     private ?int $team_id = null;
+
+    /**
+     * @var Collection<int, Schedule>
+     */
+    #[ORM\OneToMany(targetEntity: Schedule::class, mappedBy: 'event', orphanRemoval: false)]
+    private Collection $schedules;
+
+    public function __construct()
+    {
+        $this->schedules = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -187,5 +200,35 @@ class Event
 
     public function isPublic(): bool {
         return !$this->getSecret();
+    }
+
+    /**
+     * @return Collection<int, Schedule>
+     */
+    public function getSchedules(): Collection
+    {
+        return $this->schedules;
+    }
+
+    public function addSchedule(Schedule $schedule): static
+    {
+        if (!$this->schedules->contains($schedule)) {
+            $this->schedules->add($schedule);
+            $schedule->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSchedule(Schedule $schedule): static
+    {
+        if ($this->schedules->removeElement($schedule)) {
+            // set the owning side to null (unless already changed)
+            if ($schedule->getEvent() === $this) {
+                $schedule->setEvent(null);
+            }
+        }
+
+        return $this;
     }
 }

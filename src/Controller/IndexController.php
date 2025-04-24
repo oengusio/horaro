@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\ConfigRepository;
 use App\Repository\EventRepository;
+use App\Repository\ScheduleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +15,7 @@ final class IndexController extends BaseController
     public function __construct(
         protected readonly ConfigRepository $configRepository,
         protected readonly EventRepository $eventRepository,
+        protected readonly ScheduleRepository $scheduleRepository,
         protected readonly EntityManagerInterface $entityManager,
     ) {}
 
@@ -21,15 +23,13 @@ final class IndexController extends BaseController
     public function welcome(Request $request): Response
     {
         // find schedules that are currently happening
-
-        // $scheduleRepo = $this->getRepository('Schedule');
-        $schedules = []; // $scheduleRepo->findCurrentlyRunning();
+        $schedules = $this->scheduleRepository->findCurrentlyRunning();
         $live = [];
 
         // group by event
         foreach ($schedules as $schedule) {
             $event = $schedule->getEvent();
-            $eventID = $event->getID();
+            $eventID = $event->getId();
 
             $live[$eventID]['event'] = $event;
             $live[$eventID]['schedules'][] = $schedule;
@@ -37,14 +37,13 @@ final class IndexController extends BaseController
 
         // find upcoming event schedules (blatenly ignoring that the starting times
         // in the database are not in UTC).
-
-        $schedules = [];// $scheduleRepo->findUpcoming(365);
+        $schedules = $this->scheduleRepository->findUpcoming(365);
         $upcoming = [];
 
         // group by event
         foreach ($schedules as $schedule) {
             $event = $schedule->getEvent();
-            $eventID = $event->getID();
+            $eventID = $event->getId();
 
             $upcoming[$eventID]['event'] = $event;
             $upcoming[$eventID]['schedules'][] = $schedule;
@@ -68,6 +67,7 @@ final class IndexController extends BaseController
         $recent = [];
 
         if ($user) {
+            // TODO
             $recent = []; //$scheduleRepo->findRecentlyUpdated($user, 7);
         }
 
