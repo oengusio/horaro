@@ -26,7 +26,7 @@ abstract class BaseController extends AbstractController
         return false; // $this->getRepository('User')->countUsers() >= $this->app['config']['max_users'];
     }
 
-    protected function setCachingHeader(Response $response, $resourceType, \DateTime $lastModified = null)
+    protected function setCachingHeader(Response $response, $resourceType, ?\DateTime $lastModified = null)
     {
         if ($lastModified) {
             $response->setLastModified($lastModified);

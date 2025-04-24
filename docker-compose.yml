@@ -1,0 +1,12 @@
+services:
+  horaro:
+    network_mode: host
+    environment:
+      APP_ENV: prod
+      APP_DEBUG: 0
+      DATABASE_URL: "mysql://horaro:horaro@127.0.0.1:3306/horaro?serverVersion=10.11.2-MariaDB&charset=utf8mb4"
+    volumes:
+      - /coding/docker/mysql/horaro_parameters.yml:/var/www/horaro/config/parameters.yml:ro
+      - /coding/docker/mysql/.env.prod:/var/www/horaro/.env:ro
+    build:
+      context: .

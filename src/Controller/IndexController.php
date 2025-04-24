@@ -86,7 +86,7 @@ final class IndexController extends BaseController
         return $this->setCachingHeader($this->render('index/contact.twig'), 'other');
     }
 
-    #[Route('/-/licenses', name: 'app_contact', methods: ['GET'], priority: 1)]
+    #[Route('/-/licenses', name: 'app_licenses', methods: ['GET'], priority: 1)]
     public function licenses(): Response {
 
         return $this->setCachingHeader($this->render('index/licenses.twig'), 'other');

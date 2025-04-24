@@ -149,7 +149,7 @@ class ScheduleItem
      *
      * @return \DateTime
      */
-    public function getScheduledEnd(\DateTimeZone $timezone = null): \DateTimeInterface {
+    public function getScheduledEnd(?\DateTimeZone $timezone = null): \DateTimeInterface {
         if ($this->scheduled === null) {
             throw new \LogicException('Can only determine the scheduled end if the schedule start has been set.');
         }
@@ -170,7 +170,7 @@ class ScheduleItem
         return $parts[0] * 3600 + $parts[1] * 60 + $parts[2];
     }
 
-    public function getOptions(ScheduleColumn $optionsCol = null): ?array
+    public function getOptions(?ScheduleColumn $optionsCol = null): ?array
     {
         if ($optionsCol === null) {
             $optionsCol = $this->getSchedule()->getOptionsColumn();

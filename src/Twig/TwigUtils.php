@@ -27,7 +27,7 @@ class TwigUtils {
         return mb_substr($string, 0, $maxlen).'…';
     }
 
-    public function getLicenseMarkup($path) {
+    public function getLicenseMarkup(string $path) {
         $file = HORARO_ROOT.'/'.$path;
 
         if (!file_exists($file)) {
@@ -39,7 +39,7 @@ class TwigUtils {
         return '<pre>'.htmlspecialchars($content, ENT_QUOTES, 'UTF-8').'</pre>';
     }
 
-    public function userIsAdmin(/*User*/ $user = null) {
+    public function userIsAdmin(mixed/*User*/ $user = null) {
         /*$user = $user ?: $this->app['user'];
 
         if (!$user) {
@@ -51,7 +51,7 @@ class TwigUtils {
         return false;
     }
 
-    public function userIsOp(/*User*/ $user = null) {
+    public function userIsOp(mixed/*User*/ $user = null) {
         /*$user = $user ?: $this->app['user'];
 
         if (!$user) {
@@ -63,7 +63,7 @@ class TwigUtils {
         return false;
     }
 
-    public function userHasRole($role, /*User*/ $user = null) {
+    public function userHasRole($role, mixed /*User*/ $user = null) {
         /*$user = $user ?: $this->app['user'];
 
         if (!$user) {
@@ -75,7 +75,7 @@ class TwigUtils {
         return false;
     }
 
-    public function userHasAdministrativeAccess($resource, /*User*/ $user = null) {
+    public function userHasAdministrativeAccess(mixed $resource, mixed/*User*/ $user = null) {
         /*$user = $user ?: $this->app['user'];
 
         if (!$user) {
@@ -87,11 +87,12 @@ class TwigUtils {
         return false;
     }
 
-    public function formValue(array $result = null, $key, $default = null) {
+    // TODO: fix these methods
+    public function formValue(?array $result = null, $key = '', $default = null) {
         return isset($result[$key]) ? $result[$key]['filtered'] : $default;
     }
 
-    public function formClass(array $result = null, $key) {
+    public function formClass(?array $result = null, $key = '') {
         return empty($result[$key]['errors']) ? '' : ' has-error';
     }
 
@@ -138,7 +139,7 @@ class TwigUtils {
         );
     }
 
-    public function readableTime(\DateTime $time = null) {
+    public function readableTime(?\DateTime $time = null) {
         if (!$time) return '';
 
         $parser = new ReadableTime();

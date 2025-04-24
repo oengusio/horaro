@@ -68,7 +68,7 @@ class ReadableTime
         return implode(' ', $result);
     }
 
-    public static function dateTimeToSeconds(\DateTime $dt = null) {
+    public static function dateTimeToSeconds(?\DateTime $dt = null) {
         if (!$dt) {
             return 0;
         }
@@ -78,7 +78,7 @@ class ReadableTime
         return $parts[0] * 3600 + $parts[1] * 60 + intval($parts[2]);
     }
 
-    public static function dateTimeToISODuration(\DateTime $dt = null) {
+    public static function dateTimeToISODuration(?\DateTime $dt = null) {
         if (!$dt) {
             return 'PT0S';
         }
@@ -92,7 +92,7 @@ class ReadableTime
         return $iso;
     }
 
-    public static function dateTimeToDateInterval(\DateTime $dt = null) {
+    public static function dateTimeToDateInterval(?\DateTime $dt = null) {
         return new \DateInterval(static::dateTimeToISODuration($dt));
     }
 }

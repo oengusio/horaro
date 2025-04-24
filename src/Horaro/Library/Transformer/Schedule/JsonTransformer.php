@@ -161,7 +161,7 @@ class JsonTransformer extends BaseTransformer
         return $data;
     }
 
-    public function transformItem(ScheduleItem $item, $columns, ScheduleColumn $optionsCol = null): array {
+    public function transformItem(ScheduleItem $item, $columns, ?ScheduleColumn $optionsCol = null): array {
         $extra  = $item->getExtra();
         $result = [
             'length'      => $item->getISODuration(),

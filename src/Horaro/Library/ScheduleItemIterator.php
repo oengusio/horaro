@@ -24,6 +24,7 @@ class ScheduleItemIterator implements \Iterator
         $this->rewind();
     }
 
+    #[\ReturnTypeWillChange]
     public function rewind() {
         $this->time     = $this->schedule->getLocalStart();
         $this->position = 0;
@@ -31,14 +32,17 @@ class ScheduleItemIterator implements \Iterator
         $this->updateCurrentItem();
     }
 
+    #[\ReturnTypeWillChange]
     public function current() {
         return $this->current;
     }
 
+    #[\ReturnTypeWillChange]
     public function key() {
         return $this->position;
     }
 
+    #[\ReturnTypeWillChange]
     public function next() {
         $this->position++;
 
@@ -58,6 +62,7 @@ class ScheduleItemIterator implements \Iterator
         $this->updateCurrentItem();
     }
 
+    #[\ReturnTypeWillChange]
     public function valid() {
         return isset($this->items[$this->position]);
     }

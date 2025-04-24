@@ -2,7 +2,10 @@
 
 use App\Kernel;
 
-define('HORARO_ROOT', dirname(__DIR__));
+// No clue how this file gets loaded more than once per request
+if (!defined('HORARO_ROOT')) {
+    define('HORARO_ROOT', dirname(__DIR__));
+}
 
 $file = HORARO_ROOT.'/maintenance';
 
