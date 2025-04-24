@@ -21,11 +21,11 @@ RUN chmod +rx /usr/bin/composer
 COPY . /build
 WORKDIR /build
 
-# install PHP dependencies
-RUN composer install --no-dev --no-progress --no-suggest --prefer-dist --ignore-platform-reqs --optimize-autoloader
-
 # Copy over files we will later override
 COPY config/parameters.dist.yml config/parameters.yml
+
+# install PHP dependencies
+RUN composer install --no-dev --no-progress --no-suggest --prefer-dist --ignore-platform-reqs --optimize-autoloader
 
 # build assets
 RUN APP_ENV=prod php bin/console asset-map:compile && APP_ENV=prod APP_DEBUG=0 php bin/console cache:clear
