@@ -163,4 +163,35 @@ class ScheduleItem
 
         return $scheduled;
     }
+
+    public function getLengthInSeconds(): int {
+        $parts = explode(':', $this->getLength()->format('H:i:s'));
+
+        return $parts[0] * 3600 + $parts[1] * 60 + $parts[2];
+    }
+
+    public function getOptions(ScheduleColumn $optionsCol = null): ?array
+    {
+        if ($optionsCol === null) {
+            $optionsCol = $this->getSchedule()->getOptionsColumn();
+
+            if ($optionsCol === null) {
+                return null;
+            }
+        }
+
+        $colID   = $optionsCol->getID();
+        $extra   = $this->getExtra();
+        $options = null;
+
+        if (isset($extra[$colID])) {
+            $decoded = @json_decode($extra[$colID], false, 5);
+
+            if (json_last_error() === JSON_ERROR_NONE && $decoded instanceof \stdClass) {
+                $options = (array) $decoded;
+            }
+        }
+
+        return $options;
+    }
 }

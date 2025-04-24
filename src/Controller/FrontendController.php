@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Event;
 use App\Entity\Schedule;
 use App\Horaro\Service\ObscurityCodecService;
+use App\Horaro\Service\ScheduleTransformerService;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +18,8 @@ use Symfony\Component\Routing\Attribute\Route;
 final class FrontendController extends BaseController
 {
     public function __construct(
-        private ObscurityCodecService $obscurityCodec,
+        // private ObscurityCodecService $obscurityCodec,
+        private readonly ScheduleTransformerService $transformerService,
     )
     {
     }
@@ -54,7 +56,25 @@ final class FrontendController extends BaseController
             $includeHiddenColumns = $hiddenkey === $hiddenSecret;
         }
 
-        return new Response();
+        $transformer = $this->transformerService->getTransformer($format);
+
+        try {
+            $data = $transformer->transform($schedule, true, $includeHiddenColumns);
+        }
+        catch (\InvalidArgumentException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        }
+
+        $filename = sprintf('%s-%s.%s', $event->getSlug(), $schedule->getSlug(), $transformer->getFileExtension());
+        $headers  = ['Content-Type' => $transformer->getContentType()];
+
+        if ($request->query->get('named')) {
+            $headers['Content-Disposition'] = 'filename="'.$filename.'"';
+        }
+
+        $response = new Response($data, 200, $headers);
+
+        return $this->setScheduleCachingHeader($schedule, $response);
     }
 
     #[Route('/{eventSlug}/{scheduleSlug}', name: 'app_frontend_event_schedule', methods: ['GET'])]

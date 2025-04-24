@@ -485,4 +485,23 @@ class Schedule
     public function getScheduledItems() {
         return new ScheduleItemIterator($this);
     }
+
+    public function isPublic(): bool {
+        return !$this->getSecret() && $this->getEvent()->isPublic();
+    }
+
+    public function getSetupTimeInSeconds(): float|int
+    {
+        return ReadableTime::dateTimeToSeconds($this->getSetupTime());
+    }
+
+    /**
+     * Get setup time as ISO duration
+     *
+     * @return string
+     */
+    public function getSetupTimeISODuration(): string
+    {
+        return ReadableTime::dateTimeToISODuration($this->getSetupTime());
+    }
 }
