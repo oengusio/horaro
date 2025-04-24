@@ -2,8 +2,8 @@ horaro - Beautiful Schedules for the Web
 ========================================
 
 horaro (Esperanto for *schedule*) is a small web application for creating
-schedules for stream marathons (e.g. on Twitch or Hitbox). It's written in
-PHP 7.2 and only requires PHP (duh) and MySQL 5 to run.
+schedules for stream marathons (e.g. on Twitch or YouTube). It's written in
+PHP 8.4 and only requires PHP (duh) and MariaDB 11+ to run.
 
 Features
 --------
@@ -24,8 +24,8 @@ Features
 Requirements
 ------------
 
-* PHP 5.4+ or HHVM 3.6+
-* MySQL 5 or MariaDB 5/10, with InnoDB support
+* PHP 8.4+
+* MariaDB 11 or compatible MySQL version, with InnoDB support
 * a webserver (Apache 2 and nginx are supported, others should work as well)
 * mod_rewrite if you use Apache
 
