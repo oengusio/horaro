@@ -23,6 +23,20 @@
 
 {% block content %}
     <div class="row">
+        <div class="col-lg-12 col-md-12">
+            {# TODO: remove this alert when done and kabuki's instance is read only #}
+            <div class="alert alert-dismissible alert-danger">
+                <p>
+                    This is a brand-new version of Horaro that is still in development. While it might look the same, it has an entirely new and modern backend.
+                </p>
+                <p>
+                    Because of that, you will not be able to make events here until horaro.org becomes read-only.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-lg-5 col-md-5">
             {% if app.user %}
                 <h3>Your Recent Schedules</h3>

@@ -7,7 +7,6 @@ use App\Repository\EventRepository;
 use App\Repository\ScheduleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class IndexController extends BaseController
@@ -20,7 +19,7 @@ final class IndexController extends BaseController
     ) {}
 
     #[Route('/', name: 'app_welcome', methods: ['GET'])]
-    public function welcome(Request $request): Response
+    public function welcome(): Response
     {
         // find schedules that are currently happening
         $schedules = $this->scheduleRepository->findCurrentlyRunning();
@@ -80,5 +79,10 @@ final class IndexController extends BaseController
         ]);
 
         return $this->setCachingHeader($html, 'homepage');
+    }
+
+    #[Route('/-/contact', name: 'app_contact', methods: ['GET'], priority: 1)]
+    public function contact(): Response {
+        return $this->setCachingHeader($this->render('index/contact.twig'), 'other');
     }
 }
