@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Horaro\Library\ReadableTime;
+use App\Horaro\Library\ScheduleItemIterator;
 use App\Repository\ScheduleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,6 +14,11 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: ScheduleRepository::class)]
 class Schedule
 {
+    const OPTION_COLUMN_NAME = '[[options]]';
+
+    const COLUMN_SCHEDULED = 'col-scheduled';
+    const COLUMN_ESTIMATE  = 'col-estimate';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -50,8 +57,8 @@ class Schedule
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $setup_time = null;
+    #[ORM\Column(type: Types::TIME_MUTABLE, length: 255, nullable: true)]
+    private ?\DateTimeInterface $setup_time = null;
 
     #[ORM\Column]
     private ?int $max_items = null;
@@ -221,7 +228,7 @@ class Schedule
         return $this;
     }
 
-    public function getSetupTime(): ?string
+    public function getSetupTime(): ?\DateTimeInterface
     {
         return $this->setup_time;
     }
@@ -414,5 +421,68 @@ class Schedule
         }
 
         return $t;
+    }
+
+    public function getVisibleColumns() {
+        return $this->getColumns()->filter(function(ScheduleColumn $col) {
+            return !$col->isHidden();
+        });
+    }
+
+    public function getMaxItemWidth($columns) {
+        $max = 0;
+
+        foreach ($this->getItems() as $item) {
+            $max = max($max, $item->getWidth($columns));
+        }
+
+        return $max;
+    }
+
+    public function needsSeconds() {
+        $iterator = new ScheduleItemIterator($this);
+
+        foreach ($iterator as $item) {
+            if ($item->getScheduled()->format('s') !== '00') {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function getOptionsColumn() {
+        $columns = $this->getColumns();
+
+        foreach ($columns as $col) {
+            if ($col->getName() === self::OPTION_COLUMN_NAME) {
+                return $col;
+            }
+        }
+
+        return null;
+    }
+
+    public function getSetupTimeDateInterval(): \DateInterval
+    {
+        return ReadableTime::dateTimeToDateInterval($this->getSetupTime());
+    }
+
+    /*public function getUpdatedAt() {
+        $tmpFrmt = 'Y-m-d H:i:s';
+
+        return \DateTime::createFromFormat($tmpFrmt, $this->updated_at->format($tmpFrmt), new \DateTimeZone('UTC')); // "inject" proper timezone
+    }*/
+
+    public function getLocalUpdatedAt(): \DateTimeInterface
+    {
+        $local = $this->getUpdatedAt();
+        $local->setTimezone($this->getTimezoneInstance());
+
+        return $local;
+    }
+
+    public function getScheduledItems() {
+        return new ScheduleItemIterator($this);
     }
 }

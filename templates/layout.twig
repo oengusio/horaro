@@ -26,8 +26,6 @@
 	{% endblock %}
 	{% block meta %}{% endblock %}
 
-    {% block importmap %}{{ importmap('app') }}{% endblock %}
-
     <link href="{{ asset('styles/app-common.css') }}" rel="stylesheet">
 	{% block styles %}{% endblock %}
 </head>
@@ -73,6 +71,8 @@
 		</footer>
 		{% endblock %}
 	</div>
+
+    {% block importmap %}{{ importmap('app') }}{% endblock %}
 
 	{% block scripts %}{% endblock %}
 

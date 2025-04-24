@@ -97,13 +97,25 @@ class ScheduleRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Schedule
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        public function findOneBySomeField($value): ?Schedule
+        {
+            return $this->createQueryBuilder('s')
+                ->andWhere('s.exampleField = :val')
+                ->setParameter('val', $value)
+                ->getQuery()
+                ->getOneOrNullResult()
+            ;
+        }
+
+    public function findBySlug(string $eventSlug, string $scheduleSlug): ?Schedule
+    {
+        return $this->createQueryBuilder('s')
+            ->join('s.event', 'e')
+                    ->andWhere('s.slug = :scheduleSlug')
+                    ->andWhere('e.slug = :eventSlug')
+                    ->setParameter('scheduleSlug', $scheduleSlug)
+                    ->setParameter('eventSlug', $eventSlug)
+                    ->getQuery()
+                    ->getOneOrNullResult();
+    }
 }

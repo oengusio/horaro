@@ -87,14 +87,19 @@ class ScheduleItem
         return $this;
     }
 
-    public function getExtra(): ?string
-    {
-        return $this->extra;
+    public function getExtra(): array {
+        return json_decode($this->extra, true);
     }
 
-    public function setExtra(?string $extra): static
-    {
-        $this->extra = $extra;
+    public function setExtra(array $extra): static {
+        foreach ($extra as $key => $value) {
+            if (mb_strlen(trim($value)) === 0) {
+                unset($extra[$key]);
+            }
+        }
+
+        ksort($extra);
+        $this->extra = json_encode($extra);
 
         return $this;
     }
@@ -114,5 +119,48 @@ class ScheduleItem
     public function getDateInterval(): \DateInterval
     {
         return new \DateInterval($this->getISODuration());
+    }
+
+    public function getWidth($columns) {
+        $len   = 0;
+        $extra = $this->getExtra();
+
+        foreach ($columns as $idx => $column) {
+            if (isset($extra[$column->getId()]) && mb_strlen(trim($extra[$column->getId()])) > 0) {
+                $len = $idx;
+            }
+        }
+
+        return $len;
+    }
+
+    /*public function getScheduled(\DateTimeZone $timezone = null) {
+        $scheduled = clone $this->scheduled;
+
+        if ($timezone) {
+            $scheduled->setTimezone($timezone);
+        }
+
+        return $scheduled;
+    }*/
+
+    /**
+     * Get scheduled
+     *
+     * @return \DateTime
+     */
+    public function getScheduledEnd(\DateTimeZone $timezone = null): \DateTimeInterface {
+        if ($this->scheduled === null) {
+            throw new \LogicException('Can only determine the scheduled end if the schedule start has been set.');
+        }
+
+        $scheduled = clone $this->scheduled;
+        $scheduled->add($this->getDateInterval());
+
+        if ($timezone) {
+            $scheduled->setTimezone($timezone);
+        }
+
+        return $scheduled;
     }
 }

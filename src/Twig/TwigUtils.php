@@ -147,7 +147,7 @@ class TwigUtils {
     }
 
     public function markdown($text) {
-        return $this->app['markdown-converter']->convertInline($text);
+        return $text;// $this->app['markdown-converter']->convertInline($text);
     }
 
     public function appVersion(): string {
