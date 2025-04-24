@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Entity\Schedule;
-use App\Horaro\Service\ObscurityCodecService;
 use App\Horaro\Service\ScheduleTransformerService;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,10 +17,32 @@ use Symfony\Component\Routing\Attribute\Route;
 final class FrontendController extends BaseController
 {
     public function __construct(
-        // private ObscurityCodecService $obscurityCodec,
         private readonly ScheduleTransformerService $transformerService,
     )
     {
+    }
+
+    #[Route('/{eventSlug}/{scheduleSlug}/ical-feed', name: 'app_frontend_event_schedule_ical', methods: ['GET'])]
+    public function icalFaqAction(
+        #[MapEntity(mapping: ['eventSlug' => 'slug'])] Event                          $event,
+        #[MapEntity(expr: 'repository.findBySlug(eventSlug, scheduleSlug)')] Schedule $schedule,
+        #[MapQueryParameter] ?string                                                  $key = null,
+    ):Response
+    {
+        if (!$this->handleScheduleAccess($event, $schedule, $key)) {
+            return new Response();
+        }
+
+        $isPrivate = $this->isPrivatePage($event);
+        $response   = $this->render('frontend/schedule/ical.twig', [
+            'event'     => $event,
+            'schedule'  => $schedule,
+            'key'       => $key,
+            'schedules' => $this->getAllowedSchedules($event, $key),
+            'isPrivate' => $isPrivate
+        ]);
+
+        return $this->setCachingHeader($response, 'other');
     }
 
     #[Route('/{eventSlug}/{scheduleSlug}.{format}', name: 'app_frontend_event_schedule_export', methods: ['GET'], condition: "params['format'] matches '/(jsonp?|xml|csv|ical)/'")]
