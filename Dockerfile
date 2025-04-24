@@ -1,8 +1,8 @@
 FROM alpine:3.21 AS builder
 LABEL maintainer="Sgt. Kabukiman"
 
-ENV APP_ENV prod
-ENV APP_DEBUG 0
+ENV APP_ENV=prod
+ENV APP_DEBUG=0
 
 # link to search for packages https://pkgs.alpinelinux.org/packages?name=php83&branch=v3.21
 # install packages
@@ -24,6 +24,9 @@ WORKDIR /build
 # install PHP dependencies
 RUN composer install --no-dev --no-progress --no-suggest --prefer-dist --ignore-platform-reqs --optimize-autoloader
 
+# Copy over files we will later override
+COPY config/parameters.dist.yml config/parameters.yml
+
 # build assets
 RUN APP_ENV=prod php bin/console asset-map:compile && APP_ENV=prod APP_DEBUG=0 php bin/console cache:clear
 
@@ -39,8 +42,8 @@ RUN rm -rf assets .git .gitignore tests var
 FROM alpine:3.21
 LABEL maintainer="Sgt. Kabukiman"
 
-ENV APP_ENV prod
-ENV APP_DEBUG 0
+ENV APP_ENV=prod
+ENV APP_DEBUG=0
 
 # install packages
 RUN apk --no-cache add php84 php84-cli php84-fpm php84-mysqli php84-json php84-openssl php84-curl \
