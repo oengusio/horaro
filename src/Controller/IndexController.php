@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Repository\ConfigRepository;
+use App\Repository\EventRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
@@ -11,9 +13,9 @@ final class IndexController extends BaseController
 {
     public function __construct(
         protected readonly ConfigRepository $configRepository,
-    )
-    {
-    }
+        protected readonly EventRepository $eventRepository,
+        protected readonly EntityManagerInterface $entityManager,
+    ) {}
 
     #[Route('/', name: 'app_welcome')]
     public function welcome(Request $request): Response
@@ -49,13 +51,12 @@ final class IndexController extends BaseController
         }
 
         // find featured, old events
-        $ids       = $this->configRepository->getByKey('featured_events', []);
-        // $eventRepo = $this->getRepository('Event');
-        $featured  = []; //$eventRepo->findById($ids);
+        $ids = $this->configRepository->getByKey('featured_events', [])->getValue();
+        $featured  = $this->eventRepository->findByIds($ids);
 
         // remove featured events that are already included in the live/upcoming lists
         foreach ($featured as $idx => $event) {
-            $eventID = $event->getID();
+            $eventID = $event->getId();
 
             if (isset($live[$eventID]) || isset($upcoming[$eventID]) || !$event->isPublic()) {
                 unset($featured[$idx]);
