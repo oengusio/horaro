@@ -2,12 +2,19 @@
 
 namespace App\Controller;
 
+use App\Repository\ConfigRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class IndexController extends BaseController
 {
+    public function __construct(
+        protected readonly ConfigRepository $configRepository,
+    )
+    {
+    }
+
     #[Route('/', name: 'app_welcome')]
     public function welcome(Request $request): Response
     {
@@ -42,7 +49,7 @@ final class IndexController extends BaseController
         }
 
         // find featured, old events
-        // $ids       = $this->app['runtime-config']->get('featured_events', []);
+        $ids       = $this->configRepository->getByKey('featured_events', []);
         // $eventRepo = $this->getRepository('Event');
         $featured  = []; //$eventRepo->findById($ids);
 
