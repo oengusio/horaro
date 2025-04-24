@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Entity\Schedule;
+use App\Horaro\Service\ObscurityCodecService;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,6 +16,11 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class FrontendController extends BaseController
 {
+    public function __construct(
+        private ObscurityCodecService $obscurityCodec,
+    )
+    {
+    }
 
     #[Route('/{eventSlug}/{scheduleSlug}.{format}', name: 'app_frontend_event_schedule_export', methods: ['GET'], condition: "params['format'] matches '/(jsonp?|xml|csv|ical)/'")]
     public function scheduleExport(
