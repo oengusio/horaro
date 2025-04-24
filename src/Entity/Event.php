@@ -256,4 +256,9 @@ class Event
 
         return parse_url($website, PHP_URL_HOST);
     }
+
+    public function getOwner(): mixed
+    {
+        return [ 'displayName' => 'testing' ];
+    }
 }

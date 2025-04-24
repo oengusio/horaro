@@ -19,7 +19,7 @@ class TwigUtils {
         return $path;
     }
 
-    public function shorten($string, $maxlen) {
+    public function shorten(string $string, int $maxlen) {
         if (mb_strlen($string) <= $maxlen) {
             return $string;
         }

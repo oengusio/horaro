@@ -7,6 +7,9 @@ use Twig\TwigFilter;
 
 class HoraroExtension extends AbstractExtension
 {
+    public function __construct(protected readonly TwigUtils $utils)
+    {
+    }
 
     public function getFilters(): array
     {
@@ -24,7 +27,7 @@ class HoraroExtension extends AbstractExtension
 
     private function shorten(string $string, int $maxlen): string
     {
-        return $string;
+        return $this->utils->shorten($string, $maxlen);
     }
 
     private function obscurify(string $id, string $entityType): string
