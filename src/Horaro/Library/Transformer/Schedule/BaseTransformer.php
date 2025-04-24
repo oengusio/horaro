@@ -5,10 +5,14 @@ namespace App\Horaro\Library\Transformer\Schedule;
 use App\Entity\Schedule;
 use App\Horaro\Service\ObscurityCodecService;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 abstract class BaseTransformer
 {
-    public function __construct(private readonly ObscurityCodecService $codec) {}
+    public function __construct(
+        private readonly ObscurityCodecService $codec,
+        protected readonly RequestStack $requestStack,
+    ) {}
 
     abstract function getContentType(): string;
 

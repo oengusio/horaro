@@ -4,8 +4,10 @@ namespace App\Horaro\Service;
 
 use App\Horaro\Library\Transformer\Schedule\BaseTransformer;
 use App\Horaro\Library\Transformer\Schedule\CsvTransformer;
+use App\Horaro\Library\Transformer\Schedule\JsonpTransformer;
 use App\Horaro\Library\Transformer\Schedule\JsonTransformer;
 use App\Horaro\Library\Transformer\Schedule\XmlTransformer;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class ScheduleTransformerService
 {
@@ -14,11 +16,14 @@ class ScheduleTransformerService
      */
     private readonly array $transformers;
 
-    public function __construct(private readonly ObscurityCodecService $obscurityCodecService)
+    public function __construct(
+        private readonly ObscurityCodecService $obscurityCodecService,
+        private readonly RequestStack $requestStack,
+    )
     {
         $this->transformers = [
             'json' => JsonTransformer::class,
-//            'jsonp' => null,
+            'jsonp' => JsonpTransformer::class,
             'csv' => CsvTransformer::class,
 //            'ical' => null,
             'xml' => XmlTransformer::class,
@@ -27,12 +32,10 @@ class ScheduleTransformerService
 
     public function getTransformer(string $format): BaseTransformer
     {
-//        dd($format, $this->transformers);
-
         if (!array_key_exists($format, $this->transformers)) {
             throw new \InvalidArgumentException('Unknown transformer for '.$format);
         }
 
-        return new $this->transformers[$format]($this->obscurityCodecService);
+        return new $this->transformers[$format]($this->obscurityCodecService, $this->requestStack);
     }
 }
