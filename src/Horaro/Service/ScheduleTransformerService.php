@@ -5,6 +5,7 @@ namespace App\Horaro\Service;
 use App\Horaro\Library\Transformer\Schedule\BaseTransformer;
 use App\Horaro\Library\Transformer\Schedule\CsvTransformer;
 use App\Horaro\Library\Transformer\Schedule\JsonTransformer;
+use App\Horaro\Library\Transformer\Schedule\XmlTransformer;
 
 class ScheduleTransformerService
 {
@@ -20,7 +21,7 @@ class ScheduleTransformerService
 //            'jsonp' => null,
             'csv' => CsvTransformer::class,
 //            'ical' => null,
-//            'xml' => null,
+            'xml' => XmlTransformer::class,
         ];
     }
 
