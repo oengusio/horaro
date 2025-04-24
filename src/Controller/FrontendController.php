@@ -5,19 +5,57 @@ namespace App\Controller;
 use App\Entity\Event;
 use App\Entity\Schedule;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class FrontendController extends BaseController
 {
-    #[Route('/{eventSlug}/{scheduleSlug}', name: 'app_frontend_event_schedule')]
-    public function schedule(
-        #[MapEntity(mapping: ['eventSlug' => 'slug'])] Event $event,
+
+    #[Route('/{eventSlug}/{scheduleSlug}.{format}', name: 'app_frontend_event_schedule_export', methods: ['GET'], condition: "params['format'] matches '/(jsonp?|xml|csv|ical)/'")]
+    public function scheduleExport(
+        Request                                                                       $request,
+        #[MapEntity(mapping: ['eventSlug' => 'slug'])] Event                          $event,
         #[MapEntity(expr: 'repository.findBySlug(eventSlug, scheduleSlug)')] Schedule $schedule,
-        #[MapQueryParameter] ?string $key = null,
+        string                                                                        $format,
+        #[MapQueryParameter] ?string                                                  $key = null,
+        #[MapQueryParameter] ?string                                                  $hiddenkey = null,
+    ): Response
+    {
+        $formats = ['json', 'jsonp', 'xml', 'csv', 'ical'];
+
+        if (!in_array($format, $formats, true)) {
+            throw new BadRequestHttpException('Invalid format "'.$format.'" given.');
+        }
+
+        if (!$this->handleScheduleAccess($event, $schedule, $key)) {
+            return new Response();
+        }
+
+        // auto-switch to JSONP if there is a callback parameter
+        if ($format === 'json' && $request->query->has('callback')) {
+            $format = 'jsonp';
+        }
+
+        $hiddenSecret = $schedule->getHiddenSecret();
+        $includeHiddenColumns = $hiddenSecret === null;
+
+        if (!$includeHiddenColumns) {
+            $includeHiddenColumns = $hiddenkey === $hiddenSecret;
+        }
+
+        return new Response();
+    }
+
+    #[Route('/{eventSlug}/{scheduleSlug}', name: 'app_frontend_event_schedule', methods: ['GET'])]
+    public function schedule(
+        #[MapEntity(mapping: ['eventSlug' => 'slug'])] Event                          $event,
+        #[MapEntity(expr: 'repository.findBySlug(eventSlug, scheduleSlug)')] Schedule $schedule,
+        #[MapQueryParameter] ?string                                                  $key = null,
     ): Response
     {
         if (!$this->handleScheduleAccess($event, $schedule, $key)) {
@@ -32,21 +70,21 @@ final class FrontendController extends BaseController
         }*/
 
         $response = $this->render('frontend/schedule/schedule.twig', [
-            'event'       => $event,
-            'schedule'    => $schedule,
-            'key'         => $key,
-            'schedules'   => $this->getAllowedSchedules($event, $key),
-            'isPrivate'   => $this->isPrivatePage($event),
-            'description' => $description
+            'event' => $event,
+            'schedule' => $schedule,
+            'key' => $key,
+            'schedules' => $this->getAllowedSchedules($event, $key),
+            'isPrivate' => $this->isPrivatePage($event),
+            'description' => $description,
         ]);
 
         return $this->setScheduleCachingHeader($schedule, $response);
     }
 
-    #[Route('/{eventSlug}', name: 'app_frontend_event_home')]
+    #[Route('/{eventSlug}', name: 'app_frontend_event_home', methods: ['GET'])]
     public function event(
         #[MapEntity(mapping: ['eventSlug' => 'slug'])] Event $event,
-        #[MapQueryParameter] ?string $key = null,
+        #[MapQueryParameter] ?string                         $key = null,
     ): Response
     {
         // the event page is accessible if you have the event key or a key for one of the schedules
@@ -64,11 +102,11 @@ final class FrontendController extends BaseController
         $isPrivate = $this->isPrivatePage($event);
 
         $resp = $this->render('frontend/event/event.twig', [
-            'event'       => $event,
-            'key'         => $key,
-            'schedules'   => $this->getAllowedSchedules($event, $key),
+            'event' => $event,
+            'key' => $key,
+            'schedules' => $this->getAllowedSchedules($event, $key),
             'description' => $description,
-            'isPrivate'   => $isPrivate,
+            'isPrivate' => $isPrivate,
         ]);
 
         if (!$isPrivate) {
@@ -78,11 +116,13 @@ final class FrontendController extends BaseController
         return $resp;
     }
 
-    protected function hasGoodEventKey(Event $event, ?string $key): bool {
+    protected function hasGoodEventKey(Event $event, ?string $key): bool
+    {
         return $this->hasGoodKey($event->getSecret(), $key);
     }
 
-    protected function hasGoodSchedulesKey(Event $event, ?string $key): bool {
+    protected function hasGoodSchedulesKey(Event $event, ?string $key): bool
+    {
         foreach ($event->getSchedules() as $schedule) {
             if (strlen($schedule->getSecret()) > 0 && $this->hasGoodScheduleKey($schedule, $key)) {
                 return true;
@@ -92,11 +132,13 @@ final class FrontendController extends BaseController
         return false;
     }
 
-    protected function hasGoodScheduleKey(Schedule $schedule, ?string $key): bool {
+    protected function hasGoodScheduleKey(Schedule $schedule, ?string $key): bool
+    {
         return $this->hasGoodKey($schedule->getSecret(), $key);
     }
 
-    private function hasGoodKey(?string $secret, ?string $key): bool {
+    private function hasGoodKey(?string $secret, ?string $key): bool
+    {
         return strlen($secret) === 0 || $key === $secret;
     }
 
@@ -108,10 +150,12 @@ final class FrontendController extends BaseController
      * private schedule is given (because in this case the dropdown menu in the
      * navigation is different).
      *
-     * @param  Event   $event
+     * @param Event $event
+     *
      * @return boolean
      */
-    protected function isPrivatePage(Event $event): bool {
+    protected function isPrivatePage(Event $event): bool
+    {
         $isPrivate = strlen($event->getSecret()) > 0;
 
         foreach ($event->getSchedules() as $schedule) {
@@ -121,13 +165,14 @@ final class FrontendController extends BaseController
         return $isPrivate;
     }
 
-    protected function handleScheduleAccess(Event $event, Schedule $schedule, $key): bool {
-        $needsEventKey    = strlen($event->getSecret()) > 0;
+    protected function handleScheduleAccess(Event $event, Schedule $schedule, $key): bool
+    {
+        $needsEventKey = strlen($event->getSecret()) > 0;
         $needsScheduleKey = strlen($schedule->getSecret()) > 0;
-        $validEventKey    = $needsEventKey    && $this->hasGoodEventKey   ($event,    $key);
+        $validEventKey = $needsEventKey && $this->hasGoodEventKey($event, $key);
         $validScheduleKey = $needsScheduleKey && $this->hasGoodScheduleKey($schedule, $key);
 
-        $eventAccess    = !$needsEventKey || $validEventKey;
+        $eventAccess = !$needsEventKey || $validEventKey;
         $scheduleAccess = !$needsScheduleKey || $validScheduleKey || $validEventKey;
 
         if (!$scheduleAccess) {
@@ -141,8 +186,9 @@ final class FrontendController extends BaseController
         return true;
     }
 
-    protected function getAllowedSchedules(Event $event, ?string $key): array {
-        $schedules     = [];
+    protected function getAllowedSchedules(Event $event, ?string $key): array
+    {
+        $schedules = [];
         $validEventKey = strlen($event->getSecret()) > 0 && $this->hasGoodEventKey($event, $key);
 
         foreach ($event->getSchedules() as $s) {
@@ -154,11 +200,11 @@ final class FrontendController extends BaseController
         return $schedules;
     }
 
-    protected function setScheduleCachingHeader(Schedule $schedule, Response $response): Response {
+    protected function setScheduleCachingHeader(Schedule $schedule, Response $response): Response
+    {
         if ($this->isPrivatePage($schedule->getEvent())) {
             return $response;
-        }
-        else {
+        } else {
             return parent::setCachingHeader($response, 'schedule', $schedule->getUpdatedAt());
         }
     }

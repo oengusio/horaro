@@ -19,7 +19,7 @@ final class IndexController extends BaseController
         protected readonly EntityManagerInterface $entityManager,
     ) {}
 
-    #[Route('/', name: 'app_welcome')]
+    #[Route('/', name: 'app_welcome', methods: ['GET'])]
     public function welcome(Request $request): Response
     {
         // find schedules that are currently happening
