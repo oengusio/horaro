@@ -18,7 +18,7 @@ abstract class BaseTransformer
 
     abstract function getFileExtension(): string;
 
-    abstract function transform(Schedule $schedule, bool $public = false, bool $withHiddenColumns = false): mixed;
+    abstract function transform(Schedule $schedule, bool $public = false, bool $withHiddenColumns = false): string;
 
     protected function encodeID(int $id, $entityType = null): string
     {

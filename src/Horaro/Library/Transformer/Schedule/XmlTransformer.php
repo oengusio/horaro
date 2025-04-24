@@ -20,7 +20,7 @@ class XmlTransformer extends BaseTransformer
         return 'xml';
     }
 
-    function transform(Schedule $schedule, bool $public = false, bool $withHiddenColumns = false): mixed
+    function transform(Schedule $schedule, bool $public = false, bool $withHiddenColumns = false): string
     {
         $cols  = $this->getEffectiveColumns($schedule, $withHiddenColumns);
         $event = $schedule->getEvent();

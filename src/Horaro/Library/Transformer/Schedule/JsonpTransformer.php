@@ -18,7 +18,7 @@ class JsonpTransformer extends JsonTransformer
         return 'js';
     }
 
-    public function transform(Schedule $schedule, bool $public = false, bool $withHiddenColumns = false): mixed
+    public function transform(Schedule $schedule, bool $public = false, bool $withHiddenColumns = false): string
     {
         $callback = $this->requestStack->getCurrentRequest()->query->get('callback');
 

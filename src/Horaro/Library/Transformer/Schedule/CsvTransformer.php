@@ -19,7 +19,7 @@ class CsvTransformer extends BaseTransformer
         return 'csv';
     }
 
-    function transform(Schedule $schedule, bool $public = false, bool $withHiddenColumns = false): mixed
+    function transform(Schedule $schedule, bool $public = false, bool $withHiddenColumns = false): string
     {
         $rows  = [];
         $cols  = $this->getEffectiveColumns($schedule, $withHiddenColumns);
