@@ -9,6 +9,7 @@ use Symfony\Component\HttpKernel\Attribute\AsTargetedValueResolver;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 #[AsTargetedValueResolver('eventSlug')]
 readonly class EventSlugValueResolver implements ValueResolverInterface
@@ -26,7 +27,7 @@ readonly class EventSlugValueResolver implements ValueResolverInterface
         $eventSlug = $request->get($options->resolver);
 
         if ($eventSlug === '-' || $eventSlug === 'assets') {
-            throw new EventNotFoundException();
+            throw new NotFoundHttpException('Page not found');
         }
 
         $foundEvent = $this->repository->findOneBy(['slug' => $eventSlug]);
