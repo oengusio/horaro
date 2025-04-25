@@ -91,15 +91,12 @@ final class IndexController extends BaseController
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
 
-        if ($error) {
-            dd($error);
-        }
-
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
         $response = $this->render('index/login.twig', [
-            'result' => null,
+            'result' => null, // TODO: remove this
+            'error' => $error,
             'last_login' => $lastUsername,
         ]);
 

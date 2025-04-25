@@ -6,6 +6,10 @@
 
 {% block login_form %}
     <div class="well">
+        {% if error %}
+            <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
         <form method="post" action="{{ path('app_login') }}" class="form-horizontal">
             <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
 
@@ -27,7 +31,7 @@
                 </div>
 
                 {# TODO: do we always want to force this redirect? #}
-                <input type="hidden" name="_target_path" value="/-/home">
+                <input type="hidden" name="_target_path" value="/">
 
                 <div class="form-group">
                     <div class="col-lg-12 text-center">
