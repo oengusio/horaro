@@ -44,8 +44,8 @@ jobs:
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
 
-# Not yet
-#      - name: Trigger dev webhook
-#        uses: distributhor/workflow-webhook@v3
-#        env:
-#          webhook_url: ${{ secrets.DEV_WEBHOOK_URL }}
+# TODO: disable when we go to production status (we're gonna do manual updates then with named docker images)
+      - name: Trigger dev webhook
+        uses: distributhor/workflow-webhook@v3
+        env:
+          webhook_url: ${{ secrets.HORARO_WEBHOOK_URL }}
