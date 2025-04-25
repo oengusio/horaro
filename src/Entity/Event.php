@@ -257,6 +257,8 @@ class Event
         return parse_url($website, PHP_URL_HOST);
     }
 
+
+    // TODO: implement user model
     public function getOwner(): mixed
     {
         return [ 'displayName' => 'testing' ];

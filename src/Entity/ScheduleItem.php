@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Horaro\Library\ReadableTime;
 use App\Repository\ScheduleItemRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -193,5 +194,26 @@ class ScheduleItem
         }
 
         return $options;
+    }
+
+    public function getSetupTime(?ScheduleColumn $optionsCol = null): ?\DateInterval {
+        $options = $this->getOptions($optionsCol);
+
+        if (!empty($options['setup'])) {
+            try {
+                $parser = new ReadableTime();
+                $parsed = $parser->parse(trim($options['setup']));
+
+                if ($parsed) {
+                    return ReadableTime::dateTimeToDateInterval($parsed);
+                }
+            }
+            catch (\InvalidArgumentException $e) {
+                // ignore bad user input
+                dd($e);
+            }
+        }
+
+        return null;
     }
 }
