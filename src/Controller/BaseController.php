@@ -9,6 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 
+use function is_null;
+
 abstract class BaseController extends AbstractController
 {
     public function __construct(
@@ -24,7 +26,7 @@ abstract class BaseController extends AbstractController
     {
         $curUser = $this->security->getUser();
 
-        if (!($curUser instanceof User)) {
+        if (!is_null($curUser) && !($curUser instanceof User)) {
             throw new \RuntimeException('User is not a user???');
         }
 
