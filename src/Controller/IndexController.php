@@ -12,6 +12,7 @@ use Solution10\Calendar\Resolution\MonthResolution;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 final class IndexController extends BaseController
 {
@@ -83,6 +84,26 @@ final class IndexController extends BaseController
         ]);
 
         return $this->setCachingHeader($html, 'homepage');
+    }
+
+    #[Route('/-/login', name: 'app_login', methods: ['GET', 'POST'], priority: 1)]
+    public function loginForm(AuthenticationUtils $authenticationUtils): Response {
+        // get the login error if there is one
+        $error = $authenticationUtils->getLastAuthenticationError();
+
+        if ($error) {
+            dd($error);
+        }
+
+        // last username entered by the user
+        $lastUsername = $authenticationUtils->getLastUsername();
+
+        $response = $this->render('index/login.twig', [
+            'result' => null,
+            'last_login' => $lastUsername,
+        ]);
+
+        return $this->setCachingHeader($response, 'other');
     }
 
     #[Route('/-/contact', name: 'app_contact', methods: ['GET'], priority: 1)]

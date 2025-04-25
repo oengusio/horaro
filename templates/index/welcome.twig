@@ -14,7 +14,7 @@
         <script src="{{ asset('trd_party/remarkable.min.js') }}"></script>
 
         <script src="{{ macros.asset('js/vendor-backend.min.js') }}"></script>
-        <script src="{{ macros.asset('js/i18n/' ~ app.language ~ '.min.js') }}"></script>
+        <script src="{{ macros.asset('js/i18n/' ~ app.locale ~ '.min.js') }}"></script>
         <script src="{{ macros.asset('js/app-backend.min.js') }}"></script>
     {% else %}
         {{ parent() }}

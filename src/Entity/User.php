@@ -7,17 +7,21 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Table(name: 'users')]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_ID', fields: ['id'])]
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_LOGIN', fields: ['login'])]
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[ORM\GeneratedValue]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 100, unique: true)]
     private ?string $login = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -26,10 +30,10 @@ class User
     #[ORM\Column(length: 255)]
     private ?string $display_name = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 32, nullable: true)]
     private ?string $gravatar_hash = null;
 
-    #[ORM\Column(length: 5)]
+    #[ORM\Column(length: 10)]
     private ?string $language = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -46,6 +50,9 @@ class User
      */
     #[ORM\OneToMany(targetEntity: Event::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $events;
+
+    #[ORM\Column(length: 100)]
+    private ?string $role = null;
 
     public function __construct()
     {
@@ -182,5 +189,41 @@ class User
         }
 
         return $this;
+    }
+
+    public function getRoles(): array
+    {
+        return [$this->role];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function eraseCredentials(): void
+    {
+        // see documentation
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->id;
+    }
+
+    public function getRole(): ?string
+    {
+        return $this->role;
+    }
+
+    public function setRole(string $role): static
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
+
+    // Custom functions
+    public function getName(): string {
+        return $this->display_name === null ? $this->login : $this->display_name;
     }
 }
