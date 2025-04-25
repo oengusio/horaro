@@ -2,8 +2,10 @@
 
 namespace App\Twig;
 
+use App\Entity\User;
 use App\Horaro\Library\ReadableTime;
 use App\Repository\ConfigRepository;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class TwigUtils {
     protected $versions = [];
@@ -11,7 +13,8 @@ class TwigUtils {
 
     // TODO: cache values
     public function __construct(
-        protected ConfigRepository $configRepository
+        protected ConfigRepository $configRepository,
+        protected readonly Security $security,
     ) {
     }
 
@@ -39,7 +42,7 @@ class TwigUtils {
         return '<pre>'.htmlspecialchars($content, ENT_QUOTES, 'UTF-8').'</pre>';
     }
 
-    public function userIsAdmin(mixed/*User*/ $user = null) {
+    public function userIsAdmin(?User $user = null) {
         /*$user = $user ?: $this->app['user'];
 
         if (!$user) {
@@ -51,7 +54,7 @@ class TwigUtils {
         return false;
     }
 
-    public function userIsOp(mixed/*User*/ $user = null) {
+    public function userIsOp(?User $user = null) {
         /*$user = $user ?: $this->app['user'];
 
         if (!$user) {
@@ -63,7 +66,7 @@ class TwigUtils {
         return false;
     }
 
-    public function userHasRole($role, mixed /*User*/ $user = null) {
+    public function userHasRole($role, ?User $user = null) {
         /*$user = $user ?: $this->app['user'];
 
         if (!$user) {
@@ -75,7 +78,7 @@ class TwigUtils {
         return false;
     }
 
-    public function userHasAdministrativeAccess(mixed $resource, mixed/*User*/ $user = null) {
+    public function userHasAdministrativeAccess(mixed $resource, ?User $user = null) {
         /*$user = $user ?: $this->app['user'];
 
         if (!$user) {
@@ -159,5 +162,16 @@ class TwigUtils {
 
     public function csrfParamName(): string {
         return $this->configRepository->getByKey('csrf_token_name', '_csrf_token')->getValue();
+    }
+
+    private function getCurrentUser(): ?User
+    {
+        $curUser = $this->security->getUser();
+
+        if (!($curUser instanceof User)) {
+            throw new \RuntimeException('User is not a user???');
+        }
+
+        return $curUser;
     }
 }

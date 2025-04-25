@@ -7,6 +7,9 @@ use App\Entity\Schedule;
 use App\Horaro\Ex\PrivateEventException;
 use App\Horaro\Ex\ScheduleNotFoundException;
 use App\Horaro\Service\ScheduleTransformerService;
+use App\Repository\ConfigRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
@@ -18,8 +21,12 @@ final class FrontendController extends BaseController
 {
     public function __construct(
         private readonly ScheduleTransformerService $transformerService,
+        ConfigRepository $config,
+        Security $security,
+        EntityManagerInterface $entityManager,
     )
     {
+        parent::__construct($config, $security, $entityManager);
     }
 
     #[Route('/{eventSlug}/{scheduleSlug}/ical-feed', name: 'app_frontend_event_schedule_ical', methods: ['GET'])]

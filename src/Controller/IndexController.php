@@ -9,6 +9,7 @@ use App\Repository\ScheduleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Solution10\Calendar\Calendar;
 use Solution10\Calendar\Resolution\MonthResolution;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
@@ -20,8 +21,13 @@ final class IndexController extends BaseController
         protected readonly ConfigRepository $configRepository,
         protected readonly EventRepository $eventRepository,
         protected readonly ScheduleRepository $scheduleRepository,
-        protected readonly EntityManagerInterface $entityManager,
-    ) {}
+        EntityManagerInterface $entityManager,
+        ConfigRepository $config,
+        Security $security,
+    )
+    {
+        parent::__construct($config, $security, $entityManager);
+    }
 
     #[Route('/', name: 'app_welcome', methods: ['GET'])]
     public function welcome(): Response

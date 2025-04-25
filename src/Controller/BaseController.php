@@ -2,28 +2,38 @@
 
 namespace App\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
+use App\Entity\User;
+use App\Repository\ConfigRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Response;
 
 abstract class BaseController extends AbstractController
 {
-    // TODO: tmp, implement config properly
-    private $cacheTLS = [
-        'schedule' => 1,
-        'event' => 10,
-        'homepage' => 10,
-        'calendar' => 60,
-        'other' => 60,
-    ];
-
-    public function getCurrentUser()
+    public function __construct(
+        protected readonly ConfigRepository $config,
+        protected readonly Security $security,
+        protected readonly EntityManagerInterface $entityManager,
+        // Can use RequestStack to get the current request
+    )
     {
-        return null;// $this->app['user'];
     }
 
-    protected function exceedsMaxUsers()
+    public function getCurrentUser(): ?User
     {
-        return false; // $this->getRepository('User')->countUsers() >= $this->app['config']['max_users'];
+        $curUser = $this->security->getUser();
+
+        if (!($curUser instanceof User)) {
+            throw new \RuntimeException('User is not a user???');
+        }
+
+        return $curUser;
+    }
+
+    protected function exceedsMaxUsers(): bool
+    {
+        return $this->entityManager->getRepository(User::class)->count() >= $this->config->getByKey('max_users', 0);
     }
 
     protected function setCachingHeader(Response $response, $resourceType, ?\DateTime $lastModified = null)
@@ -32,9 +42,9 @@ abstract class BaseController extends AbstractController
             $response->setLastModified($lastModified);
         }
 
-        // $times = $this->app['config']['cache_ttls'];
-        $user = null; // $this->app['user'];
-        $ttl = $this->cacheTLS[$resourceType];
+        $times = $this->getParameter('cache_ttls');
+        $user = $this->getCurrentUser();
+        $ttl = $times[$resourceType];
 
         if ($user) {
             $response->setPrivate();
