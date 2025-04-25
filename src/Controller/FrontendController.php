@@ -4,14 +4,14 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Entity\Schedule;
+use App\Horaro\Ex\PrivateEventException;
+use App\Horaro\Ex\ScheduleNotFoundException;
 use App\Horaro\Service\ScheduleTransformerService;
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class FrontendController extends BaseController
@@ -24,22 +24,22 @@ final class FrontendController extends BaseController
 
     #[Route('/{eventSlug}/{scheduleSlug}/ical-feed', name: 'app_frontend_event_schedule_ical', methods: ['GET'])]
     public function icalFaqAction(
-        #[MapEntity(mapping: ['eventSlug' => 'slug'])] Event                          $event,
-        #[MapEntity(expr: 'repository.findBySlug(eventSlug, scheduleSlug)')] Schedule $schedule,
-        #[MapQueryParameter] ?string                                                  $key = null,
-    ):Response
+        #[ValueResolver('eventSlug')] Event       $event, // for later reference #[MapEntity(mapping: ['eventSlug' => 'slug'])]
+        #[ValueResolver('scheduleSlug')] Schedule $schedule,
+        #[MapQueryParameter] ?string              $key = null,
+    ): Response
     {
         if (!$this->handleScheduleAccess($event, $schedule, $key)) {
             return new Response();
         }
 
         $isPrivate = $this->isPrivatePage($event);
-        $response   = $this->render('frontend/schedule/ical.twig', [
-            'event'     => $event,
-            'schedule'  => $schedule,
-            'key'       => $key,
+        $response = $this->render('frontend/schedule/ical.twig', [
+            'event' => $event,
+            'schedule' => $schedule,
+            'key' => $key,
             'schedules' => $this->getAllowedSchedules($event, $key),
-            'isPrivate' => $isPrivate
+            'isPrivate' => $isPrivate,
         ]);
 
         return $this->setCachingHeader($response, 'other');
@@ -47,12 +47,12 @@ final class FrontendController extends BaseController
 
     #[Route('/{eventSlug}/{scheduleSlug}.{format}', name: 'app_frontend_event_schedule_export', methods: ['GET'], condition: "params['format'] matches '/(jsonp?|xml|csv|ical)/'")]
     public function scheduleExport(
-        Request                                                                       $request,
-        #[MapEntity(mapping: ['eventSlug' => 'slug'])] Event                          $event,
-        #[MapEntity(expr: 'repository.findBySlug(eventSlug, scheduleSlug)')] Schedule $schedule,
-        string                                                                        $format,
-        #[MapQueryParameter] ?string                                                  $key = null,
-        #[MapQueryParameter] ?string                                                  $hiddenkey = null,
+        Request                                   $request,
+        #[ValueResolver('eventSlug')] Event       $event,
+        #[ValueResolver('scheduleSlug')] Schedule $schedule,
+        string                                    $format,
+        #[MapQueryParameter] ?string              $key = null,
+        #[MapQueryParameter] ?string              $hiddenkey = null,
     ): Response
     {
         $formats = ['json', 'jsonp', 'xml', 'csv', 'ical'];
@@ -81,13 +81,12 @@ final class FrontendController extends BaseController
 
         try {
             $data = $transformer->transform($schedule, true, $includeHiddenColumns);
-        }
-        catch (\InvalidArgumentException $e) {
+        } catch (\InvalidArgumentException $e) {
             throw new BadRequestHttpException($e->getMessage());
         }
 
         $filename = sprintf('%s-%s.%s', $event->getSlug(), $schedule->getSlug(), $transformer->getFileExtension());
-        $headers  = ['Content-Type' => $transformer->getContentType()];
+        $headers = ['Content-Type' => $transformer->getContentType()];
 
         if ($request->query->get('named')) {
             $headers['Content-Disposition'] = 'filename="'.$filename.'"';
@@ -100,9 +99,9 @@ final class FrontendController extends BaseController
 
     #[Route('/{eventSlug}/{scheduleSlug}', name: 'app_frontend_event_schedule', methods: ['GET'])]
     public function schedule(
-        #[MapEntity(mapping: ['eventSlug' => 'slug'])] Event                          $event,
-        #[MapEntity(expr: 'repository.findBySlug(eventSlug, scheduleSlug)')] Schedule $schedule,
-        #[MapQueryParameter] ?string                                                  $key = null,
+        #[ValueResolver('eventSlug')] Event       $event,
+        #[ValueResolver('scheduleSlug')] Schedule $schedule,
+        #[MapQueryParameter] ?string              $key = null,
     ): Response
     {
         if (!$this->handleScheduleAccess($event, $schedule, $key)) {
@@ -130,13 +129,13 @@ final class FrontendController extends BaseController
 
     #[Route('/{eventSlug}', name: 'app_frontend_event_home', methods: ['GET'])]
     public function event(
-        #[MapEntity(mapping: ['eventSlug' => 'slug'])] Event $event,
-        #[MapQueryParameter] ?string                         $key = null,
+        #[ValueResolver('eventSlug')] Event $event,
+        #[MapQueryParameter] ?string        $key = null,
     ): Response
     {
         // the event page is accessible if you have the event key or a key for one of the schedules
         if (!$this->hasGoodEventKey($event, $key) && !$this->hasGoodSchedulesKey($event, $key)) {
-            throw new AccessDeniedHttpException('This event is private.');
+            throw new PrivateEventException();
         }
 
         $description = $event->getDescription();
@@ -224,9 +223,9 @@ final class FrontendController extends BaseController
 
         if (!$scheduleAccess) {
             if ($eventAccess) {
-                throw new NotFoundHttpException('Schedule not found');
+                throw new ScheduleNotFoundException();
             } else {
-                throw new AccessDeniedHttpException('This event is private.');
+                throw new PrivateEventException();
             }
         }
 
