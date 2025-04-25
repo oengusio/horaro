@@ -2,6 +2,11 @@
 framework:
     secret: '%env(APP_SECRET)%'
 
+    form:
+      csrf_protection:
+        enabled: true
+        field_name: '_csrf_token'
+
     # Note that the session will be started ONLY if you read or write from it.
     session: true
 
