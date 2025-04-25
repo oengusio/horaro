@@ -44,9 +44,6 @@ class Event
     #[ORM\Column]
     private ?int $max_schedules = null;
 
-    #[ORM\Column]
-    private ?int $user_id = null;
-
     #[ORM\Column(nullable: true)]
     private ?int $team_id = null;
 
@@ -55,6 +52,10 @@ class Event
      */
     #[ORM\OneToMany(targetEntity: Schedule::class, mappedBy: 'event', orphanRemoval: false)]
     private Collection $schedules;
+
+    #[ORM\ManyToOne(inversedBy: 'events')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
 
     public function __construct()
     {
@@ -174,18 +175,6 @@ class Event
         return $this;
     }
 
-    public function getUserId(): ?int
-    {
-        return $this->user_id;
-    }
-
-    public function setUserId(int $user_id): static
-    {
-        $this->user_id = $user_id;
-
-        return $this;
-    }
-
     public function getTeamId(): ?int
     {
         return $this->team_id;
@@ -257,10 +246,20 @@ class Event
         return parse_url($website, PHP_URL_HOST);
     }
 
-
-    // TODO: implement user model
-    public function getOwner(): mixed
+    public function getOwner(): User
     {
-        return [ 'displayName' => 'testing' ];
+        return $this->getUser();
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
     }
 }
