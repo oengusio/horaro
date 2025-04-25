@@ -67,7 +67,11 @@ class ScheduleRepository extends ServiceEntityRepository
         return $result;
     }
 
-    protected function findPublicInRange($from, $to)
+    public function findPublic(\DateTime $startFrom, \DateTime $startTo) {
+        return $this->findPublicInRange($startFrom->format('U'), $startTo->format('U'));
+    }
+
+    protected function findPublicInRange(string|int $from, string|int $to)
     {
         $query = $this->createQueryBuilder('s')
                       ->join('s.event', 'e')

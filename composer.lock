@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b17fdd5c6fef8b9e44ffb2a6394af0fc",
+    "content-hash": "bddea62a89cf7a714d2f28d00bebab93",
     "packages": [
         {
             "name": "composer/semver",
@@ -2298,6 +2298,54 @@
                 "source": "https://github.com/php-fig/log/tree/3.0.2"
             },
             "time": "2024-09-11T13:17:53+00:00"
+        },
+        {
+            "name": "solution10/calendar",
+            "version": "v1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Solution10/calendar.git",
+                "reference": "fa0d8e09627693a7b0fe0e6b69cab997bab919e8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Solution10/calendar/zipball/fa0d8e09627693a7b0fe0e6b69cab997bab919e8",
+                "reference": "fa0d8e09627693a7b0fe0e6b69cab997bab919e8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">= 5.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.0",
+                "squizlabs/php_codesniffer": "^1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Solution10\\Calendar\\": "src",
+                    "Solution10\\Calendar\\Tests\\": "tests"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alex Gisby",
+                    "email": "alex@solution10.com"
+                }
+            ],
+            "description": "Straightforward calendars, with events, for any templating system",
+            "keywords": [
+                "calendar"
+            ],
+            "support": {
+                "issues": "https://github.com/Solution10/calendar/issues",
+                "source": "https://github.com/Solution10/calendar/tree/master"
+            },
+            "time": "2017-06-06T14:57:44+00:00"
         },
         {
             "name": "symfony/asset",

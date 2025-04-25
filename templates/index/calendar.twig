@@ -10,7 +10,7 @@
 	<div class="col-lg-12 col-md-12">
 		<h1>Event Calendar</h1>
 
-		<nav class="h-calendar-nav text-center">{% spaceless %}
+		<nav class="h-calendar-nav text-center">{% apply spaceless %}
 			<span>
 				{% if prevMonth.format('Y') < minYear %}
 					<span class="btn btn-link btn-xs disabled"><i class="fa fa-ban"></i></span>
@@ -53,18 +53,18 @@
 					<a href="/-/calendar/{{ nextYear.format('Y/m') }}" class="btn btn-link btn-xs"><i class="fa fa-forward"></i></a>
 				{% endif %}
 			</span>
-		{% endspaceless %}</nav>
+		{% endapply %}</nav>
 
 		<div class="hidden-xs">
 			<table class="h-calendar res-month">
-				<thead>{% spaceless %}
+				<thead>{% apply spaceless %}
 					<tr>
 						{% for day in month.weeks()[0].days %}
 							<th>{{ day.date().format('l') }}</th>
 						{% endfor %}
 					</tr>
-				{% endspaceless %}</thead>
-				<tbody>{% spaceless %}
+				{% endapply %}</thead>
+				<tbody>{% apply spaceless %}
 					{% for week in month.weeks %}
 						<tr>
 							{% for day in week.days %}
@@ -77,13 +77,13 @@
 											<div class="bar fill">&nbsp;</div>
 											{% else %}
 											<div class="bar {% if bar.state == 'single' %}state-begin state-end{% else %}state-{{ bar.state }}{% endif %} bar-theme-{{ bar.color }}">
-												<div class="jail">{% spaceless %}
+												<div class="jail">{% apply spaceless %}
 													{% if bar.state in ['single', 'begin'] or bar.continued %}
 													<a href="{{ bar.url }}" title="{{ bar.title }}"><i class="fa fa-gamepad"></i> {{ bar.title|shorten(30) }}</a>
 													{% else %}
 													&nbsp;
 													{% endif %}
-												{% endspaceless %}</div>
+												{% endapply %}</div>
 											</div>
 											{% endif %}
 										{% endfor %}
@@ -91,12 +91,12 @@
 							{% endfor %}
 						</tr>
 					{% endfor %}
-				{% endspaceless %}</tbody>
+				{% endapply %}</tbody>
 			</table>
 		</div>
 
 		<div class="visible-xs">
-			<table class="h-calendar-vertical res-month">{% spaceless %}
+			<table class="h-calendar-vertical res-month">{% apply spaceless %}
 			{% for week in month.weeks %}
 				<tbody class="week">
 				{% for day in week.days %}
@@ -136,7 +136,7 @@
 				{% endfor %}
 				</tbody>
 			{% endfor %}
-			{% endspaceless %}</table>
+			{% endapply %}</table>
 		</div>
 	</div>
 </div>
