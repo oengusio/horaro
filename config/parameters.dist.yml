@@ -10,7 +10,7 @@ parameters:
   # This is a random string of characters. Set it to anything you want, but make it
   # at least 10 characters long and random. You cannot leave this field blank.
   # Something like this is good: http://www.random.org/strings/?num=1&len=20&digits=on&upperalpha=on&loweralpha=on&format=plain
-  secret: ''
+  secret: '!SuperSecretChangeMe!'
 
   # Set this to false to enable production mode. This will:
   #   - turn off Twig auto-reloads
