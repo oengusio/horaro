@@ -4,15 +4,7 @@ parameters:
 
   # Your database connection. Set the user, password and dbname. If needed, change
   # the host.
-  database:
-    driver:   pdo_mysql
-    host:     127.0.0.1
-    user:     yourusername
-    password: yourpassword
-    dbname:   yourdatabasename
-    charset:  utf8
-    driverOptions:
-      1002: SET NAMES utf8
+  database.url: "mysql://horaro:horaro@127.0.0.1:3306/horaro?serverVersion=10.11.2-MariaDB&charset=utf8mb4"
 
   # Your secret.
   # This is a random string of characters. Set it to anything you want, but make it
