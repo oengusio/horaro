@@ -6,6 +6,7 @@ use App\Entity\Event;
 use App\Entity\Schedule;
 use App\Horaro\Ex\PrivateEventException;
 use App\Horaro\Ex\ScheduleNotFoundException;
+use App\Horaro\Service\ObscurityCodecService;
 use App\Horaro\Service\ScheduleTransformerService;
 use App\Repository\ConfigRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,9 +25,10 @@ final class FrontendController extends BaseController
         ConfigRepository $config,
         Security $security,
         EntityManagerInterface $entityManager,
+        ObscurityCodecService $obscurityCodec,
     )
     {
-        parent::__construct($config, $security, $entityManager);
+        parent::__construct($config, $security, $entityManager, $obscurityCodec);
     }
 
     #[Route('/{eventSlug}/{scheduleSlug}/ical-feed', name: 'app_frontend_event_schedule_ical', methods: ['GET'])]

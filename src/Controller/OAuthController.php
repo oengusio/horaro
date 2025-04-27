@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Horaro\Service\ObscurityCodecService;
 use App\Repository\ConfigRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use League\OAuth2\Client\Provider\AbstractProvider;
@@ -23,10 +24,11 @@ final class OAuthController extends BaseController
         ConfigRepository                        $config,
         Security                                $security,
         EntityManagerInterface                  $entityManager,
+        ObscurityCodecService $obscurityCodec,
         private readonly FormLoginAuthenticator $authenticator,
     )
     {
-        parent::__construct($config, $security, $entityManager);
+        parent::__construct($config, $security, $entityManager, $obscurityCodec);
     }
 
     #[Route('/-/oauth/start', name: 'app_oauth_start', methods: ['GET'], priority: 1)]

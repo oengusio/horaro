@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Event;
+use App\Horaro\Service\ObscurityCodecService;
 use App\Repository\ConfigRepository;
 use App\Repository\EventRepository;
 use App\Repository\ScheduleRepository;
@@ -24,9 +25,10 @@ final class IndexController extends BaseController
         EntityManagerInterface $entityManager,
         ConfigRepository $config,
         Security $security,
+        ObscurityCodecService $obscurityCodec,
     )
     {
-        parent::__construct($config, $security, $entityManager);
+        parent::__construct($config, $security, $entityManager, $obscurityCodec);
     }
 
     #[Route('/', name: 'app_welcome', methods: ['GET'])]

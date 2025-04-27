@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Entity\User;
+use App\Horaro\Service\ObscurityCodecService;
 use App\Repository\ConfigRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,6 +19,7 @@ abstract class BaseController extends AbstractController
         protected readonly ConfigRepository $config,
         protected readonly Security $security,
         protected readonly EntityManagerInterface $entityManager,
+        protected readonly ObscurityCodecService $obscurityCodec,
         // Can use RequestStack to get the current request
     )
     {
@@ -48,6 +50,14 @@ abstract class BaseController extends AbstractController
         }
 
         return $curUser;
+    }
+
+    protected function encodeID(int $id, ?string $entityType = null): string {
+        return $this->obscurityCodec->encode($id, $entityType);
+    }
+
+    protected function decodeID(string $hash, ?string $entityType = null): ?int {
+        return $this->obscurityCodec->decode($hash, $entityType);
     }
 
     protected function exceedsMaxUsers(): bool

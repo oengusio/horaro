@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Horaro\Service\ObscurityCodecService;
 use App\Repository\ConfigRepository;
 use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,10 +17,11 @@ final class SitemapController extends BaseController
         ConfigRepository $config,
         Security $security,
         EntityManagerInterface $entityManager,
+        ObscurityCodecService $obscurityCodec,
         private readonly EventRepository $eventRepository,
     )
     {
-        parent::__construct($config, $security, $entityManager);
+        parent::__construct($config, $security, $entityManager, $obscurityCodec);
     }
 
     #[Route('/-/sitemap', name: 'app_sitemap', methods: ['GET'], priority: 1)]
