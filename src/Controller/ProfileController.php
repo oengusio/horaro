@@ -4,8 +4,11 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Horaro\DTO\ProfileUpdateDto;
+use App\Horaro\DTO\UpdatePasswordDto;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class ProfileController extends BaseController
@@ -35,7 +38,23 @@ final class ProfileController extends BaseController
     }
 
     #[Route('/-/profile/password', name: 'app_profile_update_password', methods: ['PUT'], priority: 1)]
-    public function updatePassword(): Response {
+    public function updatePassword(
+        Request $request,
+        UserPasswordHasherInterface $passwordHasher,
+        #[MapRequestPayload] UpdatePasswordDto $updateDto,
+    ): Response {
+        $user = $this->getCurrentUser();
+
+        $hashedPassword = $passwordHasher->hashPassword(
+            $user,
+            $updateDto->getPassword()
+        );
+
+        $user->setPassword($hashedPassword);
+
+        $this->entityManager->flush();
+
+        $this->createFreshSession($request, 'Your password has been changed.');
 
         return $this->redirect('/-/profile');
     }
@@ -55,5 +74,17 @@ final class ProfileController extends BaseController
             'result' => $result,
             'user' => $user,
         ]);
+    }
+
+
+
+    protected function createFreshSession(Request $request, string $successMsg): void {
+        $session = $request->getSession();
+
+        $session->migrate();
+
+        // done
+
+        $this->addSuccessMsg($successMsg);
     }
 }

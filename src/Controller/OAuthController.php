@@ -164,6 +164,9 @@ final class OAuthController extends BaseController
             $this->addSuccessMsg('Welcome to Horaro, your account has been successfully created.');
         }
 
+        // TODO: some day
+        // $this->security->login()
+
         // auth, not sure if RememberMeBadge works, keep testing
         $authenticatorManager->authenticateUser($user, $this->authenticator, $request, [new RememberMeBadge()]);
 
