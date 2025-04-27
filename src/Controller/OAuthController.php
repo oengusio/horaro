@@ -106,6 +106,16 @@ final class OAuthController extends BaseController
             if ($currentUser) {
                 $user = $currentUser;
             } else {
+                if ($this->exceedsMaxUsers()) {
+                    $response = $this->render('index/login.twig', [
+                        'error_message' => 'User registration is not available in this installation.',
+                        'error' => 'User registration is not available in this installation.',
+                        'last_login' => '',
+                        'result' => null,
+                    ]);
+                    return $this->setCachingHeader($response, 'other');
+                }
+
                 $maxEvents = $this->config->getByKey('max_events', 10)->getValue();
                 $defaultRole = $this->getParameter('horaro.default_role');
 
