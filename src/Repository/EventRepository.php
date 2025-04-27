@@ -21,12 +21,21 @@ class EventRepository extends ServiceEntityRepository
      *
      * @return Event[]
      */
-    public function findByIds(array $eventIds): array {
+    public function findByIds(array $eventIds): array
+    {
         return $this->createQueryBuilder('e')
-            ->andWhere('e.id in (:ids)')
-            ->setParameter('ids', $eventIds)
-            ->getQuery()
-            ->getResult();
+                    ->andWhere('e.id in (:ids)')
+                    ->setParameter('ids', $eventIds)
+                    ->getQuery()
+                    ->getResult();
+    }
+
+    public function findPublic(): array
+    {
+        return $this->createQueryBuilder('e')
+                    ->andWhere('e.secret IS NULL')
+                    ->getQuery()
+                    ->getResult();
     }
 
     //    /**
