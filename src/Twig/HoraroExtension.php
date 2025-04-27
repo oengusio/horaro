@@ -2,12 +2,16 @@
 
 namespace App\Twig;
 
+use App\Horaro\Service\ObscurityCodecService;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
 class HoraroExtension extends AbstractExtension
 {
-    public function __construct(protected readonly TwigUtils $utils)
+    public function __construct(
+        private readonly TwigUtils $utils,
+        private readonly ObscurityCodecService $obscurityCodec,
+    )
     {
     }
 
@@ -16,7 +20,7 @@ class HoraroExtension extends AbstractExtension
         return [
             new TwigFilter(
                 'obscurify',
-                fn (string $id, string $entityType) => $this->obscurify($id, $entityType),
+                fn (int $id, string $entityType) => $this->obscurify($id, $entityType),
             ),
             new TwigFilter(
                 'shorten',
@@ -30,8 +34,8 @@ class HoraroExtension extends AbstractExtension
         return $this->utils->shorten($string, $maxlen);
     }
 
-    private function obscurify(string $id, string $entityType): string
+    private function obscurify(int $id, string $entityType): string
     {
-        return $id;
+        return $this->obscurityCodec->encode($id, $entityType);
     }
 }
