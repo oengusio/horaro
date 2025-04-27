@@ -23,6 +23,10 @@ abstract class BaseController extends AbstractController
     {
     }
 
+    protected function getLanguages() {
+        return $this->getParameter('horaro.languages');
+    }
+
     protected function addFlashMsg(string $type, string $message): void {
         $this->addFlash($type, $message);
     }
