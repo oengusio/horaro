@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Horaro\DTO\DeletePasswordDto;
 use App\Horaro\DTO\ProfileUpdateDto;
 use App\Horaro\DTO\UpdatePasswordDto;
 use Symfony\Component\HttpFoundation\Request;
@@ -93,8 +94,28 @@ final class ProfileController extends BaseController
         return $this->redirect('/-/profile');
     }
 
-    public function removePassword() {
-        //
+    #[Route('/-/profile/password', name: 'app_profile_unconnect_password', methods: ['DELETE'], priority: 1)]
+    public function removePassword(
+        Request $request,
+        #[MapRequestPayload] DeletePasswordDto $deleteDto,
+    ): Response {
+        $user = $this->getCurrentUser();
+
+        if ($user->getPassword() === null) {
+            $this->addErrorMsg('You already have no password.');
+            return $this->redirect('/-/profile');
+        }
+
+        if ($user->getTwitchOAuth() === null) {
+            $this->addErrorMsg('You can only remove your password if your account is linked to Twitch.');
+            return $this->redirect('/-/profile');
+        }
+
+        $user->setPassword(null);
+        $this->entityManager->flush();
+        $this->createFreshSession($request, 'Your password has been removed. Login via Twitch from now on.');
+
+        return $this->redirect('/-/profile');
     }
 
     protected function renderForm(User $user, ?array $result = null): ?Response

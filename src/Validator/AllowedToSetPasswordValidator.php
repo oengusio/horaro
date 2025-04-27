@@ -40,7 +40,7 @@ final class AllowedToSetPasswordValidator extends ConstraintValidator
             throw new ConstraintDefinitionException(\sprintf('The "%s" class must implement the "%s" interface.', get_debug_type($user), PasswordAuthenticatedUserInterface::class));
         }
 
-        if (!is_null($user->getPassword()) || empty($user->getPassword())) {
+        if (is_null($user->getPassword()) || $user->getPassword() === '') {
             $this->context->buildViolation($constraint->message)
                           ->setParameter('{{ value }}', $value)
                           ->addViolation();
