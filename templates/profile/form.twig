@@ -1,0 +1,161 @@
+{% extends "backend.twig" %}
+{% import "macros.twig" as macros %}
+
+{% block title %}Your Profile{% endblock %}
+
+{% block content %}
+<ul class="breadcrumb">
+	<li><a href="/-/home">Home</a></li>
+	<li>Update Profile…</li>
+</ul>
+
+<div class="row">
+	<div class="col-lg-12 col-md-12">
+		<h2>Update Your Profile</h2>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-6 col-md-6 col-sm-7">
+		<div class="well">
+			<form method="post" action="/-/profile" class="form-horizontal">
+				<div><input type="hidden" id="_method" name="_method" value="PUT" /></div>
+
+				<fieldset>
+					<legend>Profile Information</legend>
+					{{ macros.csrf_token() }}
+
+					<div class="form-group">
+						<label class="col-lg-4 control-label" for="display_name">Display Name:</label>
+						<div class="col-lg-8">
+							<input type="text" class="form-control" id="display_name" name="display_name" autofocus placeholder="Cowen Hames" value="{{ user.displayName }}">
+							<span class="help-block">This is the name that will be shown within Horaro. Leave it empty to
+							just use your username. You can use whatever letters, numbers or symbols you want in here.</span>
+						</div>
+					</div>
+
+					<div class="form-group{{ utils.formClass(result, 'language') }}">
+						<label class="col-lg-4 control-label" for="language">Language:</label>
+						<div class="col-lg-8">
+							{% set lng = utils.formValue(result, 'language', user.language) %}
+							<select name="language" id="language" class="form-control h-fancy">
+							{% for language,name in languages %}
+								<option value="{{ language }}"{% if lng == language %} selected{% endif %}>{{ name }}</option>
+							{% endfor %}
+							</select>
+							{{ macros.form_errors(result, 'language') }}
+						</div>
+					</div>
+
+					<div class="form-group{{ utils.formClass(result, 'gravatar') }}">
+						<label class="col-lg-4 control-label" for="gravatar">Gravatar Info:</label>
+						<div class="col-lg-8">
+							<input type="text" class="form-control" id="gravatar" name="gravatar" value="{{ utils.formValue(result, 'gravatar', user.gravatarHash) }}">
+							<span class="help-block">Enter your e-mail address or its MD5 hash to enable avatars within Horaro.</span>
+							{{ macros.form_errors(result, 'gravatar') }}
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="col-lg-12 text-center">
+							<button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check"> </i> Update</button>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+
+	<div class="col-lg-6 col-md-6 col-sm-5 h-formhelp">
+		<legend><span class="hidden-xs">Side</span><span class="hidden-lg hidden-md hidden-sm">Foot</span> Notes</legend>
+		<p>To enable an Gravatar-based avatar for your account, enter your e-mail address in the Gravatar
+		field. If you don't want to enter it, you can also instead enter its MD5 hash.</p>
+		<p>Note that only the MD5 hash is stored anyway (even if you enter your e-mail address). So if
+		you see a bunch of seemingly random characters for your Gravatar info, that's <em>all right</em>.
+		Don't fiddle with them, unless you know what you are doing. To update, simply paste in another
+		MD5 hash or e-mail address.</p>
+	</div>
+</div>
+
+{% if user.password %}
+<div class="row">
+	<div class="col-lg-6 col-md-6 col-sm-7">
+		<div class="well">
+			<form method="post" action="/-/profile/password" class="form-horizontal">
+				<div><input type="hidden" id="_method" name="_method" value="PUT" /></div>
+
+				<fieldset>
+					<legend>Change Password</legend>
+					{{ macros.csrf_token() }}
+
+					<div class="form-group{{ utils.formClass(result, 'current') }}">
+						<label class="col-lg-4 control-label" for="current">Current Password:</label>
+						<div class="col-lg-8">
+							<input type="password" class="form-control" id="current" name="current" required>
+							{{ macros.form_errors(result, 'current') }}
+						</div>
+					</div>
+
+					<div class="form-group{{ utils.formClass(result, 'password') }}">
+						<label class="col-lg-4 control-label" for="password">New Password:</label>
+						<div class="col-lg-8">
+							<input type="password" class="form-control" id="password" name="password" required>
+							{{ macros.form_errors(result, 'password') }}
+						</div>
+					</div>
+
+					<div class="form-group{{ utils.formClass(result, 'password2') }}">
+						<label class="col-lg-4 control-label" for="password2">New Password again:</label>
+						<div class="col-lg-8">
+							<input type="password" class="form-control" id="password2" name="password2" required>
+							{{ macros.form_errors(result, 'password2') }}
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="col-lg-12 text-center">
+							<button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check"> </i> Change Password</button>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+
+	{% if app.config.oauth is not empty %}
+	<div class="col-lg-6 col-md-6 col-sm-5 h-formhelp">
+		<legend>Log-in via Twitch</legend>
+		{% if user.twitchOAuth is null %}
+		<p>
+			Instead of using a password here, you can instead choose to log-in with your Twitch
+			account. This happens via OAuth2, so you <strong>never enter your Twitch username
+			and password here.</strong>
+		</p>
+		<p>
+			To connect, just click the button below and authenticate Horaro to access your
+			profile. You will then be redirected back here.
+		</p>
+
+		<p class="text-center">
+			{{ macros.twitch_oauth_starter() }}
+		</p>
+
+		<p><small class="text-muted">
+			Horaro only requests your <em>public</em> user information</abbr> (username, bio and
+			display name). Specifically, your e-mail address is not revealed to Horaro.
+		</small></p>
+		{% else %}
+		<div class="alert alert-success">
+			<i class="fa fa-check"></i> Your account is linked to Twitch, so you're all set-up to log-in via Twitch. Great!
+		</div>
+
+		<p>
+			You can <a href="/-/profile/oauth">manage your Twitch log-in</a> to un-link your account or
+			remove your Horaro password alltogether.
+		</p>
+		{% endif %}
+	</div>
+	{% endif %}
+</div>
+{% endif %}
+{% endblock %}
