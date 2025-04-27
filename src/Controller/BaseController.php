@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Event;
 use App\Entity\User;
 use App\Repository\ConfigRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -48,6 +49,10 @@ abstract class BaseController extends AbstractController
     protected function exceedsMaxUsers(): bool
     {
         return $this->entityManager->getRepository(User::class)->count() >= $this->config->getByKey('max_users', 0)->getValue();
+    }
+
+    protected function exceedsMaxEvents(User $u): bool {
+        return $this->entityManager->getRepository(Event::class)->count(['user' => $u]) >= $u->getMaxEvents();
     }
 
     protected function setCachingHeader(Response $response, $resourceType, ?\DateTime $lastModified = null)
