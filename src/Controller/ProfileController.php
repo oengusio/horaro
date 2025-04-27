@@ -59,6 +59,44 @@ final class ProfileController extends BaseController
         return $this->redirect('/-/profile');
     }
 
+    #[Route('/-/profile/oauth', name: 'app_profile_oauth', methods: ['GET'], priority: 1)]
+    public function oauth(): Response {
+        $user = $this->getCurrentUser();
+
+        if ($user->getTwitchOAuth() === null || $user->getPassword() === null) {
+            return $this->redirect('/-/profile');
+        }
+
+        return $this->renderOAuthForm($user);
+    }
+
+    #[Route('/-/profile/oauth', name: 'app_profile_oauth_unconnect', methods: ['DELETE'], priority: 1)]
+    public function disconnectOauth(Request $request) {
+        $user = $this->getCurrentUser();
+
+        if ($user->getTwitchOAuth() === null) {
+            $this->addErrorMsg('Your account is not linked with any Twitch account.');
+            return $this->redirect('/-/profile/oauth');
+        }
+
+        if ($user->getPassword() === null) {
+            $this->addErrorMsg('You cannot remove the only access to your account.');
+            return $this->redirect('/-/profile/oauth');
+        }
+
+        // update profile
+
+        $user->setTwitchOAuth(null);
+        $this->entityManager->flush();
+        $this->createFreshSession($request, 'Your account is no longer connected to any Twitch account.');
+
+        return $this->redirect('/-/profile');
+    }
+
+    public function removePassword() {
+        //
+    }
+
     protected function renderForm(User $user, ?array $result = null): ?Response
     {
         return $this->render('profile/form.twig', [
