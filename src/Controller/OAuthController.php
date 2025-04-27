@@ -181,7 +181,7 @@ final class OAuthController extends BaseController
         $params = $oauthConfig[$providerName];
 
         // auto-determine the callback URL
-        $params['redirectUri'] = 'https://'.$request->getHttpHost().'/-/oauth/callback';
+        $params['redirectUri'] = $request->getSchemeAndHttpHost().'/-/oauth/callback';
 
         switch ($providerName) {
             case 'twitch':
