@@ -1,6 +1,7 @@
 # see https://symfony.com/doc/current/reference/configuration/framework.html
 framework:
     secret: '%secret%'
+    http_method_override: true
 
     form:
       csrf_protection:

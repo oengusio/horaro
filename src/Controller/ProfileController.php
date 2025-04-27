@@ -18,9 +18,10 @@ final class ProfileController extends BaseController
         return $this->renderForm($user);
     }
 
-    #[Route('/-/profile', name: 'app_profile_update', methods: ['POST'], priority: 1)]
-    public function updateProfile(#[MapRequestPayload] ProfileUpdateDto $updateDto): Response {
-        $user      = $this->getCurrentUser();
+    #[Route('/-/profile', name: 'app_profile_update', methods: ['PUT'], priority: 1)]
+    public function updateProfile(#[MapRequestPayload] ProfileUpdateDto $updateDto): Response
+    {
+        $user = $this->getCurrentUser();
 
         $user->setDisplayName($updateDto->getDisplayName());
         $user->setLanguage($updateDto->getLanguage());
@@ -33,18 +34,26 @@ final class ProfileController extends BaseController
         return $this->redirect('/-/profile');
     }
 
-    protected function renderForm(User $user, ?array $result = null): ?Response {
+    #[Route('/-/profile/password', name: 'app_profile_update_password', methods: ['PUT'], priority: 1)]
+    public function updatePassword(): Response {
+
+        return $this->redirect('/-/profile');
+    }
+
+    protected function renderForm(User $user, ?array $result = null): ?Response
+    {
         return $this->render('profile/form.twig', [
-            'result'    => $result,
-            'user'      => $user,
+            'result' => $result,
+            'user' => $user,
             'languages' => $this->getLanguages(),
         ]);
     }
 
-    protected function renderOAuthForm(User $user, ?array $result = null): Response {
+    protected function renderOAuthForm(User $user, ?array $result = null): Response
+    {
         return $this->render('profile/oauth.twig', [
             'result' => $result,
-            'user'   => $user,
+            'user' => $user,
         ]);
     }
 }
