@@ -2,6 +2,7 @@
 # Files in the packages/ subdirectory configure your dependencies.
 
 imports:
+  - { resource: 'horaro_config.yml' }
   - { resource: 'parameters.yml' }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
@@ -28,3 +29,7 @@ services:
     App\Controller\:
       resource: '../src/Controller/'
       tags: [ 'controller.service_arguments' ]
+
+    App\Controller\OAuthController:
+      arguments:
+        $authenticator: '@security.authenticator.form_login.main'

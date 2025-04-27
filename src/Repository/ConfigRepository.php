@@ -6,6 +6,8 @@ use App\Entity\Config;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+use function array_map;
+
 /**
  * @extends ServiceEntityRepository<Config>
  */
@@ -23,6 +25,28 @@ class ConfigRepository extends ServiceEntityRepository
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult() ?? new Config($key, $defaultValue);
+    }
+
+    public function getAll(): array {
+        /** @var Config[] $allConfig */
+        $allConfig = $this->findAll();
+
+        // Can't use array_map sadly because we need a "flat" array
+        // There *might* be a better way, but ICBA to google that right now
+        $result = [];
+
+        foreach ($allConfig as $config) {
+            $result[$config->getKeyname()] = $config->getValue();
+        }
+
+        /*$mappedConfig = array_map(
+            fn (Config $config) => [ ($config->getKeyname()) => $config->getValue() ],
+            $allConfig
+        );
+
+        dd($mappedConfig);*/
+
+        return $result;
     }
 
     //    /**

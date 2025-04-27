@@ -101,8 +101,9 @@ final class IndexController extends BaseController
         $lastUsername = $authenticationUtils->getLastUsername();
 
         $response = $this->render('index/login.twig', [
-            'result' => null, // TODO: remove this
+            'result' => null, // TODO: remove/re-implement this
             'error' => $error,
+            'error_message' => $error,
             'last_login' => $lastUsername,
         ]);
 

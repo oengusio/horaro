@@ -22,6 +22,18 @@ abstract class BaseController extends AbstractController
     {
     }
 
+    protected function addFlashMsg(string $type, string $message): void {
+        $this->addFlash($type, $message);
+    }
+
+    protected function addSuccessMsg(string $message): void {
+        $this->addFlashMsg('success', $message);
+    }
+
+    protected function addErrorMsg(string $message): void {
+        $this->addFlashMsg('error', $message);
+    }
+
     public function getCurrentUser(): ?User
     {
         $curUser = $this->security->getUser();

@@ -78,7 +78,7 @@
 
 	{% block flashes %}
 	{% if app.user %}
-		{% set flashes = app.session.flashbag.all %}
+		{% set flashes = app.flashes %}
 		{% if flashes|length > 0 %}
 		<script type="application/json" id="h-flashes">
 		{{ flashes|json_encode|raw }}
