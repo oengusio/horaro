@@ -99,11 +99,20 @@ final class EventController extends BaseController
         return $this->redirect('/-/events/'.$this->encodeID($event->getId(), 'event'));
     }
 
+    #[Route('/-/events/{event_e}/description', name: 'app_backend_event_description_update', methods: ['PUT'])]
     public function updateDescription(
         #[ValueResolver('event_e')] Event $event,
         #[MapRequestPayload] EventDescriptionUpdateDto $dto,
-    )
+    ): Response
     {
+        $event->setDescription($dto->getDescription());
+        $this->entityManager->flush();
+
+        // done
+
+        $this->addSuccessMsg('Your event description has been updated.');
+
+        return $this->redirect('/-/events/'.$this->encodeID($event->getId(), 'event'));
 
     }
 
