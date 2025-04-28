@@ -3,6 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Event;
+use App\Entity\Schedule;
+use App\Entity\ScheduleColumn;
+use App\Entity\ScheduleItem;
 use App\Entity\User;
 use App\Horaro\Service\ObscurityCodecService;
 use App\Repository\ConfigRepository;
@@ -67,6 +70,18 @@ abstract class BaseController extends AbstractController
 
     protected function exceedsMaxEvents(User $u): bool {
         return $this->entityManager->getRepository(Event::class)->count(['user' => $u]) >= $u->getMaxEvents();
+    }
+
+    protected function exceedsMaxSchedules(Event $e): bool {
+        return $this->entityManager->getRepository(Schedule::class)->count(['event' => $e]) >= $e->getMaxSchedules();
+    }
+
+    protected function exceedsMaxScheduleItems(Schedule $s): bool {
+        return $this->entityManager->getRepository(ScheduleItem::class)->count(['schedule' => $s]) >= $s->getMaxItems();
+    }
+
+    protected function exceedsMaxScheduleColumns(Schedule $s): bool {
+        return $this->entityManager->getRepository(ScheduleColumn::class)->countVisible($s) >= 10;
     }
 
     protected function setCachingHeader(Response $response, $resourceType, ?\DateTime $lastModified = null)

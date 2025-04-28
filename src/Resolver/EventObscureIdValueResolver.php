@@ -4,7 +4,9 @@ namespace App\Resolver;
 
 use App\Horaro\Ex\EventNotFoundException;
 use App\Horaro\Service\ObscurityCodecService;
+use App\Horaro\Traits\CanGetUser;
 use App\Repository\EventRepository;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsTargetedValueResolver;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
@@ -14,9 +16,12 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 #[AsTargetedValueResolver('event_e')]
 readonly class EventObscureIdValueResolver implements ValueResolverInterface
 {
+    use CanGetUser;
+
     public function __construct(
         private EventRepository $repository,
         private ObscurityCodecService $obscurityCodec,
+        private Security $security,
     )
     {
     }
@@ -34,6 +39,14 @@ readonly class EventObscureIdValueResolver implements ValueResolverInterface
         $foundEvent = $this->repository->findOneBy(['id' => $decoded]);
 
         if (!$foundEvent) {
+            throw new EventNotFoundException();
+        }
+
+        $user = $this->getUser();
+
+        // TODO: use roles for this, admins and op should have access
+        // Make sure non-owners cannot access the event settings
+        if ($user && $foundEvent->getOwner()->getId() !== $user->getId()) {
             throw new EventNotFoundException();
         }
 

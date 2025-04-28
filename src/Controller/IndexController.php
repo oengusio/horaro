@@ -94,6 +94,7 @@ final class IndexController extends BaseController
         return $this->setCachingHeader($html, 'homepage');
     }
 
+    // TODO: prevent users with role ghost from logging in
     #[Route('/-/login', name: 'app_login', methods: ['GET', 'POST'], priority: 1)]
     public function loginForm(AuthenticationUtils $authenticationUtils): Response {
         // get the login error if there is one
