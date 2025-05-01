@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Event;
 use App\Horaro\DTO\CreateEventDto;
 use App\Horaro\DTO\EventDescriptionUpdateDto;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
