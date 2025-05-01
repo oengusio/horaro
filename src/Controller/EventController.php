@@ -58,6 +58,7 @@ final class EventController extends BaseController
         return $this->redirect('/-/events/'.$this->encodeID($event->getId(), 'event'));
     }
 
+    #[IsGranted('edit', 'event')]
     #[Route('/-/events/{event_e}', name: 'app_backend_event_detail', methods: ['GET'])]
     public function detail(
         #[ValueResolver('event_e')] Event $event
@@ -70,11 +71,13 @@ final class EventController extends BaseController
         ]);
     }
 
+    #[IsGranted('edit', 'event')]
     #[Route('/-/events/{event_e}/edit', name: 'app_backend_event_edit', methods: ['GET'])]
     public function editEventForm(#[ValueResolver('event_e')] Event $event): Response {
         return $this->renderForm($event);
     }
 
+    #[IsGranted('edit', 'event')]
     #[Route('/-/events/{event_e}', name: 'app_backend_event_update', methods: ['PUT'])]
     public function updateEvent(
         #[ValueResolver('event_e')] Event $event,
@@ -99,6 +102,7 @@ final class EventController extends BaseController
         return $this->redirect('/-/events/'.$this->encodeID($event->getId(), 'event'));
     }
 
+    #[IsGranted('edit', 'event')]
     #[Route('/-/events/{event_e}/description', name: 'app_backend_event_description_update', methods: ['PUT'])]
     public function updateDescription(
         #[ValueResolver('event_e')] Event $event,

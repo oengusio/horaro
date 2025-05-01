@@ -42,13 +42,13 @@ readonly class EventObscureIdValueResolver implements ValueResolverInterface
             throw new EventNotFoundException();
         }
 
-        $user = $this->getUser();
+//        $user = $this->getUser();
 
         // TODO: use roles for this, admins and op should have access
         // Make sure non-owners cannot access the event settings
-        if ($user && $foundEvent->getOwner()->getId() !== $user->getId()) {
+        /*if ($user && $foundEvent->getOwner()->getId() !== $user->getId()) {
             throw new EventNotFoundException();
-        }
+        }*/
 
         return [$foundEvent];
     }
