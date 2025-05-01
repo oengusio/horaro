@@ -6,6 +6,7 @@ use App\Entity\Event;
 use App\Entity\Schedule;
 use App\Entity\ScheduleColumn;
 use App\Horaro\DTO\CreateScheduleDto;
+use App\Horaro\DTO\EventDescriptionUpdateDto;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
@@ -149,6 +150,26 @@ final class ScheduleController extends BaseController
         // done
 
         $this->addSuccessMsg('Your schedule has been updated.');
+
+        return $this->redirect('/-/schedules/'.$this->encodeID($schedule->getId(), 'schedule'));
+    }
+
+    #[IsGranted('edit', 'schedule')]
+    #[Route('/-/schedules/{schedule_e}/description', name: 'app_backend_schedule_edit_save_description', methods: ['PUT'])]
+    public function saveDescription(
+        #[ValueResolver('schedule_e')] Schedule $schedule,
+        #[MapRequestPayload] EventDescriptionUpdateDto $dto,
+    ): Response
+    {
+        $schedule
+            ->setDescription($dto->getDescription())
+            ->touch();
+
+        $this->entityManager->flush();
+
+        // done
+
+        $this->addSuccessMsg('Your schedule description has been updated.');
 
         return $this->redirect('/-/schedules/'.$this->encodeID($schedule->getId(), 'schedule'));
     }
