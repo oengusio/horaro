@@ -18,7 +18,8 @@ final class ScheduleController extends BaseController
 {
     #[IsGranted('edit', 'event')]
     #[Route('/-/events/{event_e}/schedules/new', name: 'app_backend_schedule_new', methods: ['GET'])]
-    public function newScheduleForm(#[ValueResolver('event_e')] Event $event): Response {
+    public function newScheduleForm(#[ValueResolver('event_e')] Event $event): Response
+    {
         if ($this->exceedsMaxSchedules($event)) {
             return $this->redirect(
                 '/-/events/'.$this->encodeID($event->getId(), 'event')
@@ -31,7 +32,7 @@ final class ScheduleController extends BaseController
     #[IsGranted('edit', 'event')]
     #[Route('/-/events/{event_e}/schedules', name: 'app_backend_schedule_create', methods: ['POST'])]
     public function create(
-        #[ValueResolver('event_e')] Event $event,
+        #[ValueResolver('event_e')] Event      $event,
         #[MapRequestPayload] CreateScheduleDto $createDto,
     ): Response
     {
@@ -60,15 +61,13 @@ final class ScheduleController extends BaseController
             ->setHiddenSecret($createDto->getHiddenSecret())
             ->setSetupTime($createDto->getParsedSetupTime())
             ->setMaxItems($this->config->getByKey('max_schedule_items', 200)->getValue())
-            ->touch()
-        ;
+            ->touch();
 
         $column = new ScheduleColumn();
         $column
             ->setSchedule($schedule)
             ->setPosition(1)
-            ->setName('Description')
-        ;
+            ->setName('Description');
 
         $this->entityManager->persist($schedule);
         $this->entityManager->persist($column);
@@ -85,7 +84,7 @@ final class ScheduleController extends BaseController
     #[Route('/-/schedules/{schedule_e}', name: 'app_backend_schedule_detail', methods: ['GET'])]
     public function index(#[ValueResolver('schedule_e')] Schedule $schedule): Response
     {
-        $items     = [];
+        $items = [];
         $columnIDs = [];
 
         foreach ($schedule->getItems() as $item) {
@@ -108,15 +107,16 @@ final class ScheduleController extends BaseController
 
         return $this->render('schedule/detail.twig', [
             'schedule' => $schedule,
-            'items'    => $items ?: null,
-            'columns'  => $columnIDs,
+            'items' => $items ?: null,
+            'columns' => $columnIDs,
             'maxItems' => $this->config->getByKey('max_schedule_items', 200)->getValue(),
         ]);
     }
 
     #[IsGranted('edit', 'schedule')]
     #[Route('/-/schedules/{schedule_e}/edit', name: 'app_backend_schedule_edit', methods: ['GET'])]
-    public function editSchedule(#[ValueResolver('schedule_e')] Schedule $schedule): Response {
+    public function editSchedule(#[ValueResolver('schedule_e')] Schedule $schedule): Response
+    {
         return $this->renderForm($schedule->getEvent(), $schedule);
     }
 
@@ -124,7 +124,7 @@ final class ScheduleController extends BaseController
     #[Route('/-/schedules/{schedule_e}', name: 'app_backend_schedule_edit_save', methods: ['PUT'])]
     public function save(
         #[ValueResolver('schedule_e')] Schedule $schedule,
-        #[MapRequestPayload] CreateScheduleDto $createDto,
+        #[MapRequestPayload] CreateScheduleDto  $createDto,
     ): Response
     {
         $dtoStartDate = $createDto->getStartDate();
@@ -157,7 +157,7 @@ final class ScheduleController extends BaseController
     #[IsGranted('edit', 'schedule')]
     #[Route('/-/schedules/{schedule_e}/description', name: 'app_backend_schedule_edit_save_description', methods: ['PUT'])]
     public function saveDescription(
-        #[ValueResolver('schedule_e')] Schedule $schedule,
+        #[ValueResolver('schedule_e')] Schedule        $schedule,
         #[MapRequestPayload] EventDescriptionUpdateDto $dto,
     ): Response
     {
@@ -174,16 +174,37 @@ final class ScheduleController extends BaseController
         return $this->redirect('/-/schedules/'.$this->encodeID($schedule->getId(), 'schedule'));
     }
 
+    #[IsGranted('edit', 'schedule')]
+    #[Route('/-/schedules/{schedule_e}/delete', name: 'app_backend_schedule_delete_confirmation', methods: ['GET'])]
+    public function confirmDelete(#[ValueResolver('schedule_e')] Schedule $schedule): Response
+    {
+        return $this->render('schedule/confirmation.twig', ['schedule' => $schedule]);
+    }
 
-    protected function renderForm(Event $event, Schedule $schedule = null, $result = null): Response {
+    #[IsGranted('edit', 'schedule')]
+    #[Route('/-/schedules/{schedule_e}', name: 'app_backend_schedule_delete', methods: ['DELETE'])]
+    public function delete(#[ValueResolver('schedule_e')] Schedule $schedule): Response
+    {
+        $eventId = $schedule->getEvent()->getId();
+
+        $this->entityManager->remove($schedule);
+        $this->entityManager->flush();
+
+        $this->addSuccessMsg('The requested schedule has been deleted.');
+
+        return $this->redirect('/-/events/'.$this->encodeID($eventId, 'event'));
+    }
+
+    protected function renderForm(Event $event, Schedule $schedule = null, $result = null): Response
+    {
         $timezones = \DateTimeZone::listIdentifiers();
 
         return $this->render('schedule/form.twig', [
-            'event'        => $event,
-            'timezones'    => $timezones,
-            'schedule'     => $schedule,
-            'result'       => $result,
-            'themes'       => $this->getParameter('horaro.themes'),
+            'event' => $event,
+            'timezones' => $timezones,
+            'schedule' => $schedule,
+            'result' => $result,
+            'themes' => $this->getParameter('horaro.themes'),
             'defaultTheme' => $event->getTheme(),
         ]);
     }
