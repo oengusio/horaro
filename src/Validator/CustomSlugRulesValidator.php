@@ -71,8 +71,8 @@ final class CustomSlugRulesValidator extends ConstraintValidator
             $parentName = $this->parseParameterName($constraint->parent);
             $parentId = $this->decodeItemId($parentName);
 
-            if (!$parentId) {
-                $searchParams["{$parentName}_id"] = $parentId;
+            if ($parentId) {
+                $searchParams[$parentName] = $parentId;
             }
         }
 

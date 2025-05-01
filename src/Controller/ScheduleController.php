@@ -113,6 +113,46 @@ final class ScheduleController extends BaseController
         ]);
     }
 
+    #[IsGranted('edit', 'schedule')]
+    #[Route('/-/schedules/{schedule_e}/edit', name: 'app_backend_schedule_edit', methods: ['GET'])]
+    public function editSchedule(#[ValueResolver('schedule_e')] Schedule $schedule): Response {
+        return $this->renderForm($schedule->getEvent(), $schedule);
+    }
+
+    #[IsGranted('edit', 'schedule')]
+    #[Route('/-/schedules/{schedule_e}', name: 'app_backend_schedule_edit_save', methods: ['PUT'])]
+    public function save(
+        #[ValueResolver('schedule_e')] Schedule $schedule,
+        #[MapRequestPayload] CreateScheduleDto $createDto,
+    ): Response
+    {
+        $dtoStartDate = $createDto->getStartDate();
+        $dtoStartTime = $createDto->getStartTime();
+        $startDateTime = \DateTime::createFromFormat('Y-m-d G:i', "$dtoStartDate $dtoStartTime");
+
+        $schedule
+            ->setName($createDto->getName())
+            ->setSlug($createDto->getSlug())
+            ->setTimezone($createDto->getTimezone())
+            ->setStart($startDateTime)
+            ->setWebsite($createDto->getWebsite())
+            ->setTwitter($createDto->getTwitter())
+            ->setTwitch($createDto->getTwitch())
+            ->setTheme($createDto->getTheme())
+            ->setSecret($createDto->getSecret())
+            ->setHiddenSecret($createDto->getHiddenSecret())
+            ->setSetupTime($createDto->getParsedSetupTime())
+            ->touch();
+
+        $this->entityManager->flush();
+
+        // done
+
+        $this->addSuccessMsg('Your schedule has been updated.');
+
+        return $this->redirect('/-/schedules/'.$this->encodeID($schedule->getId(), 'schedule'));
+    }
+
 
     protected function renderForm(Event $event, Schedule $schedule = null, $result = null): Response {
         $timezones = \DateTimeZone::listIdentifiers();
