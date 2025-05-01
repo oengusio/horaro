@@ -119,6 +119,23 @@ final class EventController extends BaseController
 
     }
 
+    #[IsGranted('edit', 'event')]
+    #[Route('/-/events/{event_e}/delete', name: 'app_backend_event_delete_form', methods: ['GET'])]
+    public function confirmDelete(#[ValueResolver('event_e')] Event $event): Response {
+        return $this->render('event/confirmation.twig', ['event' => $event]);
+    }
+
+    #[IsGranted('edit', 'event')]
+    #[Route('/-/events/{event_e}', name: 'app_backend_event_kill_it', methods: ['DELETE'])]
+    public function deleteEvent(#[ValueResolver('event_e')] Event $event): Response {
+        $this->entityManager->remove($event);
+        $this->entityManager->flush();
+
+        $this->addSuccessMsg('The requested event has been deleted.');
+
+        return $this->redirect('/-/home');
+    }
+
     protected function renderForm(?Event $event = null, mixed $result = null) {
         return $this->render('event/form.twig', [
             'event'        => $event,
