@@ -7,9 +7,12 @@ use App\Entity\Schedule;
 use App\Entity\ScheduleColumn;
 use App\Horaro\DTO\CreateScheduleDto;
 use App\Horaro\DTO\EventDescriptionUpdateDto;
+use App\Horaro\Service\ScheduleTransformerService;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -193,6 +196,41 @@ final class ScheduleController extends BaseController
         $this->addSuccessMsg('The requested schedule has been deleted.');
 
         return $this->redirect('/-/events/'.$this->encodeID($eventId, 'event'));
+    }
+
+    #[IsGranted('edit', 'schedule')]
+    #[Route('/-/schedules/{schedule_e}/export', name: 'app_backend_schedule_export', methods: ['GET'])]
+    public function exportSchedule(
+        ScheduleTransformerService              $transformerService,
+        #[ValueResolver('schedule_e')] Schedule $schedule,
+        #[MapQueryParameter] string             $format,
+    ): Response
+    {
+        $formats = ['json', 'xml', 'csv', 'ical'];
+
+        if (!in_array($format, $formats, true)) {
+            throw new BadRequestHttpException('Invalid format "'.$format.'" given.');
+        }
+
+        $transformer = $transformerService->getTransformer($format);
+
+        try {
+            $data = $transformer->transform($schedule, false, true);
+        } catch (\InvalidArgumentException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        }
+
+        $filename = sprintf(
+            '%s-%s.%s',
+            $schedule->getEvent()->getSlug(),
+            $schedule->getSlug(),
+            $transformer->getFileExtension()
+        );
+
+        return new Response($data, 200, [
+            'Content-Type' => $transformer->getContentType(),
+            'Content-Disposition' => 'filename="'.$filename.'"',
+        ]);
     }
 
     protected function renderForm(Event $event, Schedule $schedule = null, $result = null): Response
