@@ -2,20 +2,20 @@
 
 namespace App\Resolver;
 
-use App\Horaro\Ex\EventNotFoundException;
+use App\Horaro\Ex\ScheduleNotFoundException;
 use App\Horaro\Service\ObscurityCodecService;
-use App\Repository\EventRepository;
+use App\Repository\ScheduleRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsTargetedValueResolver;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 
-#[AsTargetedValueResolver('event_e')]
-readonly class EventObscureIdValueResolver implements ValueResolverInterface
+#[AsTargetedValueResolver('schedule_e')]
+readonly class ScheduleObscureIdValueResolver implements ValueResolverInterface
 {
     public function __construct(
-        private EventRepository $repository,
+        private ScheduleRepository $repository,
         private ObscurityCodecService $obscurityCodec,
     )
     {
@@ -27,16 +27,16 @@ readonly class EventObscureIdValueResolver implements ValueResolverInterface
     public function resolve(Request $request, ArgumentMetadata $argument): array
     {
         [$options] = $argument->getAttributes(ValueResolver::class, ArgumentMetadata::IS_INSTANCEOF);
-        $eventId = $request->get($options->resolver);
+        $scheduleId = $request->get($options->resolver);
 
-        $decoded = $this->obscurityCodec->decode($eventId, 'event');
+        $decoded = $this->obscurityCodec->decode($scheduleId, 'schedule');
 
-        $foundEvent = $this->repository->findOneBy(['id' => $decoded]);
+        $foundSchedule = $this->repository->findOneBy(['id' => $decoded]);
 
-        if (!$foundEvent) {
-            throw new EventNotFoundException();
+        if (!$foundSchedule) {
+            throw new ScheduleNotFoundException();
         }
 
-        return [$foundEvent];
+        return [$foundSchedule];
     }
 }
