@@ -24,6 +24,7 @@ final class CustomSlugRulesValidator extends ConstraintValidator
     {
     }
 
+    // TODO: implement & test parent validator
     public function validate(mixed $value, Constraint $constraint): void
     {
         /* @var CustomSlugRules $constraint */
@@ -48,12 +49,10 @@ final class CustomSlugRulesValidator extends ConstraintValidator
         }
 
         /** @var \App\Entity\Event|\App\Entity\Schedule $existing */
-        $existing = $this->entityManager
-            ->getRepository($constraint->entity)
-            ->findOneBy(['slug' => $value]);
+        $existing = $this->lookupExistingInDb($constraint, $value);
 
         if ($existing) {
-            $ref = $this->decodeItemId($constraint);
+            $ref = $this->decodeConstraintItemId($constraint);
 
             if ($ref && $existing->getId() !== $ref) {
                 $this->context->buildViolation('The slug "{{ value }}" is already in use, sorry.')
@@ -63,15 +62,40 @@ final class CustomSlugRulesValidator extends ConstraintValidator
         }
     }
 
-    private function getParameterName(CustomSlugRules $constraint): string {
-        $entityName = strtolower($constraint->entity);
-        $boom = explode('\\', $entityName);
+    private function lookupExistingInDb(CustomSlugRules $constraint, string $slug) {
+        $searchParams = [
+            'slug' => $slug,
+        ];
+
+        if ($constraint->parent) {
+            $parentName = $this->parseParameterName($constraint->parent);
+            $parentId = $this->decodeItemId($parentName);
+
+            if (!$parentId) {
+                $searchParams["{$parentName}_id"] = $parentId;
+            }
+        }
+
+        return $this->entityManager
+            ->getRepository($constraint->entity)
+            ->findOneBy($searchParams);
+    }
+
+    private function parseParameterName(string $paramName): string
+    {
+        $boom = explode('\\', strtolower($paramName));
 
         return $boom[count($boom) - 1];
     }
 
-    private function decodeItemId(CustomSlugRules $constraint): ?int {
-        $paramName = $this->getParameterName($constraint);
+    private function decodeConstraintItemId(CustomSlugRules $constraint): ?int
+    {
+        return $this->decodeItemId(
+            $this->parseParameterName($constraint->entity),
+        );
+    }
+
+    private function decodeItemId(string $paramName): ?int {
         $requestArg = "{$paramName}_e";
         $paramId = $this->requestStack->getCurrentRequest()->attributes->get($requestArg);
 

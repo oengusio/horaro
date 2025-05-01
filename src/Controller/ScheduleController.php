@@ -4,7 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Entity\Schedule;
+use App\Entity\ScheduleColumn;
+use App\Horaro\DTO\CreateScheduleDto;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -17,10 +20,64 @@ final class ScheduleController extends BaseController
     public function newScheduleForm(#[ValueResolver('event_e')] Event $event): Response {
         if ($this->exceedsMaxSchedules($event)) {
             return $this->redirect(
-                '/-/events/'.$this->obscurityCodec->encode($event->getId(), 'event')
+                '/-/events/'.$this->encodeID($event->getId(), 'event')
             );
         }
+
         return $this->renderForm($event);
+    }
+
+    #[IsGranted('edit', 'event')]
+    #[Route('/-/events/{event_e}/schedules', name: 'app_backend_schedule_create', methods: ['POST'])]
+    public function create(
+        #[ValueResolver('event_e')] Event $event,
+        #[MapRequestPayload] CreateScheduleDto $createDto,
+    ): Response
+    {
+        if ($this->exceedsMaxSchedules($event)) {
+            return $this->redirect(
+                '/-/events/'.$this->encodeID($event->getId(), 'event')
+            );
+        }
+
+        $schedule = new Schedule();
+        $dtoStartDate = $createDto->getStartDate();
+        $dtoStartTime = $createDto->getStartTime();
+        $startDateTime = \DateTime::createFromFormat('Y-m-d G:i', "$dtoStartDate $dtoStartTime");
+
+        $schedule
+            ->setEvent($event)
+            ->setName($createDto->getName())
+            ->setSlug($createDto->getSlug())
+            ->setTimezone($createDto->getTimezone())
+            ->setStart($startDateTime)
+            ->setWebsite($createDto->getWebsite())
+            ->setTwitter($createDto->getTwitter())
+            ->setTwitch($createDto->getTwitch())
+            ->setTheme($createDto->getTheme())
+            ->setSecret($createDto->getSecret())
+            ->setHiddenSecret($createDto->getHiddenSecret())
+            ->setSetupTime($createDto->getParsedSetupTime())
+            ->setMaxItems($this->config->getByKey('max_schedule_items', 200)->getValue())
+            ->touch()
+        ;
+
+        $column = new ScheduleColumn();
+        $column
+            ->setSchedule($schedule)
+            ->setPosition(1)
+            ->setName('Description')
+        ;
+
+        $this->entityManager->persist($schedule);
+        $this->entityManager->persist($column);
+        $this->entityManager->flush();
+
+        // done
+
+        $this->addSuccessMsg('Your new schedule has been created.');
+
+        return $this->redirect('/-/schedules/'.$this->encodeID($schedule->getId(), 'schedule'));
     }
 
     #[IsGranted('edit', 'schedule')]
@@ -40,7 +97,7 @@ final class ScheduleController extends BaseController
             $items[] = [
                 $this->encodeID($item->getId(), 'schedule.item'),
                 $item->getLengthInSeconds(),
-                $extra
+                $extra,
             ];
         }
 
@@ -66,7 +123,7 @@ final class ScheduleController extends BaseController
             'schedule'     => $schedule,
             'result'       => $result,
             'themes'       => $this->getParameter('horaro.themes'),
-            'defaultTheme' => $event->getTheme()
+            'defaultTheme' => $event->getTheme(),
         ]);
     }
 }

@@ -90,13 +90,26 @@ class RoleManager
     }
 
     protected function getUserFromResource(User|Schedule|ScheduleColumn|ScheduleItem|Event $resource): ?User {
-        return match(get_class($resource)) {
-            User::class, FuckingUserProxy::class => $resource,
-            ScheduleItem::class => $this->getUserFromResource($resource->getSchedule()),
-            ScheduleColumn::class => $this->getUserFromResource($resource->getSchedule()),
-            Schedule::class => $this->getUserFromResource($resource->getEvent()),
-            Event::class => $this->getUserFromResource($resource->getOwner()),
-            default => null,
-        };
+        if ($resource instanceof User) {
+            return $resource;
+        }
+
+        if ($resource instanceof ScheduleItem) {
+            return $this->getUserFromResource($resource->getSchedule());
+        }
+
+        if ($resource instanceof ScheduleColumn) {
+            return $this->getUserFromResource($resource->getSchedule());
+        }
+
+        if ($resource instanceof Schedule) {
+            return $this->getUserFromResource($resource->getEvent());
+        }
+
+        if ($resource instanceof Event) {
+            return $this->getUserFromResource($resource->getOwner());
+        }
+
+        return null;
     }
 }

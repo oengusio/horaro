@@ -27,6 +27,11 @@ class ScheduleColumn
     #[ORM\JoinColumn(nullable: false)]
     private ?Schedule $schedule = null;
 
+    public function __construct()
+    {
+        $this->setHidden(false);
+    }
+
     public function getId(): ?int
     {
         return $this->id;

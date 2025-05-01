@@ -233,7 +233,7 @@ class Schedule
         return $this->setup_time;
     }
 
-    public function setSetupTime(?string $setup_time): static
+    public function setSetupTime(?\DateTimeInterface $setup_time): static
     {
         $this->setup_time = $setup_time;
 
@@ -503,5 +503,23 @@ class Schedule
     public function getSetupTimeISODuration(): string
     {
         return ReadableTime::dateTimeToISODuration($this->getSetupTime());
+    }
+
+    public function touch(): Schedule {
+        return $this->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
+    }
+
+    public function getLink(): string {
+        $event = $this->getEvent();
+        $url   = '/'.$event->getSlug().'/'.$this->getSlug();
+
+        // for convenience reasons, create links that have access to the whole event if possible
+        if ($event->getSecret()) {
+            $url .= '?key='.$event->getSecret();
+        } else if ($this->getSecret()) {
+            $url .= '?key='.$this->getSecret();
+        }
+
+        return $url;
     }
 }
