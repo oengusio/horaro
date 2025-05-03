@@ -23,12 +23,12 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class ScheduleColumnController extends BaseController
 {
     public function __construct(
-        private readonly ScheduleRepository $scheduleRepository,
+        private readonly ScheduleRepository       $scheduleRepository,
         private readonly ScheduleColumnRepository $columnRepository,
-        ConfigRepository $config,
-        Security $security,
-        EntityManagerInterface $entityManager,
-        ObscurityCodecService $obscurityCodec,
+        ConfigRepository                          $config,
+        Security                                  $security,
+        EntityManagerInterface                    $entityManager,
+        ObscurityCodecService                     $obscurityCodec,
     )
     {
         parent::__construct($config, $security, $entityManager, $obscurityCodec);
@@ -61,9 +61,10 @@ final class ScheduleColumnController extends BaseController
     #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
     #[Route('/-/schedules/{schedule_e}/columns', name: 'app_schedule_column_new', methods: ['POST'])]
     public function createNew(
-        #[ValueResolver('schedule_e')] Schedule $schedule,
+        #[ValueResolver('schedule_e')] Schedule      $schedule,
         #[MapRequestPayload] CreateScheduleColumnDto $dto,
-    ): Response {
+    ): Response
+    {
         if (!$dto->isHidden() && $this->exceedsMaxScheduleColumns($schedule)) {
             throw new BadRequestHttpException('You cannot create more columns for this schedule.');
         }
@@ -79,7 +80,7 @@ final class ScheduleColumnController extends BaseController
                 ['schedule' => $schedule],
                 ['position' => 'DESC'],
             );
-            $max  = $last ? $last->getPosition() : 0;
+            $max = $last ? $last->getPosition() : 0;
 
             // prepare new column
 
@@ -102,13 +103,45 @@ final class ScheduleColumnController extends BaseController
 
         return $this->json([
             'data' => [
-                'id'     => $this->encodeID($col->getId(), ObscurityCodec::SCHEDULE_COLUMN),
-                'pos'    => $col->getPosition(),
-                'name'   => $col->getName(),
+                'id' => $this->encodeID($col->getId(), ObscurityCodec::SCHEDULE_COLUMN),
+                'pos' => $col->getPosition(),
+                'name' => $col->getName(),
                 'hidden' => $col->isHidden(),
-            ]
+            ],
         ], 201);
     }
 
     // TODO: move, update fixed & delete
+
+    public function updateFixed()
+    {
+    }
+
+    #[IsGranted('edit', 'schedule')]
+    #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
+    #[Route('/-/schedules/{schedule_e}/columns/{schedule_column_e}', name: 'app_schedule_column_update', methods: ['PUT'])]
+    public function updateNormal(
+        #[ValueResolver('schedule_e')] Schedule              $schedule,
+        #[ValueResolver('schedule_column_e')] ScheduleColumn $column,
+        #[MapRequestPayload] CreateScheduleColumnDto         $dto, // we love reusing dtos when possible :D
+    ): Response
+    {
+        // update column
+        $column->setName($dto->getName());
+        $column->setHidden($dto->isHidden());
+        $schedule->touch();
+
+        // store it
+        $this->entityManager->flush();
+
+        // respond
+        return $this->json([
+            'data' => [
+                'id' => $this->encodeID($column->getId(), ObscurityCodec::SCHEDULE_COLUMN),
+                'pos' => $column->getPosition(),
+                'name' => $column->getName(),
+                'hidden' => $column->isHidden(),
+            ],
+        ]);
+    }
 }
