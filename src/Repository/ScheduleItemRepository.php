@@ -19,27 +19,23 @@ class ScheduleItemRepository extends ServiceEntityRepository
 
     public function movePosition(Schedule $schedule, int $posA, int $posB, string $relation)
     {
+        // Sanity checking
         if ($relation !== '+' && $relation !== '-') {
-            throw new \Exception('Hold the fuck up! How is this possible??');
+            throw new \RuntimeException('Hold the fuck up! How is this possible??');
         }
 
         $qb = $this->createQueryBuilder('i');
 
         return $qb->update()
-//                    ->set('i.position', 'i.position :relation 1')
-                    ->set('i.position', sprintf('i.position %s 1', $relation)) // not very safe, but fine in theory since it is the only way that works
-//                    ->where('i.schedule = :schedule')
-            ->where($qb->expr()->andX(
-                $qb->expr()->eq('i.schedule', $schedule->getId()),
-                $qb->expr()->between('i.position', $posA, $posB)
-            ))
-//                    ->andWhere('i.position BETWEEN :posA AND :posB')
-                    ->andWhere($qb->expr()->between('i.position', $posA, $posB))
-//                    ->setParameter('schedule', $schedule)
-//                    ->setParameter('relation', $relation)
-//                    ->setParameter('posA', $posA)
-//                    ->setParameter('posB', $posB)
-                    ->getQuery()
-                    ->getResult();
+            //                    ->set('i.position', 'i.position :relation 1')
+            // not very safe, but fine in theory since it is the only way that works
+                  ->set('i.position', sprintf('i.position %s 1', $relation))
+                  ->where('i.schedule = :schedule')
+                  ->andWhere('i.position BETWEEN :posA AND :posB')
+                  ->setParameter('schedule', $schedule)
+                  ->setParameter('posA', $posA)
+                  ->setParameter('posB', $posB)
+                  ->getQuery()
+                  ->getResult();
     }
 }

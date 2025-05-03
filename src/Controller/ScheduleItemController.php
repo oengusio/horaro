@@ -28,12 +28,12 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class ScheduleItemController extends BaseController
 {
     public function __construct(
-        private readonly ScheduleRepository $scheduleRepository,
+        private readonly ScheduleRepository     $scheduleRepository,
         private readonly ScheduleItemRepository $scheduleItemRepository,
-        ConfigRepository $config,
-        Security $security,
-        EntityManagerInterface $entityManager,
-        ObscurityCodecService $obscurityCodec,
+        ConfigRepository                        $config,
+        Security                                $security,
+        EntityManagerInterface                  $entityManager,
+        ObscurityCodecService                   $obscurityCodec,
     )
     {
         parent::__construct($config, $security, $entityManager, $obscurityCodec);
@@ -42,7 +42,7 @@ final class ScheduleItemController extends BaseController
     #[IsGranted('edit', 'schedule')]
     #[Route('/-/schedules/{schedule_e}/items', name: 'app_schedule_item_new', methods: ['POST'])]
     public function create(
-        #[ValueResolver('schedule_e')] Schedule $schedule,
+        #[ValueResolver('schedule_e')] Schedule    $schedule,
         #[MapRequestPayload] CreateScheduleItemDto $createDto,
     ): Response
     {
@@ -60,7 +60,7 @@ final class ScheduleItemController extends BaseController
                 ['schedule' => $schedule],
                 ['position' => 'DESC']
             );
-            $max  = $last ? $last->getPosition() : 0;
+            $max = $last ? $last->getPosition() : 0;
 
             $item = new ScheduleItem();
             $item->setSchedule($schedule);
@@ -82,9 +82,10 @@ final class ScheduleItemController extends BaseController
     #[IsGranted('edit', 'schedule')]
     #[Route('/-/schedules/{schedule_e}/items/move', name: 'app_schedule_item_move', methods: ['POST'])]
     public function moveItem(
-        #[ValueResolver('schedule_e')] Schedule $schedule,
+        #[ValueResolver('schedule_e')] Schedule  $schedule,
         #[MapRequestPayload] ScheduleItemMoveDto $dto,
-    ): Response {
+    ): Response
+    {
         $schedRepo = $this->scheduleRepository;
         $itemRepo = $this->scheduleItemRepository;
 
@@ -119,16 +120,15 @@ final class ScheduleItemController extends BaseController
                 ['schedule' => $schedule],
                 ['position' => 'DESC']
             );
-            $max  = $last ? $last->getPosition() : 0;
+            $max = $last ? $last->getPosition() : 0;
 
             if ($target > $max) {
                 throw new BadRequestHttpException('Target position ('.$target.') is greater than the last position ('.$max.').');
             }
 
             // prepare chunk move
-
-            $up          = $target < $curPos;
-            $relation    = $up ? '+' : '-';
+            $up = $target < $curPos;
+            $relation = $up ? '+' : '-';
             [$a, $b] = $up ? [$target, $curPos] : [$curPos, $target];
 
             // move items between old and new position
@@ -142,19 +142,20 @@ final class ScheduleItemController extends BaseController
 
         return $this->json([
             'data' => [
-                'id'  => $this->encodeID($item->getId(), ObscurityCodec::SCHEDULE_ITEM),
-                'pos' => $item->getPosition()
-            ]
+                'id' => $this->encodeID($item->getId(), ObscurityCodec::SCHEDULE_ITEM),
+                'pos' => $item->getPosition(),
+            ],
         ]);
     }
 
     #[IsGranted('edit', 'schedule')]
     #[Route('/-/schedules/{schedule_e}/items/{schedule_item_e}', name: 'app_schedule_item_update', methods: ['PATCH'])]
     public function update(
-        #[ValueResolver('schedule_e')] Schedule $schedule,
+        #[ValueResolver('schedule_e')] Schedule          $schedule,
         #[ValueResolver('schedule_item_e')] ScheduleItem $scheduleItem,
-        #[MapRequestPayload] UpdateScheduleItemDto $dto,
-    ): Response {
+        #[MapRequestPayload] UpdateScheduleItemDto       $dto,
+    ): Response
+    {
         $newLength = $dto->getLength();
 
         if ($newLength) {
@@ -182,7 +183,8 @@ final class ScheduleItemController extends BaseController
 
     // TODO: move & delete
 
-    protected function respondWithItem(ScheduleItem $item, int $status): Response {
+    protected function respondWithItem(ScheduleItem $item, int $status): Response
+    {
         $extraData = [];
 
         foreach ($item->getExtra() as $colID => $value) {
@@ -191,11 +193,11 @@ final class ScheduleItemController extends BaseController
 
         return $this->json([
             'data' => [
-                'id'      => $this->encodeID($item->getId(), ObscurityCodec::SCHEDULE_ITEM),
-                'pos'     => $item->getPosition(),
-                'length'  => $item->getLengthInSeconds(),
-                'columns' => $extraData
-            ]
+                'id' => $this->encodeID($item->getId(), ObscurityCodec::SCHEDULE_ITEM),
+                'pos' => $item->getPosition(),
+                'length' => $item->getLengthInSeconds(),
+                'columns' => $extraData,
+            ],
         ], $status);
     }
 }
