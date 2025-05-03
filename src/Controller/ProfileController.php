@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_USER')]
@@ -24,6 +25,7 @@ final class ProfileController extends BaseController
         return $this->renderForm($user);
     }
 
+    #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
     #[Route('/-/profile', name: 'app_profile_update', methods: ['PUT'], priority: 1)]
     public function updateProfile(#[MapRequestPayload] ProfileUpdateDto $updateDto): Response
     {
@@ -40,6 +42,7 @@ final class ProfileController extends BaseController
         return $this->redirect('/-/profile');
     }
 
+    #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
     #[Route('/-/profile/password', name: 'app_profile_update_password', methods: ['PUT'], priority: 1)]
     public function updatePassword(
         Request $request,
@@ -73,6 +76,7 @@ final class ProfileController extends BaseController
         return $this->renderOAuthForm($user);
     }
 
+    #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
     #[Route('/-/profile/oauth', name: 'app_profile_oauth_unconnect', methods: ['DELETE'], priority: 1)]
     public function disconnectOauth(Request $request) {
         $user = $this->getCurrentUser();
@@ -96,6 +100,7 @@ final class ProfileController extends BaseController
         return $this->redirect('/-/profile');
     }
 
+    #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
     #[Route('/-/profile/password', name: 'app_profile_unconnect_password', methods: ['DELETE'], priority: 1)]
     public function removePassword(
         Request $request,

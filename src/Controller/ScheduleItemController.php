@@ -12,7 +12,6 @@ use App\Horaro\Service\ObscurityCodecService;
 use App\Repository\ConfigRepository;
 use App\Repository\ScheduleItemRepository;
 use App\Repository\ScheduleRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,9 +21,11 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_USER')]
+#[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')] // protect the full controller since we only have update and create methods
 final class ScheduleItemController extends BaseController
 {
     public function __construct(
@@ -53,7 +54,7 @@ final class ScheduleItemController extends BaseController
         $schedRepo = $this->scheduleRepository;
         $itemRepo = $this->scheduleItemRepository;
 
-        $item = $this->entityManager->wrapInTransaction(static function (EntityManager $em) use ($schedule, $createDto, $schedRepo, $itemRepo) {
+        $item = $this->entityManager->wrapInTransaction(static function (EntityManagerInterface $em) use ($schedule, $createDto, $schedRepo, $itemRepo) {
             $schedRepo->transientLock($schedule);
 
             $last = $itemRepo->findOneBy(
@@ -92,7 +93,7 @@ final class ScheduleItemController extends BaseController
         $itemId = $this->decodeID($dto->getItem(), ObscurityCodec::SCHEDULE_ITEM);
 
         /** @var ScheduleItem $item */
-        $item = $this->entityManager->wrapInTransaction(static function (EntityManager $em) use ($schedule, $dto, $schedRepo, $itemRepo, $itemId) {
+        $item = $this->entityManager->wrapInTransaction(static function (EntityManagerInterface $em) use ($schedule, $dto, $schedRepo, $itemRepo, $itemId) {
             $schedRepo->transientLock($schedule);
 
             $scheduleItem = $itemRepo->findOneBy([
@@ -181,7 +182,31 @@ final class ScheduleItemController extends BaseController
         return $this->respondWithItem($scheduleItem, 200);
     }
 
-    // TODO: move & delete
+    #[IsGranted('edit', 'schedule')]
+    #[Route('/-/schedules/{schedule_e}/items/{schedule_item_e}', name: 'app_schedule_item_delete', methods: ['DELETE'])]
+    public function deleteItem(
+        #[ValueResolver('schedule_e')] Schedule  $schedule,
+        #[ValueResolver('schedule_item_e')] ScheduleItem $scheduleItem,
+    ): Response
+    {
+        $schedRepo = $this->scheduleRepository;
+        $itemRepo = $this->scheduleItemRepository;
+
+        $this->entityManager->wrapInTransaction(static function (EntityManagerInterface $em) use ($schedule, $scheduleItem, $schedRepo, $itemRepo) {
+            $schedRepo->transientLock($schedule);
+
+            // TODO: do we need to refetch for info about the item's actual current position?
+            $item = $itemRepo->find($scheduleItem->getId());
+
+            $itemRepo->movePreDelOnePositionUp($schedule, $item->getPosition());
+
+            $schedule->touch();
+
+            $em->remove($item);
+        });
+
+        return $this->json(['data' => true]);
+    }
 
     protected function respondWithItem(ScheduleItem $item, int $status): Response
     {

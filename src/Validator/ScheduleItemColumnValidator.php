@@ -5,6 +5,7 @@ namespace App\Validator;
 use App\Entity\Schedule;
 use App\Horaro\Library\ObscurityCodec;
 use App\Horaro\Service\ObscurityCodecService;
+use App\Horaro\Traits\KnowsAboutScheduleId;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Constraint;
@@ -17,6 +18,8 @@ use function mb_substr;
 
 final class ScheduleItemColumnValidator extends ConstraintValidator
 {
+    use KnowsAboutScheduleId;
+
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly RequestStack           $requestStack,
@@ -71,16 +74,8 @@ final class ScheduleItemColumnValidator extends ConstraintValidator
 
     private function getSchedule(): ?Schedule
     {
-        $paramId = $this->requestStack->getCurrentRequest()->attributes->get('schedule_e');
-
-        if (!$paramId) {
-            return null;
-        }
-
-        $decodedId = $this->obscurityCodec->decode($paramId, ObscurityCodec::SCHEDULE);
-
         return $this->entityManager
             ->getRepository(Schedule::class)
-            ->findOneBy(['id' => $decodedId]);
+            ->findOneBy(['id' => $this->getDecodedScheduleId()]);
     }
 }

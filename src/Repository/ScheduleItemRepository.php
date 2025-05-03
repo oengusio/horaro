@@ -38,4 +38,18 @@ class ScheduleItemRepository extends ServiceEntityRepository
                   ->getQuery()
                   ->getResult();
     }
+
+    public function movePreDelOnePositionUp(Schedule $schedule, int $oldItemPosition)
+    {
+        $qb = $this->createQueryBuilder('i');
+
+        return $qb->update()
+                  ->set('i.position', 'i.position - 1')
+                  ->where('i.schedule = :schedule')
+                  ->andWhere('i.position > :oldPos')
+                  ->setParameter('schedule', $schedule)
+                  ->setParameter('oldPos', $oldItemPosition)
+                  ->getQuery()
+                  ->getResult();
+    }
 }

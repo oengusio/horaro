@@ -16,11 +16,11 @@
 {% endmacro %}
 
 {% macro csrf_token() %}
-<div><input type="hidden" name="{{ utils.csrfParamName }}" value="{{ csrf_token(app.session.id) }}" /></div>
+<div><input type="hidden" name="{{ utils.csrfParamName }}" value="{{ csrf_token('horaro') }}" /></div>
 {% endmacro %}
 
 {% macro csrf_token_meta() %}
-<meta name="csrf_token" content="{{ csrf_token(app.session.id) }}">
+<meta name="csrf_token" content="{{ csrf_token('horaro') }}">
 <meta name="csrf_token_name" content="{{ utils.csrfParamName }}">
 {% endmacro %}
 

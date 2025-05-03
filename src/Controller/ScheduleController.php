@@ -15,6 +15,7 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_USER')]
@@ -34,6 +35,7 @@ final class ScheduleController extends BaseController
     }
 
     #[IsGranted('edit', 'event')]
+    #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
     #[Route('/-/events/{event_e}/schedules', name: 'app_backend_schedule_create', methods: ['POST'])]
     public function create(
         #[ValueResolver('event_e')] Event      $event,
@@ -125,6 +127,7 @@ final class ScheduleController extends BaseController
     }
 
     #[IsGranted('edit', 'schedule')]
+    #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
     #[Route('/-/schedules/{schedule_e}', name: 'app_backend_schedule_edit_save', methods: ['PUT'])]
     public function save(
         #[ValueResolver('schedule_e')] Schedule $schedule,
@@ -159,6 +162,7 @@ final class ScheduleController extends BaseController
     }
 
     #[IsGranted('edit', 'schedule')]
+    #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
     #[Route('/-/schedules/{schedule_e}/description', name: 'app_backend_schedule_edit_save_description', methods: ['PUT'])]
     public function saveDescription(
         #[ValueResolver('schedule_e')] Schedule        $schedule,
@@ -186,6 +190,7 @@ final class ScheduleController extends BaseController
     }
 
     #[IsGranted('edit', 'schedule')]
+    #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
     #[Route('/-/schedules/{schedule_e}', name: 'app_backend_schedule_delete', methods: ['DELETE'])]
     public function delete(#[ValueResolver('schedule_e')] Schedule $schedule): Response
     {
