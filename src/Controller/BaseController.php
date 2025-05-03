@@ -81,7 +81,7 @@ abstract class BaseController extends AbstractController
     }
 
     protected function exceedsMaxScheduleColumns(Schedule $s): bool {
-        return $this->entityManager->getRepository(ScheduleColumn::class)->countVisible($s) >= 10;
+        return $this->entityManager->getRepository(ScheduleColumn::class)->count(['schedule' => $s, 'hidden' => false]) >= 10;
     }
 
     protected function setCachingHeader(Response $response, $resourceType, ?\DateTime $lastModified = null)
