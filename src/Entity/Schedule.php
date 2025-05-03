@@ -79,6 +79,7 @@ class Schedule
     /**
      * @var Collection<int, ScheduleColumn>
      */
+    #[ORM\OrderBy(['position' => 'ASC'])]
     #[ORM\OneToMany(targetEntity: ScheduleColumn::class, mappedBy: 'schedule', orphanRemoval: true)]
     private Collection $columns;
 
