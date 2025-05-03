@@ -7,6 +7,7 @@ use App\Entity\Schedule;
 use App\Entity\ScheduleColumn;
 use App\Horaro\DTO\CreateScheduleDto;
 use App\Horaro\DTO\EventDescriptionUpdateDto;
+use App\Horaro\Library\ObscurityCodec;
 use App\Horaro\Service\ScheduleTransformerService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
@@ -25,7 +26,7 @@ final class ScheduleController extends BaseController
     {
         if ($this->exceedsMaxSchedules($event)) {
             return $this->redirect(
-                '/-/events/'.$this->encodeID($event->getId(), 'event')
+                '/-/events/'.$this->encodeID($event->getId(), ObscurityCodec::EVENT)
             );
         }
 
@@ -41,7 +42,7 @@ final class ScheduleController extends BaseController
     {
         if ($this->exceedsMaxSchedules($event)) {
             return $this->redirect(
-                '/-/events/'.$this->encodeID($event->getId(), 'event')
+                '/-/events/'.$this->encodeID($event->getId(), ObscurityCodec::EVENT)
             );
         }
 
@@ -80,7 +81,7 @@ final class ScheduleController extends BaseController
 
         $this->addSuccessMsg('Your new schedule has been created.');
 
-        return $this->redirect('/-/schedules/'.$this->encodeID($schedule->getId(), 'schedule'));
+        return $this->redirect('/-/schedules/'.$this->encodeID($schedule->getId(), ObscurityCodec::SCHEDULE));
     }
 
     #[IsGranted('edit', 'schedule')]
@@ -94,18 +95,18 @@ final class ScheduleController extends BaseController
             $extra = [];
 
             foreach ($item->getExtra() as $colID => $value) {
-                $extra[$this->encodeID($colID, 'schedule.column')] = $value;
+                $extra[$this->encodeID($colID, ObscurityCodec::SCHEDULE_COLUMN)] = $value;
             }
 
             $items[] = [
-                $this->encodeID($item->getId(), 'schedule.item'),
+                $this->encodeID($item->getId(), ObscurityCodec::SCHEDULE_ITEM),
                 $item->getLengthInSeconds(),
                 $extra,
             ];
         }
 
         foreach ($schedule->getColumns() as $column) {
-            $columnIDs[] = $this->encodeID($column->getId(), 'schedule.column');
+            $columnIDs[] = $this->encodeID($column->getId(), ObscurityCodec::SCHEDULE_COLUMN);
         }
 
         return $this->render('schedule/detail.twig', [
@@ -154,7 +155,7 @@ final class ScheduleController extends BaseController
 
         $this->addSuccessMsg('Your schedule has been updated.');
 
-        return $this->redirect('/-/schedules/'.$this->encodeID($schedule->getId(), 'schedule'));
+        return $this->redirect('/-/schedules/'.$this->encodeID($schedule->getId(), ObscurityCodec::SCHEDULE));
     }
 
     #[IsGranted('edit', 'schedule')]
@@ -174,7 +175,7 @@ final class ScheduleController extends BaseController
 
         $this->addSuccessMsg('Your schedule description has been updated.');
 
-        return $this->redirect('/-/schedules/'.$this->encodeID($schedule->getId(), 'schedule'));
+        return $this->redirect('/-/schedules/'.$this->encodeID($schedule->getId(), ObscurityCodec::SCHEDULE));
     }
 
     #[IsGranted('edit', 'schedule')]

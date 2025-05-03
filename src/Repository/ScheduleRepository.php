@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Schedule;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -86,31 +87,6 @@ class ScheduleRepository extends ServiceEntityRepository
         return $query->getQuery()->getResult();
     }
 
-    //    /**
-    //     * @return Schedule[] Returns an array of Schedule objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('s.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-        public function findOneBySomeField($value): ?Schedule
-        {
-            return $this->createQueryBuilder('s')
-                ->andWhere('s.exampleField = :val')
-                ->setParameter('val', $value)
-                ->getQuery()
-                ->getOneOrNullResult()
-            ;
-        }
-
     public function findBySlug(string $eventSlug, string $scheduleSlug): ?Schedule
     {
         return $this->createQueryBuilder('s')
@@ -121,5 +97,18 @@ class ScheduleRepository extends ServiceEntityRepository
                     ->setParameter('eventSlug', $eventSlug)
                     ->getQuery()
                     ->getOneOrNullResult();
+    }
+
+    public function transientLock(Schedule $schedule): void {
+        $rsm = new ResultSetMappingBuilder($this->getEntityManager());
+        $rsm->addRootEntityFromClassMetadata(Schedule::class, 's');
+
+        $query = $this->getEntityManager()->createNativeQuery(
+            'SELECT id FROM schedules WHERE id = :id FOR UPDATE',
+            $rsm,
+        );
+        $query->setParameter('id', $schedule->getId());
+
+        $query->getOneOrNullResult(); // this one blocks until the lock is available
     }
 }

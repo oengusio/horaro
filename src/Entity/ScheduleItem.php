@@ -216,4 +216,8 @@ class ScheduleItem
 
         return null;
     }
+
+    public function setLengthInSeconds($seconds): static {
+        return $this->setLength(\DateTime::createFromFormat('U', $seconds));
+    }
 }

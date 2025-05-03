@@ -56,10 +56,11 @@ class CreateScheduleDto
     #[Assert\Regex(pattern: '/^[a-zA-Z0-9_-]+$/')]
     private string $hidden_secret;
 
+    #[Assert\NotBlank]
     #[HoraroAssert\ReadableTime]
     private string $setup_time;
 
-    private \DateTimeInterface $parsedSetupTime;
+    private ?\DateTimeInterface $parsedSetupTime = null;
 
     public function getName(): string
     {
@@ -181,7 +182,7 @@ class CreateScheduleDto
         $this->setup_time = $setup_time;
     }
 
-    public function getParsedSetupTime(): \DateTimeInterface
+    public function getParsedSetupTime(): ?\DateTimeInterface
     {
         return $this->parsedSetupTime;
     }
