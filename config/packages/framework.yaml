@@ -2,6 +2,7 @@
 framework:
     secret: '%secret%'
     http_method_override: true
+    csrf_protection: true
 
     form:
       csrf_protection:

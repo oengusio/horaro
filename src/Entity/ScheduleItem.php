@@ -40,7 +40,7 @@ class ScheduleItem
         return $this->id;
     }
 
-    public function getPosition(): ?int
+    public function getPosition(): int
     {
         return $this->position;
     }

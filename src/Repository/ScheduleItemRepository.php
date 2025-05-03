@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Schedule;
 use App\Entity\ScheduleItem;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -16,28 +17,29 @@ class ScheduleItemRepository extends ServiceEntityRepository
         parent::__construct($registry, ScheduleItem::class);
     }
 
-    //    /**
-    //     * @return ScheduleItem[] Returns an array of ScheduleItem objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('s.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function movePosition(Schedule $schedule, int $posA, int $posB, string $relation)
+    {
+        if ($relation !== '+' && $relation !== '-') {
+            throw new \Exception('Hold the fuck up! How is this possible??');
+        }
 
-    //    public function findOneBySomeField($value): ?ScheduleItem
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        $qb = $this->createQueryBuilder('i');
+
+        return $qb->update()
+//                    ->set('i.position', 'i.position :relation 1')
+                    ->set('i.position', sprintf('i.position %s 1', $relation)) // not very safe, but fine in theory since it is the only way that works
+//                    ->where('i.schedule = :schedule')
+            ->where($qb->expr()->andX(
+                $qb->expr()->eq('i.schedule', $schedule->getId()),
+                $qb->expr()->between('i.position', $posA, $posB)
+            ))
+//                    ->andWhere('i.position BETWEEN :posA AND :posB')
+                    ->andWhere($qb->expr()->between('i.position', $posA, $posB))
+//                    ->setParameter('schedule', $schedule)
+//                    ->setParameter('relation', $relation)
+//                    ->setParameter('posA', $posA)
+//                    ->setParameter('posB', $posB)
+                    ->getQuery()
+                    ->getResult();
+    }
 }
