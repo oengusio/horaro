@@ -2,6 +2,7 @@
 
 namespace App\Horaro\DTO;
 
+use App\Validator as HoraroAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class CreateScheduleItemDto
@@ -17,8 +18,8 @@ class CreateScheduleItemDto
     )]
     private int $length;
 
-    // TODO: validate columns
     #[Assert\NotNull]
+    #[HoraroAssert\ScheduleItemColumn] // This decodes the ids!
     private array $columns;
 
     public function getLength(): int

@@ -77,7 +77,7 @@ final class ScheduleItemController extends BaseController
     }
 
     #[IsGranted('edit', 'schedule')]
-    #[Route('/-/schedules/{schedule_e}/items/{schedule_item_e}', name: 'app_schedule_item_new', methods: ['PATCH'])]
+    #[Route('/-/schedules/{schedule_e}/items/{schedule_item_e}', name: 'app_schedule_item_update', methods: ['PATCH'])]
     public function update(
         #[ValueResolver('schedule_e')] Schedule $schedule,
         #[ValueResolver('schedule_item_e')] ScheduleItem $scheduleItem,
@@ -95,10 +95,7 @@ final class ScheduleItemController extends BaseController
             $extra = $scheduleItem->getExtra();
 
             foreach ($dto->getColumns() as $columnId => $newVal) {
-                // TODO: already decode in validator
-                $decodedId = $this->decodeID($columnId, ObscurityCodec::SCHEDULE_COLUMN);
-
-                $extra[$decodedId] = $newVal;
+                $extra[$columnId] = $newVal;
             }
 
             $scheduleItem->setExtra($extra);
