@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Schedule;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -48,14 +49,15 @@ class ScheduleRepository extends ServiceEntityRepository
      *
      * @return Schedule[]
      */
-    public function findUpcoming(int $days): array {
+    public function findUpcoming(int $days): array
+    {
         // search begins at "now minus 1 day" to include events with different timezones as well;
         // this requires filtering the schedules later on by their actual start date/time.
 
-        $day       = 24 * 3600;
-        $now       = time();
-        $schedules = $this->findPublicInRange($now - 1*$day, $now + $days*$day);
-        $result    = [];
+        $day = 24 * 3600;
+        $now = time();
+        $schedules = $this->findPublicInRange($now - 1 * $day, $now + $days * $day);
+        $result = [];
 
         foreach ($schedules as $schedule) {
             $start = $schedule->getLocalStart()->format('U');
@@ -68,8 +70,27 @@ class ScheduleRepository extends ServiceEntityRepository
         return $result;
     }
 
-    public function findPublic(\DateTime $startFrom, \DateTime $startTo) {
+    public function findPublic(\DateTime $startFrom, \DateTime $startTo)
+    {
         return $this->findPublicInRange($startFrom->format('U'), $startTo->format('U'));
+    }
+
+    /**
+     * @param User $user
+     * @param int  $max
+     *
+     * @return Schedule[]
+     */
+    public function findRecentlyUpdated(User $user, int $max): array
+    {
+        $query = $this->createQueryBuilder('s')
+                      ->join('s.event', 'e')
+                      ->andWhere('e.user = :user')
+                      ->setParameter('user', $user)
+                      ->setMaxResults($max)
+                      ->orderBy('s.updated_at', 'DESC');
+
+        return $query->getQuery()->getResult();
     }
 
     protected function findPublicInRange(string|int $from, string|int $to)
@@ -90,7 +111,7 @@ class ScheduleRepository extends ServiceEntityRepository
     public function findBySlug(string $eventSlug, string $scheduleSlug): ?Schedule
     {
         return $this->createQueryBuilder('s')
-            ->join('s.event', 'e')
+                    ->join('s.event', 'e')
                     ->andWhere('s.slug = :scheduleSlug')
                     ->andWhere('e.slug = :eventSlug')
                     ->setParameter('scheduleSlug', $scheduleSlug)
@@ -99,7 +120,8 @@ class ScheduleRepository extends ServiceEntityRepository
                     ->getOneOrNullResult();
     }
 
-    public function transientLock(Schedule $schedule): void {
+    public function transientLock(Schedule $schedule): void
+    {
         $rsm = new ResultSetMappingBuilder($this->getEntityManager());
         $rsm->addRootEntityFromClassMetadata(Schedule::class, 's');
 

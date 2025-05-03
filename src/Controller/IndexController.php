@@ -79,8 +79,7 @@ final class IndexController extends BaseController
         $recent = [];
 
         if ($user) {
-            // TODO
-            $recent = []; //$scheduleRepo->findRecentlyUpdated($user, 7);
+            $recent = $this->scheduleRepository->findRecentlyUpdated($user, 7);
         }
 
         $html = $this->render('index/welcome.twig', [
