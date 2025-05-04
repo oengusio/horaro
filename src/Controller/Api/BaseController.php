@@ -6,7 +6,6 @@ namespace App\Controller\Api;
 use App\Horaro\Pager\PagerInterface;
 use App\Horaro\Service\FractalService;
 use App\Horaro\Service\ObscurityCodecService;
-use App\JsonRedirectResponse;
 use App\Repository\ConfigRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Fractal\Resource;
@@ -20,8 +19,8 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 class BaseController extends \App\Controller\BaseController
 {
     public function __construct(
-        private readonly FractalService $fractal,
-        private readonly RequestStack $requestStack,
+        protected readonly FractalService $fractal,
+        protected readonly RequestStack $requestStack,
         ConfigRepository $config,
         Security $security,
         EntityManagerInterface $entityManager,

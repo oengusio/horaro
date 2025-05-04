@@ -4,21 +4,19 @@ namespace App\Horaro\Transformer;
 
 use App\Horaro\Service\ObscurityCodecService;
 use League\Fractal\TransformerAbstract;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 abstract class BaseTransformer extends TransformerAbstract
 {
     protected string $baseUri;
 
     public function __construct(
-        Request $request,
+        protected readonly RequestStack $requestStack,
         protected readonly ObscurityCodecService $obscurityCodec,
     )
     {
-        $this->baseUri = $request->getUriForPath('');
+        $this->baseUri = $requestStack->getCurrentRequest()->getUriForPath('');
     }
-
-    abstract public function transform(): array;
 
     protected function encodeID(int $id, string $entityType = null): string
     {

@@ -5,6 +5,7 @@ namespace App\Horaro\Library\Transformer\Schedule;
 use App\Entity\Schedule;
 use App\Entity\ScheduleColumn;
 use App\Entity\ScheduleItem;
+use App\Horaro\Library\ObscurityCodec;
 use App\Horaro\Library\Transformer\Schedule\BaseTransformer;
 
 class JsonTransformer extends BaseTransformer
@@ -54,10 +55,10 @@ class JsonTransformer extends BaseTransformer
                 'exported' => gmdate(self::DATE_FORMAT_UTC),
                 'hint'     => 'Use ?callback=yourcallback to use this document via JSONP.',
                 'api'      => 'This is a living document and may change over time. For a stable, well-defined output, use the API instead.',
-                'api-link' => '/-/api/v1/schedules/'.$this->encodeID($schedule->getId(), 'schedule')
+                'api-link' => '/-/api/v1/schedules/'.$this->encodeID($schedule->getId(), ObscurityCodec::SCHEDULE)
             ],
             'schedule' => [
-                'id'          => $this->encodeID($schedule->getId(), 'schedule'),
+                'id'          => $this->encodeID($schedule->getId(), ObscurityCodec::SCHEDULE),
                 'name'        => $schedule->getName(),
                 'slug'        => $schedule->getSlug(),
                 'timezone'    => $schedule->getTimezone(),
@@ -74,7 +75,7 @@ class JsonTransformer extends BaseTransformer
                 'updated'     => $schedule->getUpdatedAt()->format(self::DATE_FORMAT_UTC), // updated is stored as UTC, so it's okay to disregard the sys timezone here and force UTC
                 'url'         => sprintf('/%s/%s', $event->getSlug(), $schedule->getSlug()),
                 'event'       => [
-                    'id'     => $this->encodeID($event->getId(), 'event'),
+                    'id'     => $this->encodeID($event->getId(), ObscurityCodec::EVENT),
                     'name'   => $event->getName(),
                     'slug'   => $event->getSlug(),
                     'theme'  => $event->getTheme(),
@@ -134,7 +135,7 @@ class JsonTransformer extends BaseTransformer
 
         $data = [
             'schedule' => [
-                'id'             => $this->encodeID($schedule->getId(), 'schedule'),
+                'id'             => $this->encodeID($schedule->getId(), ObscurityCodec::SCHEDULE),
                 'name'           => $schedule->getName(),
                 'slug'           => $schedule->getSlug(),
                 'timezone'       => $schedule->getTimezone(),
