@@ -4,6 +4,7 @@ namespace App\Horaro\Pager;
 
 use App\Horaro\Pager\PagerInterface;
 use League\Fractal\Resource\Collection;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class OffsetLimitPager implements PagerInterface
