@@ -6,6 +6,7 @@ use App\Entity\Event;
 use App\Entity\Schedule;
 use App\Horaro\Ex\PrivateEventException;
 use App\Horaro\Ex\ScheduleNotFoundException;
+use App\Horaro\Service\MarkdownService;
 use App\Horaro\Service\ObscurityCodecService;
 use App\Horaro\Service\ScheduleTransformerService;
 use App\Repository\ConfigRepository;
@@ -22,6 +23,7 @@ final class FrontendController extends BaseController
 {
     public function __construct(
         private readonly ScheduleTransformerService $transformerService,
+        private readonly MarkdownService $markdownService,
         ConfigRepository $config,
         Security $security,
         EntityManagerInterface $entityManager,
@@ -119,10 +121,9 @@ final class FrontendController extends BaseController
 
         $description = $schedule->getDescription();
 
-        // TODO: implement markdown parsing
-        /*if ($description) {
-            $description = $this->convertMarkdown($description);
-        }*/
+        if ($description) {
+            $description = $this->markdownService->convert($description);
+        }
 
         $response = $this->render('frontend/schedule/schedule.twig', [
             'event' => $event,
@@ -149,10 +150,9 @@ final class FrontendController extends BaseController
 
         $description = $event->getDescription();
 
-        // TODO: implement markdown parsing
-        /*if ($description) {
-            $description = $this->convertMarkdown($description);
-        }*/
+        if ($description) {
+            $description = $this->markdownService->convert($description);
+        }
 
         $isPrivate = $this->isPrivatePage($event);
 

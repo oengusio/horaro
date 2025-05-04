@@ -4,17 +4,20 @@ namespace App\Twig;
 
 use App\Entity\User;
 use App\Horaro\Library\ReadableTime;
+use App\Horaro\RoleManager;
+use App\Horaro\Service\MarkdownService;
 use App\Repository\ConfigRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 
 class TwigUtils {
     protected $versions = [];
-    protected $app;
 
     // TODO: cache values
     public function __construct(
         protected ConfigRepository $configRepository,
         protected readonly Security $security,
+        private readonly RoleManager $roleManager,
+        private readonly MarkdownService $markdownService,
     ) {
     }
 
@@ -34,7 +37,7 @@ class TwigUtils {
         $file = HORARO_ROOT.'/'.$path;
 
         if (!file_exists($file)) {
-            return '<p class="text-error">License file ('.htmlspecialchars($file, ENT_QUOTES, 'UTF-8').' not found.</p>';
+            return '<p class="text-error">License file ('.htmlspecialchars($file, ENT_QUOTES, 'UTF-8').') not found.</p>';
         }
 
         $content = file_get_contents($file);
@@ -42,52 +45,48 @@ class TwigUtils {
         return '<pre>'.htmlspecialchars($content, ENT_QUOTES, 'UTF-8').'</pre>';
     }
 
-    public function userIsAdmin(?User $user = null) {
-        /*$user = $user ?: $this->app['user'];
+    public function userIsAdmin(?User $user = null): bool
+    {
+        $user = $user ?: $this->getCurrentUser();
 
         if (!$user) {
             return false;
         }
 
-        return $this->app['rolemanager']->userIsAdmin($user);*/
-
-        return false;
+        return $this->roleManager->userIsAdmin($user);
     }
 
-    public function userIsOp(?User $user = null) {
-        /*$user = $user ?: $this->app['user'];
+    public function userIsOp(?User $user = null): bool
+    {
+        $user = $user ?: $this->getCurrentUser();
 
         if (!$user) {
             return false;
         }
 
-        return $this->app['rolemanager']->userIsOp($user);*/
-
-        return false;
+        return $this->roleManager->userIsOp($user);
     }
 
-    public function userHasRole($role, ?User $user = null) {
-        /*$user = $user ?: $this->app['user'];
+    public function userHasRole($role, ?User $user = null): bool
+    {
+        $user = $user ?: $this->getCurrentUser();
 
         if (!$user) {
             return false;
         }
 
-        return $this->app['rolemanager']->userHasRole($role, $user);*/
-
-        return false;
+        return $this->roleManager->userHasRole($role, $user);
     }
 
-    public function userHasAdministrativeAccess(mixed $resource, ?User $user = null) {
-        /*$user = $user ?: $this->app['user'];
+    public function userHasAdministrativeAccess(mixed $resource, ?User $user = null): bool
+    {
+        $user = $user ?: $this->getCurrentUser();
 
         if (!$user) {
             return false;
         }
 
-        return $this->app['rolemanager']->hasAdministrativeAccess($user, $resource);*/
-
-        return false;
+        return $this->roleManager->hasAdministrativeAccess($user, $resource);
     }
 
     // TODO: fix these methods
@@ -95,23 +94,26 @@ class TwigUtils {
         return isset($result[$key]) ? $result[$key]['filtered'] : $default;
     }
 
-    public function formClass(?array $result = null, $key = '') {
+    public function formClass(?array $result = null, $key = ''): string
+    {
         return empty($result[$key]['errors']) ? '' : ' has-error';
     }
 
-    public function roleIcon($role) {
+    public function roleIcon($role): string
+    {
         $classes = [
             'ROLE_OP'    => 'fa-android',
             'ROLE_ADMIN' => 'fa-user-md',
             'ROLE_USER'  => 'fa-user',
             'ROLE_GHOST' => 'fa-ban'
         ];
-        $cls = isset($classes[$role]) ? $classes[$role] : 'fa-question';
+        $cls = $classes[$role] ?? 'fa-question';
 
         return sprintf('<i class="fa %s"></i>', $cls);
     }
 
-    public function roleClass($role) {
+    public function roleClass($role): string
+    {
         $classes = [
             'ROLE_OP'    => 'danger',
             'ROLE_ADMIN' => 'warning',
@@ -119,10 +121,11 @@ class TwigUtils {
             'ROLE_GHOST' => 'default'
         ];
 
-        return isset($classes[$role]) ? $classes[$role] : 'primary';
+        return $classes[$role] ?? 'primary';
     }
 
-    public function roleName($role) {
+    public function roleName($role): string
+    {
         $names = [
             'ROLE_OP'    => 'Operator',
             'ROLE_ADMIN' => 'Administrator',
@@ -130,10 +133,11 @@ class TwigUtils {
             'ROLE_GHOST' => 'Ghost'
         ];
 
-        return isset($names[$role]) ? $names[$role] : $role;
+        return $names[$role] ?? $role;
     }
 
-    public function roleBadge($role) {
+    public function roleBadge($role): string
+    {
         $key = strtolower(str_replace('ROLE_', '', $role));
 
         return sprintf(
@@ -142,7 +146,8 @@ class TwigUtils {
         );
     }
 
-    public function readableTime(?\DateTime $time = null) {
+    public function readableTime(?\DateTime $time = null): string
+    {
         if (!$time) return '';
 
         $parser = new ReadableTime();
@@ -150,8 +155,9 @@ class TwigUtils {
         return $parser->stringify($time);
     }
 
-    public function markdown($text) {
-        return $text;// $this->app['markdown-converter']->convertInline($text);
+    public function markdown($text): string
+    {
+        return $this->markdownService->convertInline($text);
     }
 
     public function appVersion(): string {

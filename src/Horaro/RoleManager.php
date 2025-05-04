@@ -8,11 +8,9 @@ use App\Entity\Schedule;
 use App\Entity\ScheduleColumn;
 use App\Entity\ScheduleItem;
 use App\Entity\User;
-use Proxies\__CG__\App\Entity\User as FuckingUserProxy; // TIL how doctrine knows if an entity is detached
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 use function array_search;
-use function get_class;
 
 class RoleManager
 {
