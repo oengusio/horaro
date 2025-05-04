@@ -6,6 +6,7 @@ use App\Entity\Schedule;
 use App\Entity\ScheduleColumn;
 use App\Horaro\DTO\CreateScheduleColumnDto;
 use App\Horaro\DTO\ScheduleColumnMoveDto;
+use App\Horaro\Ex\ScheduleColumnNotFoundException;
 use App\Horaro\Library\ObscurityCodec;
 use App\Horaro\Service\ObscurityCodecService;
 use App\Repository\ConfigRepository;
@@ -114,10 +115,40 @@ final class ScheduleColumnController extends BaseController
         ], 201);
     }
 
-    // TODO: update fixed & delete
-
-    public function updateFixed()
+    #[IsGranted('edit', 'schedule')]
+    #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
+    #[Route('/-/schedules/{schedule_e}/columns/fixed/{column_key}', name: 'app_schedule_column_update_fixed', methods: ['PUT'])]
+    public function updateFixed(
+        #[ValueResolver('schedule_e')] Schedule              $schedule,
+        #[MapRequestPayload] CreateScheduleColumnDto         $dto, // we love reusing dtos when possible :D
+        string $column_key
+    ): Response
     {
+        if (!in_array($column_key, [Schedule::COLUMN_SCHEDULED, Schedule::COLUMN_ESTIMATE], true)) {
+            throw new ScheduleColumnNotFoundException();
+        }
+
+        // update column
+
+        $extra = $schedule->getExtra();
+        $extra['texts'][$column_key] = $dto->getName();
+
+        $schedule->setExtra($extra);
+        $schedule->touch();
+
+        // store it
+
+        $this->entityManager->flush();
+
+        // respond
+
+        return $this->json([
+            'data' => [
+                'id'   => $column_key,
+                'pos'  => $column_key === Schedule::COLUMN_SCHEDULED ? -1 : 0,
+                'name' => $dto->getName(),
+            ]
+        ]);
     }
 
     #[IsGranted('edit', 'schedule')]

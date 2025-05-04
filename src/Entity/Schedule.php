@@ -266,14 +266,15 @@ class Schedule
         return $this;
     }
 
-    public function getExtra(): ?string
+    public function getExtra(): array
     {
-        return $this->extra;
+        return $this->extra === null ? [] : json_decode($this->extra, true);
     }
 
-    public function setExtra(string $extra): static
+    public function setExtra(array $extra): static
     {
-        $this->extra = $extra;
+        ksort($extra);
+        $this->extra = json_encode($extra);
 
         return $this;
     }
@@ -425,7 +426,8 @@ class Schedule
         return $t;
     }
 
-    public function getVisibleColumns() {
+    public function getVisibleColumns(): Collection
+    {
         return $this->getColumns()->filter(function(ScheduleColumn $col) {
             return !$col->isHidden();
         });
@@ -441,7 +443,8 @@ class Schedule
         return $max;
     }
 
-    public function needsSeconds() {
+    public function needsSeconds(): bool
+    {
         $iterator = new ScheduleItemIterator($this);
 
         foreach ($iterator as $item) {
@@ -484,7 +487,8 @@ class Schedule
         return $local;
     }
 
-    public function getScheduledItems() {
+    public function getScheduledItems(): ScheduleItemIterator
+    {
         return new ScheduleItemIterator($this);
     }
 
@@ -523,5 +527,12 @@ class Schedule
         }
 
         return $url;
+    }
+
+    // called from twig as "schedule.text('col-scheduled')"
+    public function getText($key): ?string {
+        $extra = $this->getExtra();
+
+        return isset($extra['texts'][$key]) ? $extra['texts'][$key] : null;
     }
 }
