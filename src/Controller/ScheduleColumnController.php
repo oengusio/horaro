@@ -216,4 +216,51 @@ final class ScheduleColumnController extends BaseController
             ],
         ]);
     }
+
+    #[IsGranted('edit', 'schedule')]
+    #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
+    #[Route('/-/schedules/{schedule_e}/columns/{schedule_column_e}', name: 'app_schedule_column_delete', methods: ['DELETE'])]
+    public function delete(
+        #[ValueResolver('schedule_e')] Schedule              $schedule,
+        #[ValueResolver('schedule_column_e')] ScheduleColumn $column,
+    ): Response
+    {
+        // do not allow to delete the only column
+
+        if ($schedule->getColumns()->count() === 1) {
+            throw new ConflictHttpException('The last column cannot be deleted.');
+        }
+
+
+        $schedRepo = $this->scheduleRepository;
+        $colRepo = $this->columnRepository;
+
+        $this->entityManager->wrapInTransaction(static function (EntityManagerInterface $em) use ($schedule, $column, $schedRepo, $colRepo) {
+            $schedRepo->transientLock($schedule);
+
+            $columnId = $column->getId();
+            // re-fetch the column to get its actual current position
+            $freshCol = $colRepo->find($columnId);
+
+            $colRepo->movePreDelOnePositionUp($schedule, $freshCol->getPosition());
+
+            // Cleanup schedule item data, no reason to store stuff we don't need anymore
+            foreach ($schedule->getItems() as $item) {
+                $itemExtra = $item->getExtra();
+
+                // Not sure what unset does for unknown keys, so better safe than sorry
+                if (isset($itemExtra[$columnId])) {
+                    unset($itemExtra[$columnId]);
+                }
+
+                $item->setExtra($itemExtra);
+            }
+
+            $schedule->touch();
+
+            $em->remove($column);
+        });
+
+        return $this->json(['data' => true]);
+    }
 }
