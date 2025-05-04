@@ -4,6 +4,9 @@ framework:
     http_method_override: true
     csrf_protection: true
 
+    trusted_proxies: '10.0.0.0/8'
+    trusted_headers: [ 'x-forwarded-for', 'x-forwarded-host', 'x-forwarded-proto', 'x-forwarded-port', 'x-forwarded-prefix' ]
+
     form:
       csrf_protection:
         enabled: true
