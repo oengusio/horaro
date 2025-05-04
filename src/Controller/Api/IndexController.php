@@ -2,18 +2,19 @@
 
 namespace App\Controller\Api;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class IndexController extends AbstractController
+final class IndexController extends BaseController
 {
-    #[Route('/api/index', name: 'app_api_index')]
-    public function index(): JsonResponse
+    #[Route('/-/api', name: 'app_api_index', methods: ['GET'], priority: 1)]
+    public function index(Request $request): Response
     {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/Api/IndexController.php',
+        $html = $this->render('index/api.twig', [
+            'baseUri' => $request->getUriForPath('')
         ]);
+
+        return $this->setCachingHeader($html, 'other');
     }
 }
