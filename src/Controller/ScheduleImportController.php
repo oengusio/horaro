@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Schedule;
+use App\Horaro\ScheduleImporter\CsvImporter;
 use App\Horaro\ScheduleImporter\JsonImporter;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,6 +33,7 @@ final class ScheduleImportController extends BaseController
     public function importAction(
         Request $request,
         JsonImporter $jsonImporter,
+        CsvImporter $csvImporter,
         #[ValueResolver('schedule_e')] Schedule $schedule,
     ): Response
     {
@@ -73,6 +75,7 @@ final class ScheduleImportController extends BaseController
 
         $importer = match ($fileType) {
             'json' => $jsonImporter,
+            'csv' => $csvImporter,
             default => throw new \RuntimeException('Invalid importer'),
         };
         try {
