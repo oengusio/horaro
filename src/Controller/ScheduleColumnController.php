@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Schedule;
 use App\Entity\ScheduleColumn;
 use App\Horaro\DTO\CreateScheduleColumnDto;
+use App\Horaro\DTO\ScheduleColumnMoveDto;
 use App\Horaro\Library\ObscurityCodec;
 use App\Horaro\Service\ObscurityCodecService;
 use App\Repository\ConfigRepository;
@@ -16,6 +17,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -111,10 +114,79 @@ final class ScheduleColumnController extends BaseController
         ], 201);
     }
 
-    // TODO: move, update fixed & delete
+    // TODO: update fixed & delete
 
     public function updateFixed()
     {
+    }
+
+    #[IsGranted('edit', 'schedule')]
+    #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
+    #[Route('/-/schedules/{schedule_e}/columns/move', name: 'app_schedule_column_move', methods: ['POST'])]
+    public function moveItems(
+        #[ValueResolver('schedule_e')] Schedule              $schedule,
+        #[MapRequestPayload] ScheduleColumnMoveDto $dto,
+    ): Response {
+        $schedRepo = $this->scheduleRepository;
+        $colRepo = $this->columnRepository;
+
+        $columnId = $this->decodeID($dto->getColumn(), ObscurityCodec::SCHEDULE_COLUMN);
+
+        /** @var ScheduleColumn $column */
+        $column = $this->entityManager->wrapInTransaction(static function (EntityManagerInterface $em) use ($schedule, $dto, $schedRepo, $colRepo, $columnId) {
+            $schedRepo->transientLock($schedule);
+
+            $foundColumn = $colRepo->findOneBy([
+                'id' => $columnId,
+                'schedule' => $schedule,
+            ]);
+
+            if (!$foundColumn) {
+                throw new NotFoundHttpException('No such schedule item in this schedule');
+            }
+
+            $curPos = $foundColumn->getPosition();
+
+            if ($curPos < 1) {
+                throw new BadRequestHttpException('This item is already at position 0. This should never happen.');
+            }
+
+            $target = $dto->getPosition();
+
+            if ($target === $curPos) {
+                throw new ConflictHttpException('This would be a NOP.');
+            }
+
+            $last = $colRepo->findOneBy(
+                ['schedule' => $schedule],
+                ['position' => 'DESC']
+            );
+            $max = $last ? $last->getPosition() : 0;
+
+            if ($target > $max) {
+                throw new BadRequestHttpException('Target position ('.$target.') is greater than the last position ('.$max.').');
+            }
+
+            // prepare chunk move
+            $up = $target < $curPos;
+            $relation = $up ? '+' : '-';
+            [$a, $b] = $up ? [$target, $curPos] : [$curPos, $target];
+
+            // move items between old and new position
+            $colRepo->movePosition($schedule, $a, $b, $relation);
+
+            $schedule->touch();
+            $foundColumn->setPosition($target);
+
+            return $foundColumn;
+        });
+
+        return $this->json([
+            'data' => [
+                'id' => $this->encodeID($column->getId(), ObscurityCodec::SCHEDULE_COLUMN),
+                'pos' => $column->getPosition(),
+            ],
+        ]);
     }
 
     #[IsGranted('edit', 'schedule')]
