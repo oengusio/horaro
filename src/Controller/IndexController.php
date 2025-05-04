@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Event;
+use App\Entity\User;
+use App\Horaro\DTO\RegisterDto;
 use App\Horaro\Service\ObscurityCodecService;
 use App\Repository\ConfigRepository;
 use App\Repository\EventRepository;
@@ -11,10 +13,16 @@ use Doctrine\ORM\EntityManagerInterface;
 use Solution10\Calendar\Calendar;
 use Solution10\Calendar\Resolution\MonthResolution;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
+use Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 
 final class IndexController extends BaseController
 {
@@ -22,6 +30,7 @@ final class IndexController extends BaseController
         protected readonly ConfigRepository $configRepository,
         protected readonly EventRepository $eventRepository,
         protected readonly ScheduleRepository $scheduleRepository,
+        private readonly FormLoginAuthenticator $authenticator,
         EntityManagerInterface $entityManager,
         ConfigRepository $config,
         Security $security,
@@ -110,6 +119,59 @@ final class IndexController extends BaseController
         ]);
 
         return $this->setCachingHeader($response, 'other');
+    }
+
+    #[Route('/-/register', name: 'app_register_form', methods: ['GET'], priority: 1)]
+    public function registerForm(): Response {
+        if ($this->exceedsMaxUsers()) {
+            return $this->redirect('/');
+        }
+
+        $html = $this->render('index/register.twig', ['result' => null]);
+
+        return $this->setCachingHeader($html, 'other');
+    }
+
+    #[Route('/-/register', name: 'app_register_submit', methods: ['POST'], priority: 1)]
+    public function registerAction(
+        Request $request,
+        UserPasswordHasherInterface $passwordHasher,
+        UserAuthenticatorInterface $authenticatorManager,
+        #[MapRequestPayload] RegisterDto $dto,
+    ): Response
+    {
+        if ($this->exceedsMaxUsers()) {
+            return $this->redirect('/');
+        }
+
+        $maxEvents = $this->config->getByKey('max_events', 10)->getValue();
+
+        $user = new User();
+        $user->setLogin($dto->getLogin());
+
+        $passwordHash = $passwordHasher->hashPassword(
+            $user,
+            $dto->getPassword(),
+        );
+
+        $user->setPassword($passwordHash);
+        $user->setDisplayName($dto->getDisplayName());
+        $user->setRole($this->getParameter('horaro.default_role'));
+        $user->setMaxEvents($maxEvents);
+        $user->setLanguage('en_us');
+
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+        $request->getSession()->start();
+        $request->getSession()->migrate();
+
+        // auth, not sure if RememberMeBadge works, keep testing
+        $authenticatorManager->authenticateUser($user, $this->authenticator, $request, [new RememberMeBadge()]);
+
+        $this->addSuccessMsg('Welcome to Horaro, your account has been successfully created.');
+
+        return $this->redirect('/-/home');
     }
 
     #[Route('/-/contact', name: 'app_contact', methods: ['GET'], priority: 1)]
@@ -273,7 +335,7 @@ final class IndexController extends BaseController
                     'group'     => $event->getID(),
                     'title'     => $title,
                     'url'       => $url,
-                    'continued' => in_array($state, ['progress', 'end']) && $cursor === $calStartTS
+                    'continued' => in_array($state, ['progress', 'end']) && $cursor === $calStartTS,
                 ];
 
                 $cursor = strtotime('+1 day', $cursor);

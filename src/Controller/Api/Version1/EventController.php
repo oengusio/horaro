@@ -11,7 +11,6 @@ use App\Horaro\Library\ObscurityCodec;
 use App\Horaro\Pager\OffsetLimitPager;
 use App\Horaro\Transformer\Version1\EventTransformer;
 use App\Horaro\Transformer\Version1\ScheduleTransformer;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -19,7 +18,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class EventController extends BaseController
 {
     #[Route('/-/api/v1/events', name: 'app_api_v1_event_list', methods: ['GET'])]
-    public function listPublicEvents(Request $request)
+    public function listPublicEvents(Request $request): Response
     {
         // determine current page
         $pager = new OffsetLimitPager($request);

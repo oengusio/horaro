@@ -74,7 +74,7 @@
 			a participant in an event). Only create an account if you plan on <em>creating</em> schedules.
 		</div>
 
-		{% if app.config.oauth is not empty %}
+		{% if oauth_settings is not empty %}
 		<p class="text-center">
 			The best way to use Horaro is to {{ macros.twitch_oauth_starter() }}<br>
 			<small class="text-muted">Horaro only gets access to your Twitch username, bio and display name.</small>

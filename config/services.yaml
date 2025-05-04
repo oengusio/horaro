@@ -30,6 +30,10 @@ services:
       resource: '../src/Controller/'
       tags: [ 'controller.service_arguments' ]
 
+    App\Controller\IndexController:
+      arguments:
+        $authenticator: '@security.authenticator.form_login.main'
+
     App\Controller\OAuthController:
       arguments:
         $authenticator: '@security.authenticator.form_login.main'
