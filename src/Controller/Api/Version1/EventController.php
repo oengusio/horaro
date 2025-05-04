@@ -10,6 +10,7 @@ use App\Horaro\Ex\ScheduleNotFoundException;
 use App\Horaro\Library\ObscurityCodec;
 use App\Horaro\Pager\OffsetLimitPager;
 use App\Horaro\Transformer\Version1\EventTransformer;
+use App\Horaro\Transformer\Version1\ScheduleTransformer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -72,6 +73,48 @@ class EventController extends BaseController
         $transformer = new EventTransformer($this->requestStack, $this->obscurityCodec);
 
         return $this->respondWithItem($event, $transformer);
+    }
+
+    #[Route('/-/api/v1/events/{eventid}/schedules', name: 'app_api_v1_event_schedules', methods: ['GET'])]
+    public function listEventSchedules(Request $request): Response {
+        [$event, $bySlug] = $this->resolveEvent($request);
+
+        if ($bySlug) {
+            $id = $this->encodeID($event->getID(), ObscurityCodec::EVENT);
+
+            return $this->redirect('/-/api/v1/events/'.$id.'/schedules');
+        }
+
+        $schedules = [];
+
+        foreach ($event->getSchedules() as $schedule) {
+            if ($schedule->isPublic()) {
+                $schedules[] = $schedule;
+            }
+        }
+
+        $transformer = new ScheduleTransformer($this->requestStack, $this->obscurityCodec, false);
+        return $this->respondWithCollection($schedules, $transformer);
+    }
+
+    #[Route('/-/api/v1/events/{eventid}/schedules/{scheduleid}', name: 'app_api_v1_event_schedules_view', methods: ['GET'])]
+    public function viewSchedule(Request $request): Response {
+        [$event]    = $this->resolveEvent($request);
+        [$schedule] = $this->resolveSchedule($event, $request);
+
+        $scheduleID = $this->obscurityCodec->encode($schedule->getID(), ObscurityCodec::SCHEDULE);
+
+        return $this->redirect('/-/api/v1/schedules/'.$scheduleID);
+    }
+
+    #[Route('/-/api/v1/events/{eventid}/schedules/{scheduleid}/ticker', name: 'app_api_v1_event_schedules_view_ticker', methods: ['GET'])]
+    public function viewScheduleTicker(Request $request): Response {
+        [$event]    = $this->resolveEvent($request);
+        [$schedule] = $this->resolveSchedule($event, $request);
+
+        $scheduleID = $this->obscurityCodec->encode($schedule->getID(), ObscurityCodec::SCHEDULE);
+
+        return $this->redirect('/-/api/v1/schedules/'.$scheduleID.'/ticker');
     }
 
     private function resolveEvent(Request $request): array
