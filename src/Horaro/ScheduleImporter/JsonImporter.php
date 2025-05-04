@@ -9,7 +9,6 @@ use JsonSchema\Validator as JSONValidator;
 
 class JsonImporter extends BaseImporter
 {
-
     public function import(string $filePath, Schedule $schedule, bool $ignoreErrors, bool $updateMetadata): array
     {
         $data = @json_decode(file_get_contents($filePath), false, 20);
@@ -135,7 +134,7 @@ class JsonImporter extends BaseImporter
         return $this->returnLog();
     }
 
-    protected function updateMetadata(Schedule $schedule, \stdClass $data)
+    protected function updateMetadata(Schedule $schedule, \stdClass $data): void
     {
         if (isset($data->name)) {
             $schedule->setName($data->name);

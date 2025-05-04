@@ -6,13 +6,12 @@ use App\Entity\Schedule;
 use Doctrine\ORM\EntityManagerInterface;
 
 abstract class BaseImporter {
-    protected EntityManagerInterface $em;
     protected array $log;
-    protected ScheduleValidator $validator;
 
-    public function __construct(EntityManagerInterface $em, ScheduleValidator $validator) {
-        $this->em        = $em;
-        $this->validator = $validator;
+    public function __construct(
+        protected readonly EntityManagerInterface $em,
+        protected readonly SchduleImportValidator $validator
+    ) {
         $this->log       = [];
     }
 

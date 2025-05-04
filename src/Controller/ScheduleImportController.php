@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Schedule;
+use App\Horaro\ScheduleImporter\JsonImporter;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,9 +28,10 @@ final class ScheduleImportController extends BaseController
 
     #[IsGranted('edit', 'schedule')]
     #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
-    #[Route('/-/schedules/{schedule_e}/import', name: 'app_schedule_import', methods: ['POST'])]
+    #[Route('/-/schedules/{schedule_e}/import', name: 'app_schedule_import_submit', methods: ['POST'])]
     public function importAction(
         Request $request,
+        JsonImporter $jsonImporter,
         #[ValueResolver('schedule_e')] Schedule $schedule,
     ): Response
     {
@@ -65,11 +67,40 @@ final class ScheduleImportController extends BaseController
             return $this->renderForm($schedule, $validateResult);
         }
 
-        $filePath = $upload->getPath();
+        $filePath = (string) $upload;
         $ignoreErrors   = !!$request->request->get('ignore');
         $updateMetadata = !!$request->request->get('metadata');
 
-        return $this->renderForm($schedule);
+        $importer = match ($fileType) {
+            'json' => $jsonImporter,
+            default => throw new \RuntimeException('Invalid importer'),
+        };
+        try {
+            $log = $importer->import($filePath, $schedule, $ignoreErrors, $updateMetadata);
+        }
+        catch (\Exception $e) {
+            $log = $e;
+        }
+
+        $hasErrors = false;
+
+        foreach ($log as $row) {
+            if ($row[0] === 'error') {
+                $hasErrors = true;
+                break;
+            }
+        }
+
+        // respond
+
+        return $this->render('schedule/import-result.twig', [
+            'schedule' => $schedule,
+            'log'      => $log,
+            'errors'   => $hasErrors,
+            'stopped'  => $hasErrors && !$ignoreErrors,
+            'failed'   => $log instanceof \Exception,
+            'upload'   => $upload,
+        ]);
     }
 
     protected function renderForm(Schedule $schedule, array $result = null) {
