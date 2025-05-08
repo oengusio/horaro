@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Event;
 use App\Horaro\Pager;
 use App\Horaro\RoleManager;
 use App\Horaro\Service\ObscurityCodecService;
@@ -50,5 +51,33 @@ final class EventController extends BaseController
             'pager'  => new Pager($page, $total, $size),
             'query'  => $query
         ]);
+    }
+
+    #[Route('/-/admin/events/{event}/edit', name: 'app_admin_event_edit')]
+    public function edit(Event $event): Response
+    {
+        if (!$this->canEdit($event)) {
+            return $this->render('admin/events/view.twig', [
+                'event' => $event,
+                'themes'   => $this->getParameter('horaro.themes'),
+            ]);
+        }
+
+        return $this->renderForm($event);
+    }
+
+    protected function renderForm(Event $event, array $result = null): Response {
+        $featured = $this->config->getByKey('featured_events', [])->getValue();
+
+        return $this->render('admin/events/form.twig', [
+            'result'   => $result,
+            'event'    => $event,
+            'themes'   => $this->getParameter('horaro.themes'),
+            'featured' => in_array($event->getID(), $featured)
+        ]);
+    }
+
+    protected function canEdit(Event $event): bool {
+        return $this->roleManager->canEditEvent($this->getCurrentUser(), $event);
     }
 }
