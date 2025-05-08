@@ -79,7 +79,6 @@ final class UserController extends BaseController
     #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
     #[Route('/-/admin/users/{user}', name: 'app_admin_user_save', methods: ['PUT'])]
     public function saveUser(
-        Request $request,
         User $user,
         #[MapRequestPayload] UpdateUserDto $dto,
     ): Response {
@@ -87,9 +86,14 @@ final class UserController extends BaseController
             throw new AccessDeniedHttpException('You are not allowed to edit this user.');
         }
 
-        dd($request, $dto);
+        $user->setLogin(strtolower($dto->getLogin()));
+        $user->setDisplayName($dto->getDisplayName());
+        $user->setLanguage($dto->getLanguage());
+        $user->setGravatarHash($dto->getGravatar());
+        $user->setMaxEvents($dto->getMaxEvents());
+        $user->setRole($dto->getRole());
 
-        // TODO: validate DTO
+        $this->entityManager->flush();
 
         $this->addSuccessMsg('User '.$user->getLogin().' has been updated.');
 

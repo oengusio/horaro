@@ -29,7 +29,7 @@ final class RoleAllowedValidator extends ConstraintValidator
 
         if (null === $value || '' === $value) {
             return;
-        };
+        }
 
         $user = $this->getUserFromAdminRequest();
 
