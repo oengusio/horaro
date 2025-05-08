@@ -17,6 +17,8 @@ final class CustomSlugRules extends Constraint
         public string $entity,
         public ?string $parent = null,
         public string $mode = 'strict',
+        public string $paramSuffix = '_e',
+        public bool $idNeedsDecoding = true,
         ?array $groups = null,
         mixed $payload = null
     ) {

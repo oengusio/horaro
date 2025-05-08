@@ -24,7 +24,6 @@ final class CustomSlugRulesValidator extends ConstraintValidator
     {
     }
 
-    // TODO: implement & test parent validator
     public function validate(mixed $value, Constraint $constraint): void
     {
         /* @var CustomSlugRules $constraint */
@@ -69,7 +68,7 @@ final class CustomSlugRulesValidator extends ConstraintValidator
 
         if ($constraint->parent) {
             $parentName = $this->parseParameterName($constraint->parent);
-            $parentId = $this->decodeItemId($parentName);
+            $parentId = $this->decodeItemId($parentName, $constraint->paramSuffix, $constraint->idNeedsDecoding,);
 
             if ($parentId) {
                 $searchParams[$parentName] = $parentId;
@@ -92,18 +91,23 @@ final class CustomSlugRulesValidator extends ConstraintValidator
     {
         return $this->decodeItemId(
             $this->parseParameterName($constraint->entity),
+            $constraint->paramSuffix, $constraint->idNeedsDecoding,
         );
     }
 
-    private function decodeItemId(string $paramName): ?int {
-        $requestArg = "{$paramName}_e";
+    private function decodeItemId(string $paramName, string $suffix, bool $needsDecoding): ?int {
+        $requestArg = $paramName.$suffix;
         $paramId = $this->requestStack->getCurrentRequest()->attributes->get($requestArg);
 
         if (!$paramId) {
             return null;
         }
 
-        return $this->obscurityCodec->decode($paramId, $paramName);
+        if ($needsDecoding) {
+            return $this->obscurityCodec->decode($paramId, $paramName);
+        }
+
+        return $paramId;
 
         // No need to fetch the entity if we just need the id, we already have that
         /*return $this->entityManager
