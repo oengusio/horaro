@@ -16,4 +16,23 @@ trait CanGetUser
 
         return null;
     }
+
+    public function getUserFromAdminRequest(): ?User
+    {
+        $request = $this->requestStack->getCurrentRequest();
+
+        if (!$request) {
+            return null;
+        }
+
+        if (!$request->attributes->has('__horaro_resolved_user')) {
+            $user = $this->entityManager
+                ->getRepository(User::class)
+                ->findOneBy(['id' => $request->attributes->get('user')]);
+
+            $request->attributes->set('__horaro_resolved_user', $user);
+        }
+
+        return $request->attributes->get('__horaro_resolved_user');
+    }
 }

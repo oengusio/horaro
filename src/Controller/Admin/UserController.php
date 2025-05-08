@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
+use App\Horaro\DTO\Admin\UpdateUserDto;
 use App\Horaro\Pager;
 use App\Horaro\RoleManager;
 use App\Horaro\Service\ObscurityCodecService;
@@ -12,10 +13,13 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_ADMIN')]
@@ -72,11 +76,18 @@ final class UserController extends BaseController
         return $this->renderForm($user);
     }
 
+    #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
     #[Route('/-/admin/users/{user}', name: 'app_admin_user_save', methods: ['PUT'])]
-    public function saveUser(User $user): Response {
+    public function saveUser(
+        Request $request,
+        User $user,
+        #[MapRequestPayload] UpdateUserDto $dto,
+    ): Response {
         if (!$this->canEdit($user)) {
             throw new AccessDeniedHttpException('You are not allowed to edit this user.');
         }
+
+        dd($request, $dto);
 
         // TODO: validate DTO
 
