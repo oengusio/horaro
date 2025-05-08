@@ -18,6 +18,10 @@ class UpdateUserDto
     private string $display_name;
 
     #[Assert\NotBlank]
+    #[Assert\Choice(
+        choices: ['en_us', 'de_de'],
+        message: 'Choose a valid Language.',
+    )] // TODO: make these dynamic
     private string $language;
 
     #[HoraroAssert\GravatarHash]
