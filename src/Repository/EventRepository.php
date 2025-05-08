@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Event;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -38,28 +39,17 @@ class EventRepository extends ServiceEntityRepository
                     ->getResult();
     }
 
-    //    /**
-    //     * @return Event[] Returns an array of Event objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('e')
-    //            ->andWhere('e.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('e.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function countEvents(User $user = null): int {
+        $dql = 'SELECT COUNT(e.id) FROM App\Entity\Event e';
 
-    //    public function findOneBySomeField($value): ?Event
-    //    {
-    //        return $this->createQueryBuilder('e')
-    //            ->andWhere('e.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        if ($user) {
+            $query = $this->getEntityManager()->createQuery($dql.' WHERE e.user = :user');
+            $query->setParameter('user', $user);
+        }
+        else {
+            $query = $this->getEntityManager()->createQuery($dql);
+        }
+
+        return (int) $query->getSingleScalarResult();
+    }
 }

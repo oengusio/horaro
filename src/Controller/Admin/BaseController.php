@@ -11,7 +11,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 class BaseController extends \App\Controller\BaseController
 {
     public function __construct(
-        private readonly RoleManager $roleManager,
+        protected readonly RoleManager $roleManager,
         ConfigRepository $config,
         Security $security,
         EntityManagerInterface $entityManager,

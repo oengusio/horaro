@@ -33,28 +33,25 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
-    //    /**
-    //     * @return User[] Returns an array of User objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('u.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findFiltered(string $query, int $size, int $offset) {
+        return $this->createQueryBuilder('u')
+                    ->where('u.login LIKE :query')
+                    ->orWhere('u.display_name LIKE :query')
+                    ->setParameter('query', '%'.$query.'%')
+                    ->add('orderBy', 'u.login ASC')
+                    ->setMaxResults($size)
+                    ->setFirstResult($offset)
+                    ->getQuery()
+                    ->getResult();
+    }
 
-    //    public function findOneBySomeField($value): ?User
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function countFiltered(string $query) {
+        return $this->createQueryBuilder('u')
+                    ->select('COUNT(u)')
+                    ->where('u.login LIKE :query')
+                    ->orWhere('u.display_name LIKE :query')
+                    ->setParameter('query', '%'.$query.'%')
+                    ->getQuery()
+                    ->getSingleScalarResult();
+    }
 }

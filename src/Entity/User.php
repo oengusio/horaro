@@ -10,6 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+use function str_starts_with;
+
 #[ORM\Table(name: 'users')]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_ID', fields: ['id'])]
@@ -225,5 +227,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     // Custom functions
     public function getName(): string {
         return $this->display_name === null ? $this->login : $this->display_name;
+    }
+
+    public function isOAuthAccount(): bool {
+        return str_starts_with($this->getLogin(), 'oauth:');
     }
 }

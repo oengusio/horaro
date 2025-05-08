@@ -234,7 +234,7 @@ final class FrontendController extends BaseController
             if ($eventAccess) {
                 throw new ScheduleNotFoundException();
             } else {
-                throw new PrivateEventException();
+                throw new PrivateEventException(); // TODO: throw 404 instead?
             }
         }
 

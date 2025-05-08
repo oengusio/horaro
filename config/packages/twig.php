@@ -8,6 +8,7 @@ return static function (TwigConfig $twig): void {
     $twig->strictVariables(true);
 
     $twig->global('utils')->value(service('App\Twig\TwigUtils'));
+    $twig->global('rolemanager')->value(service(\App\Horaro\RoleManager::class));
 
     $twig->global('oauth_settings')->value('%oauth%');
 };
