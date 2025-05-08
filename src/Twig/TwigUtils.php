@@ -25,7 +25,12 @@ class TwigUtils {
         return $path;
     }
 
-    public function shorten(string $string, int $maxlen) {
+    public function shorten(?string $string, int $maxlen): string
+    {
+        if (is_null($string)) {
+            return '';
+        }
+
         if (mb_strlen($string) <= $maxlen) {
             return $string;
         }
@@ -33,7 +38,8 @@ class TwigUtils {
         return mb_substr($string, 0, $maxlen).'…';
     }
 
-    public function getLicenseMarkup(string $path) {
+    public function getLicenseMarkup(string $path): string
+    {
         $file = HORARO_ROOT.'/'.$path;
 
         if (!file_exists($file)) {

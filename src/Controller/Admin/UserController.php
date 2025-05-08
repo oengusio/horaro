@@ -12,8 +12,6 @@ use App\Repository\EventRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -99,6 +97,8 @@ final class UserController extends BaseController
 
         return $this->redirect('/-/admin/users');
     }
+
+    // TODO: update password
 
     protected function renderForm(User $user, array $result = null): Response
     {

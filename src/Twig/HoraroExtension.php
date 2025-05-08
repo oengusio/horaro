@@ -24,12 +24,12 @@ class HoraroExtension extends AbstractExtension
             ),
             new TwigFilter(
                 'shorten',
-                fn (string $string, int $maxlen) => $this->shorten($string, $maxlen),
+                fn (?string $string, int $maxlen) => $this->shorten($string, $maxlen),
             ),
         ];
     }
 
-    private function shorten(string $string, int $maxlen): string
+    private function shorten(?string $string, int $maxlen): string
     {
         return $this->utils->shorten($string, $maxlen);
     }

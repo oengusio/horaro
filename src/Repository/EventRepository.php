@@ -52,4 +52,32 @@ class EventRepository extends ServiceEntityRepository
 
         return (int) $query->getSingleScalarResult();
     }
+
+    public function findFiltered(string $query, int $size, int $offset) {
+        return $this->createQueryBuilder('e')
+                    ->where('e.name LIKE :query')
+                    ->orWhere('e.slug LIKE :query')
+                    ->orWhere('e.twitter LIKE :query')
+                    ->orWhere('e.twitch LIKE :query')
+                    ->orWhere('e.website LIKE :query')
+                    ->setParameter('query', '%'.$query.'%')
+                    ->add('orderBy', 'e.name ASC')
+                    ->setMaxResults($size)
+                    ->setFirstResult($offset)
+                    ->getQuery()
+                    ->getResult();
+    }
+
+    public function countFiltered(string $query) {
+        return $this->createQueryBuilder('e')
+                    ->select('COUNT(e)')
+                    ->where('e.name LIKE :query')
+                    ->orWhere('e.slug LIKE :query')
+                    ->orWhere('e.twitter LIKE :query')
+                    ->orWhere('e.twitch LIKE :query')
+                    ->orWhere('e.website LIKE :query')
+                    ->setParameter('query', '%'.$query.'%')
+                    ->getQuery()
+                    ->getSingleScalarResult();
+    }
 }
