@@ -24,11 +24,11 @@ final class EventController extends BaseController
 {
     public function __construct(
         private readonly EventRepository $eventRepository,
-        RoleManager $roleManager,
-        ConfigRepository $config,
-        Security $security,
-        EntityManagerInterface $entityManager,
-        ObscurityCodecService $obscurityCodec,
+        RoleManager                      $roleManager,
+        ConfigRepository                 $config,
+        Security                         $security,
+        EntityManagerInterface           $entityManager,
+        ObscurityCodecService            $obscurityCodec,
     )
     {
         parent::__construct($roleManager, $config, $security, $entityManager, $obscurityCodec);
@@ -46,24 +46,25 @@ final class EventController extends BaseController
             $page = 0;
         }
 
-        $query     = $q;
-        $events    = $this->eventRepository->findFiltered($query, $size, $page*$size);
-        $total     = $this->eventRepository->countFiltered($query);
+        $query = $q;
+        $events = $this->eventRepository->findFiltered($query, $size, $page * $size);
+        $total = $this->eventRepository->countFiltered($query);
 
         return $this->render('admin/events/index.twig', [
             'events' => $events,
-            'pager'  => new Pager($page, $total, $size),
-            'query'  => $query
+            'pager' => new Pager($page, $total, $size),
+            'query' => $query,
         ]);
     }
 
     #[Route('/-/admin/events/{event}/edit', name: 'app_admin_event_edit', methods: ['GET'])]
     public function edit(Event $event): Response
     {
+        // TODO: pull this out into a guard or something
         if (!$this->canEdit($event)) {
             return $this->render('admin/events/view.twig', [
                 'event' => $event,
-                'themes'   => $this->getParameter('horaro.themes'),
+                'themes' => $this->getParameter('horaro.themes'),
             ]);
         }
 
@@ -73,9 +74,11 @@ final class EventController extends BaseController
     #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
     #[Route('/-/admin/events/{event}', name: 'app_admin_event_update', methods: ['PUT'])]
     public function update(
-        Event $event,
+        Event                               $event,
         #[MapRequestPayload] UpdateEventDto $dto,
-    ): Response {
+    ): Response
+    {
+        // TODO: pull this out into a guard or something
         if (!$this->canEdit($event)) {
             throw new AccessDeniedHttpException('You are not allowed to edit this event.');
         }
@@ -89,7 +92,7 @@ final class EventController extends BaseController
             ->setTheme($dto->getTheme())
             ->setMaxSchedules($dto->getMaxSchedules());
 
-        $eventID  = $event->getID();
+        $eventID = $event->getID();
         $featuredModel = $this->config->getByKey('featured_events', []);
         $featuredValue = $featuredModel->getValue();
 
@@ -111,18 +114,48 @@ final class EventController extends BaseController
         return $this->redirect('/-/admin/events');
     }
 
-    protected function renderForm(Event $event, array $result = null): Response {
+    #[Route('/-/admin/events/{event}/delete', name: 'app_admin_event_delete_warning', methods: ['GET'])]
+    public function confirmDeleteForm(Event $event): Response
+    {
+        // TODO: pull this out into a guard or something
+        if (!$this->canEdit($event)) {
+            throw new AccessDeniedHttpException('You are not allowed to edit this event.');
+        }
+
+        return $this->render('admin/events/confirmation.twig', ['event' => $event]);
+    }
+
+    #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
+    #[Route('/-/admin/events/{event}', name: 'app_admin_event_delete', methods: ['DELETE'])]
+    public function deleteEvent(Event $event): Response
+    {
+        // TODO: pull this out into a guard or something
+        if (!$this->canEdit($event)) {
+            throw new AccessDeniedHttpException('You are not allowed to edit this event.');
+        }
+
+        $this->entityManager->remove($event);
+        $this->entityManager->flush();
+
+        $this->addSuccessMsg('The requested event has been deleted.');
+
+        return $this->redirect('/-/admin/events');
+    }
+
+    protected function renderForm(Event $event, array $result = null): Response
+    {
         $featured = $this->config->getByKey('featured_events', [])->getValue();
 
         return $this->render('admin/events/form.twig', [
-            'result'   => $result,
-            'event'    => $event,
-            'themes'   => $this->getParameter('horaro.themes'),
-            'featured' => in_array($event->getID(), $featured)
+            'result' => $result,
+            'event' => $event,
+            'themes' => $this->getParameter('horaro.themes'),
+            'featured' => in_array($event->getID(), $featured),
         ]);
     }
 
-    protected function canEdit(Event $event): bool {
+    protected function canEdit(Event $event): bool
+    {
         return $this->roleManager->canEditEvent($this->getCurrentUser(), $event);
     }
 }
