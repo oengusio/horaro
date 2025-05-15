@@ -56,7 +56,7 @@ class CreateScheduleDto
     #[Assert\Regex(pattern: '/^[a-zA-Z0-9_-]+$/')]
     private string $hidden_secret;
 
-    #[Assert\NotBlank]
+    #[Assert\NotNull]
     #[HoraroAssert\ReadableTime]
     private string $setup_time;
 
