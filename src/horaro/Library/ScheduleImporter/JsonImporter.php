@@ -48,6 +48,13 @@ class JsonImporter extends BaseImporter {
 				$column = new ScheduleColumn();
 				$column->setName($col)->setPosition($pos);
 
+                // for new version:
+                /*
+                 * $column->setName($col)
+                       ->setHidden($col === Schedule::OPTION_COLUMN_NAME)
+                       ->setPosition($pos);
+                 * */
+
 				$columns[] = $column;
 				$this->log('ok', 'Imported column #'.$pos.', "'.$col.'"');
 			}

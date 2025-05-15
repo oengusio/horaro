@@ -28,5 +28,10 @@
         "psr-4": {
             "horaro\\": "src/horaro"
         }
+    },
+    "config": {
+        "allow-plugins": {
+            "ocramius/package-versions": true
+        }
     }
 }

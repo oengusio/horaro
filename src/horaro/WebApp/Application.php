@@ -259,6 +259,7 @@ class Application extends BaseApplication {
 		};
 	}
 
+    // All implemented routes have been removed :)
 	public function setupRouting() {
 		$this->before($this['middleware.csrf']);
 		$this->before($this['middleware.firewall']);
@@ -273,129 +274,24 @@ class Application extends BaseApplication {
 		///////////////////////////////////////////////////////////////////////////////////////////
 		// general routes
 
-		$this->route('GET',   '/',                          'index:welcome');
-		$this->route('GET',   '/-/contact',                 'index:contact');
-		$this->route('GET',   '/-/licenses',                'index:licenses');
-		$this->route('GET',   '/-/calendar/{year}/{month}', 'index:calendar');
-		$this->route('GET',   '/-/login',                   'index:loginForm',    'ghost');
-		$this->route('POST',  '/-/login',                   'index:login',        'ghost', true);
-		$this->route('GET',   '/-/register',                'index:registerForm', 'ghost');
-		$this->route('POST',  '/-/register',                'index:register',     'ghost', true);
-		$this->route('POST',  '/-/logout',                  'index:logout',       'user');
-
-		$this->route('GET',   '/-/oauth/start',             'oauth:start');
-		$this->route('GET',   '/-/oauth/callback',          'oauth:callback');
-
-		$this->route('GET',   '/-/sitemap',                 'sitemap:generate');
-
 		///////////////////////////////////////////////////////////////////////////////////////////
 		// user backend
-
-		$this->route('GET',    '/-/home',                                               'home:index',                  'user');
-
-		$this->route('GET',    '/-/events/new',                                         'event:new',                   'user');
-		$this->route('POST',   '/-/events',                                             'event:create',                'user');
-		$this->route('GET',    '/-/events/{event_e}',                                   'event:detail',                'user');
-		$this->route('GET',    '/-/events/{event_e}/edit',                              'event:edit',                  'user');
-		$this->route('PUT',    '/-/events/{event_e}',                                   'event:update',                'user');
-		$this->route('PUT',    '/-/events/{event_e}/description',                       'event:updateDescription',     'user');
-		$this->route('GET',    '/-/events/{event_e}/delete',                            'event:confirmation',          'user');
-		$this->route('DELETE', '/-/events/{event_e}',                                   'event:delete',                'user');
-
-		$this->route('GET',    '/-/events/{event_e}/schedules/new',                     'schedule:new',                'user');
-		$this->route('POST',   '/-/events/{event_e}/schedules',                         'schedule:create',             'user');
-		$this->route('GET',    '/-/schedules/{schedule_e}',                             'schedule:detail',             'user');
-		$this->route('GET',    '/-/schedules/{schedule_e}/edit',                        'schedule:edit',               'user');
-		$this->route('PUT',    '/-/schedules/{schedule_e}',                             'schedule:update',             'user');
-		$this->route('PUT',    '/-/schedules/{schedule_e}/description',                 'schedule:updateDescription',  'user');
-		$this->route('GET',    '/-/schedules/{schedule_e}/delete',                      'schedule:confirmation',       'user');
-		$this->route('DELETE', '/-/schedules/{schedule_e}',                             'schedule:delete',             'user');
-		$this->route('GET',    '/-/schedules/{schedule_e}/export',                      'schedule:export',             'user');
-
-		$this->route('POST',   '/-/schedules/{schedule_e}/items',                       'schedule.item:create',        'user');
-		$this->route('POST',   '/-/schedules/{schedule_e}/items/move',                  'schedule.item:move',          'user');
-		$this->route('PATCH',  '/-/schedules/{schedule_e}/items/{schedule_item_e}',     'schedule.item:patch',         'user');
-		$this->route('DELETE', '/-/schedules/{schedule_e}/items/{schedule_item_e}',     'schedule.item:delete',        'user');
-
-		$this->route('GET',    '/-/schedules/{schedule_e}/columns/edit',                'schedule.column:edit',        'user');
-		$this->route('POST',   '/-/schedules/{schedule_e}/columns',                     'schedule.column:create',      'user');
-		$this->route('POST',   '/-/schedules/{schedule_e}/columns/move',                'schedule.column:move',        'user');
-		$this->route('PUT',    '/-/schedules/{schedule_e}/columns/fixed/{column_key}',  'schedule.column:updateFixed', 'user');
-		$this->route('PUT',    '/-/schedules/{schedule_e}/columns/{schedule_column_e}', 'schedule.column:update',      'user');
-		$this->route('DELETE', '/-/schedules/{schedule_e}/columns/{schedule_column_e}', 'schedule.column:delete',      'user');
-
-		$this->route('GET',    '/-/schedules/{schedule_e}/import',                      'schedule.import:form',        'user');
-		$this->route('POST',   '/-/schedules/{schedule_e}/import',                      'schedule.import:import',      'user');
-
-		$this->route('GET',    '/-/profile',                                            'profile:edit',                'user');
-		$this->route('PUT',    '/-/profile',                                            'profile:update',              'user');
-		$this->route('PUT',    '/-/profile/password',                                   'profile:updatePassword',      'user');
-		$this->route('DELETE', '/-/profile/password',                                   'profile:removePassword',      'user');
-		$this->route('GET',    '/-/profile/oauth',                                      'profile:oauth',               'user');
-		$this->route('DELETE', '/-/profile/oauth',                                      'profile:unconnect',           'user');
 
 		///////////////////////////////////////////////////////////////////////////////////////////
 		// admin backend
 
-		$this->route('GET',    '/-/admin',                             'admin.index:dashboard',       'admin');
-
-		$this->route('GET',    '/-/admin/users',                       'admin.user:index',            'admin');
-		$this->route('GET',    '/-/admin/users/{user}/edit',           'admin.user:edit',             'admin');
-		$this->route('PUT',    '/-/admin/users/{user}',                'admin.user:update',           'admin');
-		$this->route('PUT',    '/-/admin/users/{user}/password',       'admin.user:updatePassword',   'admin');
-
-		$this->route('GET',    '/-/admin/events',                      'admin.event:index',           'admin');
-		$this->route('GET',    '/-/admin/events/{event}/edit',         'admin.event:edit',            'admin');
-		$this->route('PUT',    '/-/admin/events/{event}',              'admin.event:update',          'admin');
-		$this->route('GET',    '/-/admin/events/{event}/delete',       'admin.event:confirmation',    'admin');
-		$this->route('DELETE', '/-/admin/events/{event}',              'admin.event:delete',          'admin');
-
-		$this->route('GET',    '/-/admin/schedules',                   'admin.schedule:index',        'admin');
-		$this->route('GET',    '/-/admin/schedules/{schedule}/edit',   'admin.schedule:edit',         'admin');
-		$this->route('PUT',    '/-/admin/schedules/{schedule}',        'admin.schedule:update',       'admin');
-		$this->route('GET',    '/-/admin/schedules/{schedule}/delete', 'admin.schedule:confirmation', 'admin');
-		$this->route('DELETE', '/-/admin/schedules/{schedule}',        'admin.schedule:delete',       'admin');
-
 		///////////////////////////////////////////////////////////////////////////////////////////
 		// operator-only extensions to the admin interface
-
-		$this->route('GET',  '/-/admin/utils',                      'admin.utils:index',                'op');
-
-		$this->route('GET',  '/-/admin/utils/config',               'admin.utils.config:form',          'op');
-		$this->route('PUT',  '/-/admin/utils/config',               'admin.utils.config:update',        'op');
-
-		$this->route('GET',  '/-/admin/utils/tools',                'admin.utils.tools:form',           'op');
-		$this->route('POST', '/-/admin/utils/tools/cleartwigcache', 'admin.utils.tools:cleartwigcache', 'op');
-		$this->route('POST', '/-/admin/utils/tools/fixpositions',   'admin.utils.tools:fixpositions',   'op');
-		$this->route('POST', '/-/admin/utils/tools/cleanupusers',   'admin.utils.tools:cleanupusers',   'op');
-
-		$this->route('GET',  '/-/admin/utils/serverinfo',           'admin.utils.serverinfo:form',      'op');
-		$this->route('GET',  '/-/admin/utils/serverinfo/phpinfo',   'admin.utils.serverinfo:phpinfo',   'op');
 
 		///////////////////////////////////////////////////////////////////////////////////////////
 		// API
 
-		$this->route('GET', '/-/api',                                                   'api.index:index',             null, false, true);
-		$this->route('GET', '/-/api/v1',                                                'api.v1.index:index',          null, false, true);
-		$this->route('GET', '/-/api/v1/events',                                         'api.v1.event:index',          null, false, true);
-		$this->route('GET', '/-/api/v1/events/{eventid}',                               'api.v1.event:view',           null, false, true);
-		$this->route('GET', '/-/api/v1/events/{eventid}/schedules',                     'api.v1.event:schedules',      null, false, true);
-		$this->route('GET', '/-/api/v1/events/{eventid}/schedules/{scheduleid}',        'api.v1.event:schedule',       null, false, true);
-		$this->route('GET', '/-/api/v1/events/{eventid}/schedules/{scheduleid}/ticker', 'api.v1.event:scheduleTicker', null, false, true);
-		$this->route('GET', '/-/api/v1/schedules/{scheduleid}',                         'api.v1.schedule:view',        null, false, true);
-		$this->route('GET', '/-/api/v1/schedules/{scheduleid}/ticker',                  'api.v1.schedule:ticker',      null, false, true);
 
 		///////////////////////////////////////////////////////////////////////////////////////////
 		// generic event/schedule routes
 
 		// We widen the rules for the slugs (".+") to allow for any junk to be appended to the URL.
 		// The controller will filter accordingly.
-
-		$this->route('GET', '/{eventslug}',                          'frontend:event');
-		$this->route('GET', '/{eventslug}/',                         'frontend:event');
-		$this->route('GET', '/{eventslug}/{scheduleslug}.{format}',  'frontend:scheduleExport')->assert('format', '(jsonp?|xml|csv|ical)');
-		$this->route('GET', '/{eventslug}/{scheduleslug}/ical-feed', 'frontend:icalFaq');
-		$this->route('GET', '/{eventslug}/{scheduleslug}',           'frontend:schedule')->assert('scheduleslug', '.+');
 	}
 
 	protected function route($method, $pattern, $endpoint, $requiredRole = null, $noCsrf = false, $json = false) {

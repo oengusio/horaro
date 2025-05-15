@@ -16,6 +16,7 @@ module.exports = function (grunt) {
 					compress: true
 				},
 				files: {
+					'tmp/assets/css/app-common.css': 'assets/less/common.less',
 					'tmp/assets/css/app-frontend.css': 'assets/less/frontend.less',
 					'tmp/assets/css/app-backend.css':  'assets/less/backend.less'
 				}
@@ -53,7 +54,7 @@ module.exports = function (grunt) {
 			i18n_en_us: {
 				options: {
 					separator: '\n;\n',
-					footer: 'var horaroTimeFormat = "H:i a";'
+					footer: 'var horaroTimeFo	rmat = "H:i a";'
 				},
 				src: [/* english (US) is built in into all dependencies */],
 				dest: 'tmp/assets/js/i18n/en_us.js'
