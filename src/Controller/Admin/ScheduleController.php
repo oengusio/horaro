@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Schedule;
+use App\Horaro\DTO\Admin\UpdateScheduleDto;
 use App\Horaro\Pager;
 use App\Horaro\RoleManager;
 use App\Horaro\Service\ObscurityCodecService;
@@ -14,7 +15,10 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_ADMIN')]
@@ -66,6 +70,42 @@ final class ScheduleController extends BaseController
         }
 
         return $this->renderForm($schedule);
+    }
+
+    #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
+    #[Route('/-/admin/schedules/{schedule}', name: 'app_admin_schedule_update', methods: ['PUT'])]
+    public function updateSchedule(
+        Schedule $schedule,
+        #[MapRequestPayload] UpdateScheduleDto $dto
+    ): Response
+    {
+        if (!$this->canEdit($schedule)) {
+            throw new AccessDeniedHttpException('You are not allowed to edit this schedule.');
+        }
+
+        $dtoStartDate = $dto->getStartDate();
+        $dtoStartTime = $dto->getStartTime();
+        $startDateTime = \DateTime::createFromFormat('Y-m-d G:i', "$dtoStartDate $dtoStartTime");
+
+        $schedule
+            ->setName($dto->getName())
+            ->setSlug($dto->getSlug())
+            ->setTimezone($dto->getTimezone())
+            ->setStart($startDateTime)
+            ->setWebsite($dto->getWebsite())
+            ->setTwitter($dto->getTwitter())
+            ->setTwitch($dto->getTwitch())
+            ->setTheme($dto->getTheme())
+            ->setSecret($dto->getSecret())
+            ->setMaxItems($dto->getMaxItems())
+            ->touch()
+        ;
+
+        $this->entityManager->flush();
+
+        $this->addSuccessMsg('Schedule '.$schedule->getName().' has been updated.');
+
+        return $this->redirect('/-/admin/schedules');
     }
 
     protected function renderForm(Schedule $schedule, array $result = null): Response {
