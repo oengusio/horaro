@@ -49,6 +49,19 @@ class ConfigRepository extends ServiceEntityRepository
         return $result;
     }
 
+    public function saveBatch(array $newConfig): void {
+        /** @var Config[] $allConfig */
+        $allConfig = $this->findAll();
+
+        foreach ($allConfig as $config) {
+            $newValue = $newConfig[$config->getKeyname()] ?? $config->getValue();
+
+            $config->setValue($newValue);
+        }
+
+        $this->getEntityManager()->flush();
+    }
+
     //    /**
     //     * @return Config[] Returns an array of Config objects
     //     */

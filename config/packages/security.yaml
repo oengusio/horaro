@@ -38,8 +38,8 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/-/admin/utils, roles: ROLE_OP }
-        - { path: ^/-/admin, roles: ROLE_ADMIN }
+#        - { path: ^/-/admin/utils, roles: ROLE_OP }
+#        - { path: ^/-/admin, roles: ROLE_ADMIN }
 #        - { path: ^/-/home, roles: ROLE_USER }
 #        - { path: ^/-/profile, roles: [ROLE_USER, ROLE_ADMIN, ROLE_OP] }
 #        - { path: ^/-/events, roles: [ROLE_USER, ROLE_ADMIN, ROLE_OP] }

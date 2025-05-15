@@ -77,7 +77,7 @@
 					<div class="col-lg-4">
 						{% set thm = utils.formValue(result, 'default_event_theme', config.default_event_theme) %}
 						<select name="default_event_theme" id="default_event_theme" class="form-control h-fancy">
-						{% for themes,name in config.themes %}
+						{% for themes,name in themes %}
 							<option value="{{ themes }}"{% if thm == themes %} selected{% endif %}>{{ name }}</option>
 						{% endfor %}
 						</select>
