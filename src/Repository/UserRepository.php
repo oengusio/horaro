@@ -54,4 +54,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                     ->getQuery()
                     ->getSingleScalarResult();
     }
+
+    /**
+     * @return User[]
+     */
+    public function findInactiveOAuthAccounts(): array {
+        // TODO: use query builder
+        $dql   = 'SELECT DISTINCT u FROM App\Entity\User u LEFT JOIN u.events e WHERE u.password IS NULL AND e.id IS NULL AND u.twitch_oauth IS NOT NULL AND u.created_at < :threshold ORDER BY u.id ASC';
+        $query = $this->getEntityManager()->createQuery($dql);
+
+        $query->setParameter('threshold', gmdate('Y-m-d H:i:s', strtotime('-1 month')));
+
+        return $query->getResult();
+    }
 }
