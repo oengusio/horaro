@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use AllowDynamicProperties;
 use App\Horaro\Library\ReadableTime;
 use App\Horaro\Library\ScheduleItemIterator;
 use App\Repository\ScheduleRepository;
@@ -10,6 +11,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+#[AllowDynamicProperties]
 #[ORM\Table(name: 'schedules')]
 #[ORM\Entity(repositoryClass: ScheduleRepository::class)]
 class Schedule

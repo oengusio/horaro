@@ -133,4 +133,32 @@ class ScheduleRepository extends ServiceEntityRepository
 
         $query->getOneOrNullResult(); // this one blocks until the lock is available
     }
+
+    public function findFiltered(string $query, int $size, int $offset) {
+        return $this->createQueryBuilder('s')
+                    ->where('s.name LIKE :query')
+                    ->orWhere('s.slug LIKE :query')
+                    ->orWhere('s.website LIKE :query')
+                    ->orWhere('s.twitter LIKE :query')
+                    ->orWhere('s.twitch LIKE :query')
+                    ->setParameter('query', '%'.$query.'%')
+                    ->add('orderBy', 's.name ASC')
+                    ->setMaxResults($size)
+                    ->setFirstResult($offset)
+                    ->getQuery()
+                    ->getResult();
+    }
+
+    public function countFiltered(string $query) {
+        return $this->createQueryBuilder('s')
+                    ->select('COUNT(s)')
+                    ->where('s.name LIKE :query')
+                    ->orWhere('s.slug LIKE :query')
+                    ->orWhere('s.website LIKE :query')
+                    ->orWhere('s.twitter LIKE :query')
+                    ->orWhere('s.twitch LIKE :query')
+                    ->setParameter('query', '%'.$query.'%')
+                    ->getQuery()
+                    ->getSingleScalarResult();
+    }
 }

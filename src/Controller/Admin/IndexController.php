@@ -10,7 +10,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_ADMIN')]
 final class IndexController extends BaseController
 {
-    #[Route('/-/admin', name: 'app_admin_index')]
+    #[Route('/-/admin', name: 'app_admin_index', methods: ['GET'])]
     public function dashboard(Request $request): Response
     {
         $request->getSession()->set('navbar', 'admin');

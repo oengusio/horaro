@@ -52,4 +52,18 @@ class ScheduleItemRepository extends ServiceEntityRepository
                   ->getQuery()
                   ->getResult();
     }
+
+    public function countItems(Schedule $schedule = null): int {
+        $dql = 'SELECT COUNT(i.id) FROM App\Entity\ScheduleItem i';
+
+        if ($schedule) {
+            $query = $this->getEntityManager()->createQuery($dql.' WHERE i.schedule = :schedule');
+            $query->setParameter('schedule', $schedule);
+        }
+        else {
+            $query = $this->getEntityManager()->createQuery($dql);
+        }
+
+        return (int) $query->getSingleScalarResult();
+    }
 }
