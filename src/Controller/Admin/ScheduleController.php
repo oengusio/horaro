@@ -64,7 +64,8 @@ final class ScheduleController extends BaseController
     }
 
     #[Route('/-/admin/schedules/{schedule}/edit', name: 'app_admin_schedule_edit', methods: ['GET'])]
-    public function editForm(Schedule $schedule): Response {
+    public function editForm(Schedule $schedule): Response
+    {
         if (!$this->canEdit($schedule)) {
             return $this->render('admin/schedules/view.twig', ['schedule' => $schedule]);
         }
@@ -75,7 +76,7 @@ final class ScheduleController extends BaseController
     #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
     #[Route('/-/admin/schedules/{schedule}', name: 'app_admin_schedule_update', methods: ['PUT'])]
     public function updateSchedule(
-        Schedule $schedule,
+        Schedule                               $schedule,
         #[MapRequestPayload] UpdateScheduleDto $dto
     ): Response
     {
@@ -98,8 +99,7 @@ final class ScheduleController extends BaseController
             ->setTheme($dto->getTheme())
             ->setSecret($dto->getSecret())
             ->setMaxItems($dto->getMaxItems())
-            ->touch()
-        ;
+            ->touch();
 
         $this->entityManager->flush();
 
@@ -108,21 +108,49 @@ final class ScheduleController extends BaseController
         return $this->redirect('/-/admin/schedules');
     }
 
-    protected function renderForm(Schedule $schedule, array $result = null): Response {
-        $itemRepo  = $this->itemRepository;
+    #[Route('/-/admin/schedules/{schedule}/delete', name: 'app_admin_schedule_delete_form', methods: ['GET'])]
+    public function deleteScheduleForm(Schedule $schedule): Response
+    {
+        if (!$this->canEdit($schedule)) {
+            throw new AccessDeniedHttpException('You are not allowed to edit this schedule.');
+        }
+
+        return $this->render('admin/schedules/confirmation.twig', ['schedule' => $schedule]);
+    }
+
+    #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
+    #[Route('/-/admin/schedules/{schedule}', name: 'app_admin_schedule_delete', methods: ['DELETE'])]
+    public function goGoGadgetDeleteIt(Schedule $schedule): Response
+    {
+        if (!$this->canEdit($schedule)) {
+            throw new AccessDeniedHttpException('You are not allowed to edit this schedule.');
+        }
+
+        $this->entityManager->remove($schedule);
+        $this->entityManager->flush();
+
+        $this->addSuccessMsg('The requested schedule has been deleted.');
+
+        return $this->redirect('/-/admin/schedules');
+    }
+
+    protected function renderForm(Schedule $schedule, array $result = null): Response
+    {
+        $itemRepo = $this->itemRepository;
         $timezones = \DateTimeZone::listIdentifiers();
 
         $schedule->itemCount = $itemRepo->countItems($schedule);
 
         return $this->render('admin/schedules/form.twig', [
-            'result'    => $result,
+            'result' => $result,
             'timezones' => $timezones,
-            'themes'    => $this->getParameter('horaro.themes'),
-            'schedule'  => $schedule
+            'themes' => $this->getParameter('horaro.themes'),
+            'schedule' => $schedule,
         ]);
     }
 
-    protected function canEdit(Schedule $schedule): bool {
+    protected function canEdit(Schedule $schedule): bool
+    {
         return $this->roleManager->canEditSchedule($this->getCurrentUser(), $schedule);
     }
 }
