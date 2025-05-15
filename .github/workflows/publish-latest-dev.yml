@@ -38,8 +38,6 @@ jobs:
           tags: oengusio/horaro:latest
           cache-from: type=gha
           cache-to: type=gha
-          build-args: |
-            PROFILE=production-dev
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
