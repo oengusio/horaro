@@ -37,7 +37,7 @@ final class EventController extends BaseController
         $user = $this->getCurrentUser();
 
         if ($this->exceedsMaxEvents($user)) {
-            return $this->redirect('/-/home');
+            return $this->redirectToRoute('app_home');
         }
 
         $form = $this->createForm(EventCreateType::class, new CreateEventDto());
