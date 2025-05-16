@@ -104,7 +104,11 @@ final class EventController extends BaseController
         #[ValueResolver('event_e')] Event $event,
     ): Response
     {
-        $form = $this->createForm(EventCreateType::class, CreateEventDto::fromEvent($event));
+        // Forms need a method specified for them to submit when it's not post
+        // See https://github.com/symfony/symfony/issues/8412#issuecomment-59394789
+        $form = $this->createForm(EventCreateType::class, CreateEventDto::fromEvent($event), [
+            'method' => 'PUT',
+        ]);
 
         $form->handleRequest($request);
 
