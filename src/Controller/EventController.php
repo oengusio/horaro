@@ -4,17 +4,18 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Form\Type\EventCreateType;
+use App\Form\Type\EventDescriptionType;
 use App\Horaro\DTO\CreateEventDto;
 use App\Horaro\DTO\EventDescriptionUpdateDto;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+// TODO: merge description and event update data into a single form
 #[IsGranted('ROLE_USER')]
 final class EventController extends BaseController
 {
@@ -119,18 +120,35 @@ final class EventController extends BaseController
     #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
     #[Route('/-/events/{event_e}/description', name: 'app_backend_event_description_update', methods: ['PUT'])]
     public function updateDescription(
-        #[ValueResolver('event_e')] Event              $event,
-        #[MapRequestPayload] EventDescriptionUpdateDto $dto,
+        Request                           $request,
+        #[ValueResolver('event_e')] Event $event,
     ): Response
     {
-        $event->setDescription($dto->getDescription());
-        $this->entityManager->flush();
+        $descriptionForm = $this->createForm(EventDescriptionType::class, EventDescriptionUpdateDto::fromEvent($event), [
+            'method' => 'PUT',
+        ]);
 
-        // done
+        $descriptionForm->handleRequest($request);
 
-        $this->addSuccessMsg('Your event description has been updated.');
+        if ($descriptionForm->isSubmitted() && $descriptionForm->isValid()) {
+            /** @var EventDescriptionUpdateDto $dto */
+            $dto = $descriptionForm->getData();
 
-        return $this->redirect('/-/events/'.$this->encodeID($event->getId(), 'event'));
+            $event->setDescription($dto->getDescription());
+            $this->entityManager->flush();
+
+            // done
+
+            $this->addSuccessMsg('Your event description has been updated.');
+
+            return $this->redirectToRoute('app_backend_event_detail', [
+                'event_e' => $this->encodeID($event->getId(), 'event'),
+            ]);
+        }
+
+        $form = $this->createForm(EventCreateType::class, CreateEventDto::fromEvent($event));
+
+        return $this->renderForm($form, $event, $descriptionForm);
     }
 
     #[IsGranted('edit', 'event')]
@@ -153,11 +171,16 @@ final class EventController extends BaseController
         return $this->redirect('/-/home');
     }
 
-    protected function renderForm(FormInterface $form, ?Event $event = null): Response
+    protected function renderForm(FormInterface $form, ?Event $event = null, ?FormInterface $descriptionForm = null): Response
     {
+        $descriptionForm = $event
+            ? $descriptionForm ?? $this->createForm(EventDescriptionType::class, EventDescriptionUpdateDto::fromEvent($event))
+            : null;
+
         return $this->render('event/form.twig', [
             'event' => $event,
             'form' => $form,
+            'descriptionForm' => $descriptionForm,
             'themes' => $this->getParameter('horaro.themes'),
             'defaultTheme' => $this->config->getByKey('default_event_theme', 'yeti')->getValue(),
         ]);

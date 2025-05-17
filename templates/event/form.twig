@@ -218,10 +218,13 @@
                         <fieldset>
                             {{ macros.csrf_token() }}
 
-                            <div class="form-group{{ utils.formClass(form, 'description') }}">
-                                <textarea class="form-control remarkable" name="description"
-                                          rows="10">{{ utils.formValue(form, 'description', event.description) }}</textarea>
-                                {{ macros.form_errors(form, 'description') }}
+                            <div class="form-group{{ utils.formClass(descriptionForm, 'description') }}">
+                                <textarea
+                                    class="form-control remarkable"
+                                    rows="10"
+                                    name="{{ field_name(descriptionForm.description) }}"
+                                >{{ field_value(descriptionForm.description) }}</textarea>
+                                {{ form_errors(descriptionForm.description) }}
                                 <span class="help-block">
 							The description uses
 							<a href="https://packetlife.net/media/library/16/Markdown.pdf"
@@ -251,6 +254,9 @@
                                         Update Description
                                     </button>
                                 </div>
+
+                                {{ form_errors(descriptionForm) }}
+                                {{ form_rest(descriptionForm) }}
                             </div>
                         </fieldset>
                     </form>
