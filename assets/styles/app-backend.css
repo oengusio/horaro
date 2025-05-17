@@ -751,6 +751,10 @@ body[data-ui="columnist"] .editableform .editable-input input {
   margin-bottom: 12px
 }
 
+.form-group.has-error li {
+  color: red
+}
+
 .form-control {
   height: 35px;
   padding: 6px 8px

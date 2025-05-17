@@ -2,6 +2,7 @@
 
 namespace App\Horaro\DTO;
 
+use App\Entity\Event;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class EventDescriptionUpdateDto
@@ -10,7 +11,7 @@ class EventDescriptionUpdateDto
         max: 16*1024,
         maxMessage: 'The description cannot be longer than 16k characters.',
     )]
-    private string $description;
+    private string $description = '';
 
     public function getDescription(): string
     {
@@ -22,6 +23,13 @@ class EventDescriptionUpdateDto
         $this->description = $description;
     }
 
+    public static function fromEvent(Event $event): static
+    {
+        $dto = new static();
 
+        $dto->description = $event->getDescription();
+
+        return $dto;
+    }
 
 }
