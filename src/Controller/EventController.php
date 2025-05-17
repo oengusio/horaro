@@ -18,21 +18,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 final class EventController extends BaseController
 {
-    #[Route('/-/events/new', name: 'app_backend_event_new_form', methods: ['GET'])]
-    public function showNewForm(): Response
-    {
-        if ($this->exceedsMaxEvents($this->getCurrentUser())) {
-            return $this->redirectToRoute('app_home');
-        }
-
-        $form = $this->createForm(EventCreateType::class, new CreateEventDto());
-
-        return $this->renderForm($form);
-    }
-
-    #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
-    #[Route('/-/events', name: 'app_backend_event_create', methods: ['POST'])]
-    public function create(Request $request): Response
+    #[Route('/-/events/new', name: 'app_backend_event_new_form', methods: ['GET', 'POST'])]
+    public function showNewForm(Request $request): Response
     {
         $user = $this->getCurrentUser();
 
@@ -68,7 +55,9 @@ final class EventController extends BaseController
 
             $this->addSuccessMsg('Your new event has been created.');
 
-            return $this->redirect('/-/events/'.$this->encodeID($event->getId(), 'event'));
+            return $this->redirectToRoute('app_backend_event_detail', [
+                'event_e' => $this->encodeID($event->getId(), 'event'),
+            ]);
         }
 
         return $this->renderForm($form);
@@ -88,21 +77,8 @@ final class EventController extends BaseController
     }
 
     #[IsGranted('edit', 'event')]
-    #[Route('/-/events/{event_e}/edit', name: 'app_backend_event_edit', methods: ['GET'])]
-    public function editEventForm(#[ValueResolver('event_e')] Event $event): Response
-    {
-        $form = $this->createForm(EventCreateType::class, CreateEventDto::fromEvent($event));
-
-        return $this->renderForm($form, $event);
-    }
-
-    #[IsGranted('edit', 'event')]
-    #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
-    #[Route('/-/events/{event_e}', name: 'app_backend_event_update', methods: ['PUT'])]
-    public function updateEvent(
-        Request                           $request,
-        #[ValueResolver('event_e')] Event $event,
-    ): Response
+    #[Route('/-/events/{event_e}/edit', name: 'app_backend_event_edit', methods: ['GET', 'PUT'])]
+    public function editEventForm(Request $request, #[ValueResolver('event_e')] Event $event): Response
     {
         // Forms need a method specified for them to submit when it's not post
         // See https://github.com/symfony/symfony/issues/8412#issuecomment-59394789
@@ -131,7 +107,9 @@ final class EventController extends BaseController
 
             $this->addSuccessMsg('Your event has been updated.');
 
-            return $this->redirect('/-/events/'.$this->encodeID($event->getId(), 'event'));
+            return $this->redirectToRoute('app_backend_event_detail', [
+                'event_e' => $this->encodeID($event->getId(), 'event'),
+            ]);
         }
 
         return $this->renderForm($form, $event);
@@ -175,11 +153,10 @@ final class EventController extends BaseController
         return $this->redirect('/-/home');
     }
 
-    protected function renderForm(FormInterface $form, ?Event $event = null, mixed $result = null): Response
+    protected function renderForm(FormInterface $form, ?Event $event = null): Response
     {
         return $this->render('event/form.twig', [
             'event' => $event,
-            'result' => $result,
             'form' => $form,
             'themes' => $this->getParameter('horaro.themes'),
             'defaultTheme' => $this->config->getByKey('default_event_theme', 'yeti')->getValue(),

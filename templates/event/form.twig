@@ -31,7 +31,7 @@
                     </div>
                 {% endif %}
 
-                <form method="post" action="/-/events{% if event %}/{{ event.id|obscurify('event') }}{% endif %}"
+                <form method="post" action="/-/events{% if event %}/{{ event.id|obscurify('event') }}/edit{% else %}/new{% endif %}"
                       class="form-horizontal">
                     {% if event %}
                         <div><input type="hidden" id="_method" name="_method" value="PUT"/></div>
@@ -42,7 +42,7 @@
                         <legend>Event Information</legend>
                         {{ macros.csrf_token() }}
 
-                        <div class="form-group{{ utils.formClass(result, 'name') }}">
+                        <div class="form-group{{ utils.formClass(form, 'name') }}">
                             <label class="col-lg-3 control-label" for="name">Name:</label>
                             <div class="col-lg-9">
                                 <input
@@ -57,11 +57,10 @@
                                 />
 
                                 {{ form_errors(form.name) }}
-                                {{ macros.form_errors(result, 'name') }}
                             </div>
                         </div>
 
-                        <div class="form-group{{ utils.formClass(result, 'slug') }}">
+                        <div class="form-group{{ utils.formClass(form, 'slug') }}">
                             <label class="col-lg-3 control-label" for="slug">Slug:</label>
                             <div class="col-lg-9">
                                 <input
@@ -75,11 +74,10 @@
                                     required
                                 />
                                 {{ form_errors(form.slug, { 'class': 'is-danger' }) }}
-                                {{ macros.form_errors(result, 'slug') }}
                             </div>
                         </div>
 
-                        <div class="form-group{{ utils.formClass(result, 'website') }}">
+                        <div class="form-group{{ utils.formClass(form, 'website') }}">
                             <label class="col-lg-3 control-label" for="website">Website:</label>
                             <div class="col-lg-9">
                                 <input
@@ -91,11 +89,10 @@
                                     value="{{ field_value(form.website) }}"
                                 />
                                 {{ form_errors(form.website) }}
-                                {{ macros.form_errors(result, 'website') }}
                             </div>
                         </div>
 
-                        <div class="form-group{{ utils.formClass(result, 'twitch') }}">
+                        <div class="form-group{{ utils.formClass(form, 'twitch') }}">
                             <label class="col-lg-3 control-label" for="twitch">Twitch Stream:</label>
                             <div class="col-lg-9">
                                 <div class="input-group">
@@ -110,11 +107,10 @@
                                     />
                                 </div>
                                 {{ form_errors(form.twitch) }}
-                                {{ macros.form_errors(result, 'twitch') }}
                             </div>
                         </div>
 
-                        <div class="form-group{{ utils.formClass(result, 'twitter') }}">
+                        <div class="form-group{{ utils.formClass(form, 'twitter') }}">
                             <label class="col-lg-3 control-label" for="twitter">Twitter Account:</label>
                             <div class="col-lg-9">
                                 <div class="input-group">
@@ -129,11 +125,10 @@
                                     />
                                 </div>
                                 {{ form_errors(form.twitter) }}
-                                {{ macros.form_errors(result, 'twitter') }}
                             </div>
                         </div>
 
-                        <div class="form-group{{ utils.formClass(result, 'theme') }}">
+                        <div class="form-group{{ utils.formClass(form, 'theme') }}">
                             <label class="col-lg-3 control-label" for="theme">Theme:</label>
                             <div class="col-lg-9">
                                 {% set t = field_value(form.theme) %}
@@ -143,11 +138,10 @@
                                     {% endfor %}
                                 </select>
                                 {{ form_errors(form.theme) }}
-                                {{ macros.form_errors(result, 'theme') }}
                             </div>
                         </div>
 
-                        <div class="form-group{{ utils.formClass(result, 'secret') }}">
+                        <div class="form-group{{ utils.formClass(form, 'secret') }}">
                             <label class="col-lg-3 control-label" for="secret">Secret:</label>
                             <div class="col-lg-9">
                                 <input
@@ -159,7 +153,6 @@
                                     value="{{ field_value(form.secret) }}"
                                 />
                                 {{ form_errors(form.secret) }}
-                                {{ macros.form_errors(result, 'secret') }}
                             </div>
                         </div>
 
@@ -225,10 +218,10 @@
                         <fieldset>
                             {{ macros.csrf_token() }}
 
-                            <div class="form-group{{ utils.formClass(result, 'description') }}">
+                            <div class="form-group{{ utils.formClass(form, 'description') }}">
                                 <textarea class="form-control remarkable" name="description"
-                                          rows="10">{{ utils.formValue(result, 'description', event.description) }}</textarea>
-                                {{ macros.form_errors(result, 'description') }}
+                                          rows="10">{{ utils.formValue(form, 'description', event.description) }}</textarea>
+                                {{ macros.form_errors(form, 'description') }}
                                 <span class="help-block">
 							The description uses
 							<a href="https://packetlife.net/media/library/16/Markdown.pdf"
