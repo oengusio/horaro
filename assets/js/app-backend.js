@@ -421,7 +421,18 @@ function mirrorColumnWidths(sourceTable, targets) {
 				}
 			},
 			error: function(result) {
-				self.errors(result.responseJSON.errors);
+        const errors = {};
+        const violations = result.responseJSON.violations ?? [];
+
+        violations.forEach((violation) => {
+          if (!errors[violation.propertyPath]) {
+            errors[violation.propertyPath] = [];
+          }
+
+          errors[violation.propertyPath].push(violation.title);
+        })
+
+				self.errors(errors);
 			},
 			complete: function() {
 				self.busy(false);
@@ -836,7 +847,8 @@ function mirrorColumnWidths(sourceTable, targets) {
 				}
 			},
 			error: function(result) {
-				self.errors(result.responseJSON.errors);
+        console.log(result.responseJSON);
+				self.errors(result.responseJSON.detail);
 			},
 			complete: function() {
 				self.busy(false);
@@ -869,6 +881,11 @@ function mirrorColumnWidths(sourceTable, targets) {
 			success: function() {
 				viewModel.columns.remove(self);
 			},
+      error: function(result) {
+        self.errors({
+          [colID]: [result.responseJSON.detail],
+        });
+      },
 			complete: function() {
 				self.busy(false);
 			}

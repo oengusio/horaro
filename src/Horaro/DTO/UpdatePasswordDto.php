@@ -10,15 +10,15 @@ class UpdatePasswordDto
 {
     #[HoraroAssert\AllowedToSetPassword]
     #[SecurityAssert\UserPassword]
-    private string $current;
+    private string $current = '';
 
     #[Assert\NotBlank]
     #[Assert\NotCompromisedPassword]
     #[Assert\PasswordStrength]
-    private string $password;
+    private string $password = '';
 
     #[Assert\EqualTo(propertyPath: 'password')]
-    private string $password2;
+    private string $password2 = '';
 
     public function getCurrent(): string
     {

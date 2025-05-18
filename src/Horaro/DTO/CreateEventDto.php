@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CreateEventDto
 {
     #[Assert\NotBlank]
-    private string $name;
+    private string $name = '';
 
     #[Assert\Length(min: 2)]
     #[Assert\Regex(pattern: '/^[a-z0-9-]{2,}$/')]
@@ -19,24 +19,25 @@ class CreateEventDto
         match: false,
     )]
     #[HoraroAssert\CustomSlugRules(entity: Event::class)]
-    private string $slug;
+    private string $slug = '';
 
+    #[Assert\NotNull]
     #[Assert\Url(requireTld: true)]
-    private string $website;
+    private string $website = '';
 
     #[Assert\Regex(pattern: '/^@?([a-zA-Z0-9-_]+)$/')]
-    private string $twitter;
+    private string $twitter = '';
 
     #[Assert\Regex(pattern: '/^[a-zA-Z0-9_-]+$/')]
-    private string $twitch;
+    private string $twitch = '';
 
     #[Assert\NotBlank]
     #[HoraroAssert\Theme]
-    private string $theme;
+    private string $theme = '';
 
     #[Assert\Length(max: 20)]
     #[Assert\Regex(pattern: '/^[a-zA-Z0-9_-]+$/')]
-    private string $secret;
+    private string $secret = '';
 
     public function getName(): string
     {
@@ -63,9 +64,9 @@ class CreateEventDto
         return $this->website;
     }
 
-    public function setWebsite(string $website): void
+    public function setWebsite(?string $website): void
     {
-        $this->website = $website;
+        $this->website = $website ?? '';
     }
 
     public function getTwitter(): string
@@ -73,9 +74,9 @@ class CreateEventDto
         return $this->twitter;
     }
 
-    public function setTwitter(string $twitter): void
+    public function setTwitter(?string $twitter): void
     {
-        $this->twitter = $twitter;
+        $this->twitter = $twitter ?? '';
     }
 
     public function getTwitch(): string
@@ -83,9 +84,9 @@ class CreateEventDto
         return $this->twitch;
     }
 
-    public function setTwitch(string $twitch): void
+    public function setTwitch(?string $twitch): void
     {
-        $this->twitch = $twitch;
+        $this->twitch = $twitch ?? '';
     }
 
     public function getTheme(): string
@@ -103,9 +104,22 @@ class CreateEventDto
         return $this->secret;
     }
 
-    public function setSecret(string $secret): void
+    public function setSecret(?string $secret): void
     {
-        $this->secret = $secret;
+        $this->secret = $secret ?? '';
     }
 
+    public static function fromEvent(Event $event): static {
+        $dto = new static();
+
+        $dto->name = $event->getName();
+        $dto->slug = $event->getSlug();
+        $dto->website = $event->getWebsite();
+        $dto->twitter = $event->getTwitter();
+        $dto->twitch = $event->getTwitch();
+        $dto->theme = $event->getTheme();
+        $dto->secret = $event->getSecret();
+
+        return $dto;
+    }
 }

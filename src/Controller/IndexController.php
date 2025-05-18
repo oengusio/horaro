@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Entity\User;
+use App\Form\Type\RegisterType;
 use App\Horaro\DTO\RegisterDto;
 use App\Horaro\Service\ObscurityCodecService;
 use App\Repository\ConfigRepository;
@@ -15,7 +16,6 @@ use Solution10\Calendar\Resolution\MonthResolution;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
@@ -102,7 +102,6 @@ final class IndexController extends BaseController
         return $this->setCachingHeader($html, 'homepage');
     }
 
-    // TODO: prevent users with role ghost from logging in
     #[Route('/-/login', name: 'app_login', methods: ['GET', 'POST'], priority: 1)]
     public function loginForm(AuthenticationUtils $authenticationUtils): Response {
         // get the login error if there is one
@@ -112,66 +111,67 @@ final class IndexController extends BaseController
         $lastUsername = $authenticationUtils->getLastUsername();
 
         $response = $this->render('index/login.twig', [
-            'result' => null, // TODO: remove/re-implement this
             'error' => $error,
-            'error_message' => $error,
             'last_login' => $lastUsername,
         ]);
 
         return $this->setCachingHeader($response, 'other');
     }
 
-    #[Route('/-/register', name: 'app_register_form', methods: ['GET'], priority: 1)]
-    public function registerForm(): Response {
-        if ($this->exceedsMaxUsers()) {
-            return $this->redirect('/');
-        }
-
-        $html = $this->render('index/register.twig', ['result' => null]);
-
-        return $this->setCachingHeader($html, 'other');
-    }
-
-    #[Route('/-/register', name: 'app_register_submit', methods: ['POST'], priority: 1)]
-    public function registerAction(
+    #[Route('/-/register', name: 'app_register_form', methods: ['GET', 'POST'], priority: 1)]
+    public function registerForm(
         Request $request,
         UserPasswordHasherInterface $passwordHasher,
         UserAuthenticatorInterface $authenticatorManager,
-        #[MapRequestPayload] RegisterDto $dto,
-    ): Response
-    {
+    ): Response {
         if ($this->exceedsMaxUsers()) {
-            return $this->redirect('/');
+            return $this->redirect('app_welcome');
         }
 
-        $maxEvents = $this->config->getByKey('max_events', 10)->getValue();
+        $form = $this->createForm(RegisterType::class, new RegisterDto());
 
-        $user = new User();
-        $user->setLogin($dto->getLogin());
+        $form->handleRequest($request);
 
-        $passwordHash = $passwordHasher->hashPassword(
-            $user,
-            $dto->getPassword(),
-        );
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var RegisterDto $dto */
+            $dto = $form->getData();
 
-        $user->setPassword($passwordHash);
-        $user->setDisplayName($dto->getDisplayName());
-        $user->setRole($this->getParameter('horaro.default_role'));
-        $user->setMaxEvents($maxEvents);
-        $user->setLanguage('en_us');
+            $maxEvents = $this->config->getByKey('max_events', 10)->getValue();
 
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
+            $user = new User();
+            $user->setLogin($dto->getLogin());
 
-        $request->getSession()->start();
-        $request->getSession()->migrate();
+            $passwordHash = $passwordHasher->hashPassword(
+                $user,
+                $dto->getPassword(),
+            );
 
-        // auth, not sure if RememberMeBadge works, keep testing
-        $authenticatorManager->authenticateUser($user, $this->authenticator, $request, [new RememberMeBadge()]);
+            $user->setPassword($passwordHash);
 
-        $this->addSuccessMsg('Welcome to Horaro, your account has been successfully created.');
+            $targetDisplayName = empty($dto->getDisplayName()) ? $dto->getLogin() : $dto->getDisplayName();
 
-        return $this->redirect('/-/home');
+            $user->setDisplayName($targetDisplayName);
+            $user->setRole($this->getParameter('horaro.default_role'));
+            $user->setMaxEvents($maxEvents);
+            $user->setLanguage('en_us');
+
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
+
+            $request->getSession()->start();
+            $request->getSession()->migrate();
+
+            // auth, not sure if RememberMeBadge works, keep testing
+            $authenticatorManager->authenticateUser($user, $this->authenticator, $request, [new RememberMeBadge()]);
+
+            $this->addSuccessMsg('Welcome to Horaro, your account has been successfully created.');
+
+            return $this->redirectToRoute('app_home');
+        }
+
+        $html = $this->render('index/register.twig', ['form' => $form, 'result' => null]);
+
+        return $this->setCachingHeader($html, 'other');
     }
 
     #[Route('/-/contact', name: 'app_contact', methods: ['GET'], priority: 1)]

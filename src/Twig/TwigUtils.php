@@ -8,6 +8,7 @@ use App\Horaro\RoleManager;
 use App\Horaro\Service\MarkdownService;
 use App\Repository\ConfigRepository;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Form\FormView;
 
 class TwigUtils {
     protected $versions = [];
@@ -96,13 +97,14 @@ class TwigUtils {
     }
 
     // TODO: fix these methods
-    public function formValue(?array $result = null, $key = '', $default = null) {
-        return isset($result[$key]) ? $result[$key]['filtered'] : $default;
+    public function formValue(mixed $result = null, $key = '', $default = null): ?string {
+//        return 'FORM VALUE UTIL USED, PLEASE UPGRADE FORM';
+        return $result[$key]['filtered'] ?? $default;
     }
 
-    public function formClass(?array $result = null, $key = ''): string
+    public function formClass(?FormView $result = null, $key = ''): string
     {
-        return empty($result[$key]['errors']) ? '' : ' has-error';
+        return $result[$key]->vars['valid'] ?? true ? '' : ' has-error';
     }
 
     public function roleIcon($role): string
@@ -152,6 +154,7 @@ class TwigUtils {
         );
     }
 
+    // TODO: make full util class
     public function readableTime(?\DateTime $time = null): string
     {
         if (!$time) return '';

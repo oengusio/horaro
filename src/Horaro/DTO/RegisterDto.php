@@ -9,7 +9,7 @@ class RegisterDto
 {
     #[Assert\NotBlank]
     #[HoraroAssert\NonTakenUsername]
-    private string $login;
+    private string $login = '';
 
     #[Assert\NotBlank]
     #[Assert\NotCompromisedPassword]
@@ -18,13 +18,13 @@ class RegisterDto
         value: 'secret123',
         message: 'You just had to try it out, didn\'t you? Please choose something else.',
     )]
-    private string $password;
+    private string $password = '';
 
     #[Assert\EqualTo(propertyPath: 'password')]
-    private string $password2;
+    private string $password2 = '';
 
-    #[Assert\NotBlank]
-    private string $display_name;
+    #[Assert\NotNull]
+    private string $display_name = '';
 
     public function getLogin(): string
     {
@@ -61,8 +61,8 @@ class RegisterDto
         return $this->display_name;
     }
 
-    public function setDisplayName(string $display_name): void
+    public function setDisplayName(?string $display_name): void
     {
-        $this->display_name = $display_name;
+        $this->display_name = $display_name ?? '';
     }
 }

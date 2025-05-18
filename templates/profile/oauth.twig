@@ -55,13 +55,12 @@
 		<div class="well">
 			<form method="post" action="/-/profile/password" class="form-horizontal h-confirmation">
 				<div><input type="hidden" id="_method" name="_method" value="DELETE" /></div>
-				{{ macros.csrf_token() }}
 
 				<fieldset>
-					<div class="form-group{{ utils.formClass(result, 'current') }}">
+					<div class="form-group{{ utils.formClass(form, 'current') }}">
 						<div class="col-lg-8 col-md-7 col-sm-12 col-xs-12">
-							<input type="password" class="form-control" name="current" required placeholder="your current password">
-							{{ macros.form_errors(result, 'current') }}
+							<input type="password" class="form-control" name="{{ field_name(form.current) }}" required placeholder="your current password">
+							{{ form_errors(form.current) }}
 						</div>
 						<div class="col-lg-4 col-md-5 hidden-sm hidden-xs">
 							<button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-eraser"> </i> Remove Password</button>
@@ -70,10 +69,13 @@
 
 					<div class="hide visible-xs-block visible-sm-block form-group">
 						<div class="text-center">
-							<button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-eraser"> </i> Remove Password</button>
+							<button type="submit" name="{{ field_name(form.submit) }}" class="btn btn-danger btn-sm"><i class="fa fa-eraser"> </i> Remove Password</button>
 						</div>
 					</div>
 				</fieldset>
+
+                {{ form_rest(form) }}
+                {{ form_errors(form) }}
 			</form>
 		</div>
 	</div>

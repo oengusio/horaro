@@ -1249,3 +1249,7 @@ button[disabled] {
 .theme-superhero .text-muted {
   color: #8e9dac
 }
+
+.form-group.has-error li {
+  color: red
+}

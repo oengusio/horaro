@@ -3,9 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\Type\CurrentPasswordType;
+use App\Form\Type\PasswordUpdateType;
+use App\Form\Type\ProfileUpdateType;
 use App\Horaro\DTO\DeletePasswordDto;
 use App\Horaro\DTO\ProfileUpdateDto;
 use App\Horaro\DTO\UpdatePasswordDto;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -17,52 +21,66 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 final class ProfileController extends BaseController
 {
-    #[Route('/-/profile', name: 'app_profile', methods: ['GET'], priority: 1)]
-    public function index(): Response
+    #[Route('/-/profile', name: 'app_profile', methods: ['GET', 'PUT'], priority: 1)]
+    public function index(Request $request): Response
     {
         $user = $this->getCurrentUser();
+        $updateDto = ProfileUpdateDto::fromUser($user);
 
-        return $this->renderForm($user);
+        $form = $this->createForm(ProfileUpdateType::class, $updateDto, [
+            'method' => 'PUT'
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setDisplayName($updateDto->getDisplayName());
+            $user->setLanguage($updateDto->getLanguage());
+            $user->setGravatarHash($updateDto->getGravatar());
+
+            $this->entityManager->flush();
+
+            $this->addSuccessMsg('Your profile has been updated.');
+
+            return $this->redirectToRoute('app_profile');
+        }
+
+        return $this->renderForm($user, $form);
     }
 
-    #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
-    #[Route('/-/profile', name: 'app_profile_update', methods: ['PUT'], priority: 1)]
-    public function updateProfile(#[MapRequestPayload] ProfileUpdateDto $updateDto): Response
-    {
-        $user = $this->getCurrentUser();
-
-        $user->setDisplayName($updateDto->getDisplayName());
-        $user->setLanguage($updateDto->getLanguage());
-        $user->setGravatarHash($updateDto->getGravatar());
-
-        $this->entityManager->flush();
-
-        $this->addSuccessMsg('Your profile has been updated.');
-
-        return $this->redirect('/-/profile');
-    }
-
-    #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
     #[Route('/-/profile/password', name: 'app_profile_update_password', methods: ['PUT'], priority: 1)]
     public function updatePassword(
         Request $request,
         UserPasswordHasherInterface $passwordHasher,
-        #[MapRequestPayload] UpdatePasswordDto $updateDto,
     ): Response {
         $user = $this->getCurrentUser();
+        $updateDto = new UpdatePasswordDto();
 
-        $hashedPassword = $passwordHasher->hashPassword(
-            $user,
-            $updateDto->getPassword()
-        );
+        $passwordForm = $this->createForm(PasswordUpdateType::class, $updateDto, [
+            'method' => 'PUT',
+        ]);
 
-        $user->setPassword($hashedPassword);
+        $passwordForm->handleRequest($request);
 
-        $this->entityManager->flush();
+        if ($passwordForm->isSubmitted() && $passwordForm->isValid()) {
+            $hashedPassword = $passwordHasher->hashPassword(
+                $user,
+                $updateDto->getPassword()
+            );
 
-        $this->createFreshSession($request, 'Your password has been changed.');
+            $user->setPassword($hashedPassword);
 
-        return $this->redirect('/-/profile');
+            $this->entityManager->flush();
+
+            $this->createFreshSession($request, 'Your password has been changed.');
+
+            return $this->redirectToRoute('app_profile');
+
+        }
+
+        $form = $this->createForm(ProfileUpdateType::class, ProfileUpdateDto::fromUser($user));
+
+        return $this->renderForm($user, $form, $passwordForm);
     }
 
     #[Route('/-/profile/oauth', name: 'app_profile_oauth', methods: ['GET'], priority: 1)]
@@ -70,7 +88,7 @@ final class ProfileController extends BaseController
         $user = $this->getCurrentUser();
 
         if ($user->getTwitchOAuth() === null || $user->getPassword() === null) {
-            return $this->redirect('/-/profile');
+            return $this->redirectToRoute('app_profile');
         }
 
         return $this->renderOAuthForm($user);
@@ -83,12 +101,12 @@ final class ProfileController extends BaseController
 
         if ($user->getTwitchOAuth() === null) {
             $this->addErrorMsg('Your account is not linked with any Twitch account.');
-            return $this->redirect('/-/profile/oauth');
+            return $this->redirectToRoute('app_profile_oauth');
         }
 
         if ($user->getPassword() === null) {
             $this->addErrorMsg('You cannot remove the only access to your account.');
-            return $this->redirect('/-/profile/oauth');
+            return $this->redirectToRoute('app_profile_oauth');
         }
 
         // update profile
@@ -97,52 +115,61 @@ final class ProfileController extends BaseController
         $this->entityManager->flush();
         $this->createFreshSession($request, 'Your account is no longer connected to any Twitch account.');
 
-        return $this->redirect('/-/profile');
+        return $this->redirectToRoute('app_profile');
     }
 
-    #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
     #[Route('/-/profile/password', name: 'app_profile_unconnect_password', methods: ['DELETE'], priority: 1)]
-    public function removePassword(
-        Request $request,
-        #[MapRequestPayload] DeletePasswordDto $deleteDto,
-    ): Response {
+    public function removePassword(Request $request): Response {
         $user = $this->getCurrentUser();
 
         if ($user->getPassword() === null) {
             $this->addErrorMsg('You already have no password.');
-            return $this->redirect('/-/profile');
+            return $this->redirectToRoute('app_profile');
         }
 
         if ($user->getTwitchOAuth() === null) {
             $this->addErrorMsg('You can only remove your password if your account is linked to Twitch.');
-            return $this->redirect('/-/profile');
+            return $this->redirectToRoute('app_profile');
         }
 
-        $user->setPassword(null);
-        $this->entityManager->flush();
-        $this->createFreshSession($request, 'Your password has been removed. Login via Twitch from now on.');
+        $form = $this->createForm(CurrentPasswordType::class, new DeletePasswordDto(), [
+            'method' => 'DELETE',
+        ]);
 
-        return $this->redirect('/-/profile');
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword(null);
+            $this->entityManager->flush();
+            $this->createFreshSession($request, 'Your password has been removed. Login via Twitch from now on.');
+
+            return $this->redirectToRoute('app_profile');
+        }
+
+        return $this->renderOAuthForm($user, $form);
     }
 
-    protected function renderForm(User $user, ?array $result = null): ?Response
+    protected function renderForm(User $user, FormInterface $form, FormInterface $passwordForm = null): ?Response
     {
+        $passwordForm = $passwordForm ?? $this->createForm(PasswordUpdateType::class, new UpdatePasswordDto());
+
         return $this->render('profile/form.twig', [
-            'result' => $result,
+            'form' => $form,
+            'passwordForm' => $passwordForm,
             'user' => $user,
             'languages' => $this->getLanguages(),
         ]);
     }
 
-    protected function renderOAuthForm(User $user, ?array $result = null): Response
+    protected function renderOAuthForm(User $user, FormInterface $form = null): Response
     {
+        $form = $form ?? $this->createForm(CurrentPasswordType::class, new DeletePasswordDto());
+
         return $this->render('profile/oauth.twig', [
-            'result' => $result,
+            'form' => $form,
             'user' => $user,
         ]);
     }
-
-
 
     protected function createFreshSession(Request $request, string $successMsg): void {
         $session = $request->getSession();

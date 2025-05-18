@@ -4,13 +4,14 @@ namespace App\Horaro\DTO;
 
 use App\Entity\Event;
 use App\Entity\Schedule;
+use App\Horaro\Library\ReadableTime;
 use App\Validator as HoraroAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class CreateScheduleDto
 {
     #[Assert\NotBlank]
-    private string $name;
+    private string $name = '';
 
     #[Assert\Length(min: 2)]
     #[Assert\Regex(pattern: '/^[a-z0-9-]{2,}$/')]
@@ -20,45 +21,45 @@ class CreateScheduleDto
         match: false,
     )]
     #[HoraroAssert\CustomSlugRules(entity: Schedule::class, parent: Event::class)]
-    private string $slug;
+    private string $slug = '';
 
     #[Assert\Timezone]
-    private string $timezone;
+    private string $timezone = '';
 
     #[Assert\NotBlank]
     #[Assert\Date]
     #[Assert\GreaterThan('2000-12-31')]
     #[Assert\LessThan('now +2 years', message: "Start date should be less than {{ compared_value }}")]
-    private string $start_date;
+    private string $start_date = '';
 
     #[Assert\NotBlank]
     #[Assert\Time(withSeconds: false)]
-    private string $start_time;
+    private string $start_time = '';
 
     #[Assert\Url(requireTld: true)]
-    private string $website;
+    private string $website = '';
 
     #[Assert\Regex(pattern: '/^@?([a-zA-Z0-9-_]+)$/')]
-    private string $twitter;
+    private string $twitter = '';
 
     #[Assert\Regex(pattern: '/^[a-zA-Z0-9_-]+$/')]
-    private string $twitch;
+    private string $twitch = '';
 
     #[Assert\NotBlank]
     #[HoraroAssert\Theme]
-    private string $theme;
+    private string $theme = '';
 
     #[Assert\Length(max: 20)]
     #[Assert\Regex(pattern: '/^[a-zA-Z0-9_-]+$/')]
-    private string $secret;
+    private string $secret = '';
 
     #[Assert\Length(max: 20)]
     #[Assert\Regex(pattern: '/^[a-zA-Z0-9_-]+$/')]
-    private string $hidden_secret;
+    private string $hidden_secret = '';
 
     #[Assert\NotNull]
     #[HoraroAssert\ReadableTime]
-    private string $setup_time;
+    private string $setup_time = '';
 
     private ?\DateTimeInterface $parsedSetupTime = null;
 
@@ -117,9 +118,9 @@ class CreateScheduleDto
         return $this->website;
     }
 
-    public function setWebsite(string $website): void
+    public function setWebsite(?string $website): void
     {
-        $this->website = $website;
+        $this->website = $website ?? '';
     }
 
     public function getTwitter(): string
@@ -127,9 +128,9 @@ class CreateScheduleDto
         return $this->twitter;
     }
 
-    public function setTwitter(string $twitter): void
+    public function setTwitter(?string $twitter): void
     {
-        $this->twitter = $twitter;
+        $this->twitter = $twitter ?? '';
     }
 
     public function getTwitch(): string
@@ -137,9 +138,9 @@ class CreateScheduleDto
         return $this->twitch;
     }
 
-    public function setTwitch(string $twitch): void
+    public function setTwitch(?string $twitch): void
     {
-        $this->twitch = $twitch;
+        $this->twitch = $twitch ?? '';
     }
 
     public function getTheme(): string
@@ -157,9 +158,9 @@ class CreateScheduleDto
         return $this->secret;
     }
 
-    public function setSecret(string $secret): void
+    public function setSecret(?string $secret): void
     {
-        $this->secret = $secret;
+        $this->secret = $secret ?? '';
     }
 
     public function getHiddenSecret(): string
@@ -167,9 +168,9 @@ class CreateScheduleDto
         return $this->hidden_secret;
     }
 
-    public function setHiddenSecret(string $hidden_secret): void
+    public function setHiddenSecret(?string $hidden_secret): void
     {
-        $this->hidden_secret = $hidden_secret;
+        $this->hidden_secret = $hidden_secret ?? '';
     }
 
     public function getSetupTime(): string
@@ -177,9 +178,9 @@ class CreateScheduleDto
         return $this->setup_time;
     }
 
-    public function setSetupTime(string $setup_time): void
+    public function setSetupTime(?string $setup_time): void
     {
-        $this->setup_time = $setup_time;
+        $this->setup_time = $setup_time ?? '';
     }
 
     public function getParsedSetupTime(): ?\DateTimeInterface
@@ -190,5 +191,34 @@ class CreateScheduleDto
     public function setParsedSetupTime(\DateTimeInterface $parsedSetupTime): void
     {
         $this->parsedSetupTime = $parsedSetupTime;
+    }
+
+    public static function fromSchedule(Schedule $schedule): self
+    {
+        $dto = new self();
+
+        $dto->name = $schedule->getName();
+        $dto->slug = $schedule->getSlug();
+        $dto->timezone = $schedule->getTimezone();
+        $dto->start_date = $schedule->getStart()->format('Y-m-d');
+        $dto->start_time = $schedule->getStart()->format('H:i');
+        $dto->website = $schedule->getWebsite();
+        $dto->twitter = $schedule->getTwitter();
+        $dto->twitch = $schedule->getTwitch();
+        $dto->theme = $schedule->getTheme();
+        $dto->secret = $schedule->getSecret();
+        $dto->hidden_secret = $schedule->getHiddenSecret();
+        $dto->setup_time = self::safeReadableTime($schedule->getSetupTime());
+
+        return $dto;
+    }
+
+    private static function safeReadableTime(\DateTime|null $time): string
+    {
+        if (!$time) return '';
+
+        $parser = new ReadableTime();
+
+        return $parser->stringify($time);
     }
 }

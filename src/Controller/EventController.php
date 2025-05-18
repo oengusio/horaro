@@ -3,10 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Event;
+use App\Form\Type\EventCreateType;
+use App\Form\Type\EventDescriptionType;
 use App\Horaro\DTO\CreateEventDto;
 use App\Horaro\DTO\EventDescriptionUpdateDto;
+use App\Horaro\Library\ObscurityCodec;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
@@ -15,48 +19,49 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 final class EventController extends BaseController
 {
-    #[Route('/-/events/new', name: 'app_backend_event_new_form', methods: ['GET'])]
-    public function showNewForm(): Response {
-        if ($this->exceedsMaxEvents($this->getCurrentUser())) {
-            return $this->redirect('/-/home');
-        }
-
-        return $this->renderForm();
-    }
-
-    #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
-    #[Route('/-/events', name: 'app_backend_event_create', methods: ['POST'])]
-    public function create(
-        #[MapRequestPayload] CreateEventDto $createDto,
-    ): Response {
+    #[Route('/-/events/new', name: 'app_backend_event_new_form', methods: ['GET', 'POST'])]
+    public function showNewForm(Request $request): Response
+    {
         $user = $this->getCurrentUser();
 
         if ($this->exceedsMaxEvents($user)) {
-            return $this->redirect('/-/home');
+            return $this->redirectToRoute('app_home');
         }
 
-        $event = new Event();
+        $form = $this->createForm(EventCreateType::class, new CreateEventDto());
 
-        $event
-            ->setUser($user)
-            ->setName($createDto->getName())
-            ->setSlug($createDto->getSlug())
-            ->setWebsite($createDto->getWebsite())
-            ->setTwitter($createDto->getTwitter())
-            ->setTwitch($createDto->getTwitch())
-            ->setTheme($createDto->getTheme())
-            ->setSecret($createDto->getSecret())
-            ->setMaxSchedules($this->config->getByKey('max_schedules', 10)->getValue())
-        ;
+        $form->handleRequest($request);
 
-        $this->entityManager->persist($event);
-        $this->entityManager->flush();
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var CreateEventDto $createDto */
+            $createDto = $form->getData();
 
-        // done
+            $event = new Event();
 
-        $this->addSuccessMsg('Your new event has been created.');
+            $event
+                ->setUser($user)
+                ->setName($createDto->getName())
+                ->setSlug($createDto->getSlug())
+                ->setWebsite($createDto->getWebsite())
+                ->setTwitter($createDto->getTwitter())
+                ->setTwitch($createDto->getTwitch())
+                ->setTheme($createDto->getTheme())
+                ->setSecret($createDto->getSecret())
+                ->setMaxSchedules($this->config->getByKey('max_schedules', 10)->getValue());
 
-        return $this->redirect('/-/events/'.$this->encodeID($event->getId(), 'event'));
+            $this->entityManager->persist($event);
+            $this->entityManager->flush();
+
+            // done
+
+            $this->addSuccessMsg('Your new event has been created.');
+
+            return $this->redirectToRoute('app_backend_event_detail', [
+                'event_e' => $this->encodeID($event->getId(), ObscurityCodec::EVENT),
+            ]);
+        }
+
+        return $this->renderForm($form);
     }
 
     #[IsGranted('edit', 'event')]
@@ -73,66 +78,90 @@ final class EventController extends BaseController
     }
 
     #[IsGranted('edit', 'event')]
-    #[Route('/-/events/{event_e}/edit', name: 'app_backend_event_edit', methods: ['GET'])]
-    public function editEventForm(#[ValueResolver('event_e')] Event $event): Response {
-        return $this->renderForm($event);
-    }
-
-    #[IsGranted('edit', 'event')]
-    #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
-    #[Route('/-/events/{event_e}', name: 'app_backend_event_update', methods: ['PUT'])]
-    public function updateEvent(
-        #[ValueResolver('event_e')] Event $event,
-        #[MapRequestPayload] CreateEventDto $createDto,
-    ): Response
+    #[Route('/-/events/{event_e}/edit', name: 'app_backend_event_edit', methods: ['GET', 'PUT'])]
+    public function editEventForm(Request $request, #[ValueResolver('event_e')] Event $event): Response
     {
-        $event
-            ->setName($createDto->getName())
-            ->setSlug($createDto->getSlug())
-            ->setWebsite($createDto->getWebsite())
-            ->setTwitter($createDto->getTwitter())
-            ->setTwitch($createDto->getTwitch())
-            ->setTheme($createDto->getTheme())
-            ->setSecret($createDto->getSecret());
+        // Forms need a method specified for them to submit when it's not post
+        // See https://github.com/symfony/symfony/issues/8412#issuecomment-59394789
+        $form = $this->createForm(EventCreateType::class, CreateEventDto::fromEvent($event), [
+            'method' => 'PUT',
+        ]);
 
-        $this->entityManager->flush();
+        $form->handleRequest($request);
 
-        // done
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var CreateEventDto $createDto */
+            $createDto = $form->getData();
 
-        $this->addSuccessMsg('Your event has been updated.');
+            $event
+                ->setName($createDto->getName())
+                ->setSlug($createDto->getSlug())
+                ->setWebsite($createDto->getWebsite())
+                ->setTwitter($createDto->getTwitter())
+                ->setTwitch($createDto->getTwitch())
+                ->setTheme($createDto->getTheme())
+                ->setSecret($createDto->getSecret());
 
-        return $this->redirect('/-/events/'.$this->encodeID($event->getId(), 'event'));
+            $this->entityManager->flush();
+
+            // done
+
+            $this->addSuccessMsg('Your event has been updated.');
+
+            return $this->redirectToRoute('app_backend_event_detail', [
+                'event_e' => $this->encodeID($event->getId(), ObscurityCodec::EVENT),
+            ]);
+        }
+
+        return $this->renderForm($form, $event);
     }
 
     #[IsGranted('edit', 'event')]
-    #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
     #[Route('/-/events/{event_e}/description', name: 'app_backend_event_description_update', methods: ['PUT'])]
     public function updateDescription(
+        Request                           $request,
         #[ValueResolver('event_e')] Event $event,
-        #[MapRequestPayload] EventDescriptionUpdateDto $dto,
     ): Response
     {
-        $event->setDescription($dto->getDescription());
-        $this->entityManager->flush();
+        $descriptionForm = $this->createForm(EventDescriptionType::class, EventDescriptionUpdateDto::fromEvent($event), [
+            'method' => 'PUT',
+        ]);
 
-        // done
+        $descriptionForm->handleRequest($request);
 
-        $this->addSuccessMsg('Your event description has been updated.');
+        if ($descriptionForm->isSubmitted() && $descriptionForm->isValid()) {
+            /** @var EventDescriptionUpdateDto $dto */
+            $dto = $descriptionForm->getData();
 
-        return $this->redirect('/-/events/'.$this->encodeID($event->getId(), 'event'));
+            $event->setDescription($dto->getDescription());
+            $this->entityManager->flush();
 
+            // done
+
+            $this->addSuccessMsg('Your event description has been updated.');
+
+            return $this->redirectToRoute('app_backend_event_detail', [
+                'event_e' => $this->encodeID($event->getId(), ObscurityCodec::EVENT),
+            ]);
+        }
+
+        $form = $this->createForm(EventCreateType::class, CreateEventDto::fromEvent($event));
+
+        return $this->renderForm($form, $event, $descriptionForm);
     }
 
     #[IsGranted('edit', 'event')]
     #[Route('/-/events/{event_e}/delete', name: 'app_backend_event_delete_form', methods: ['GET'])]
-    public function confirmDelete(#[ValueResolver('event_e')] Event $event): Response {
+    public function confirmDelete(#[ValueResolver('event_e')] Event $event): Response
+    {
         return $this->render('event/confirmation.twig', ['event' => $event]);
     }
 
     #[IsGranted('edit', 'event')]
     #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
     #[Route('/-/events/{event_e}', name: 'app_backend_event_kill_it', methods: ['DELETE'])]
-    public function deleteEvent(#[ValueResolver('event_e')] Event $event): Response {
+    public function deleteEvent(#[ValueResolver('event_e')] Event $event): Response
+    {
         $this->entityManager->remove($event);
         $this->entityManager->flush();
 
@@ -141,11 +170,17 @@ final class EventController extends BaseController
         return $this->redirect('/-/home');
     }
 
-    protected function renderForm(?Event $event = null, mixed $result = null) {
+    protected function renderForm(FormInterface $form, ?Event $event = null, ?FormInterface $descriptionForm = null): Response
+    {
+        $descriptionForm = $event
+            ? $descriptionForm ?? $this->createForm(EventDescriptionType::class, EventDescriptionUpdateDto::fromEvent($event))
+            : null;
+
         return $this->render('event/form.twig', [
-            'event'        => $event,
-            'result'       => $result,
-            'themes'       => $this->getParameter('horaro.themes'),
+            'event' => $event,
+            'form' => $form,
+            'descriptionForm' => $descriptionForm,
+            'themes' => $this->getParameter('horaro.themes'),
             'defaultTheme' => $this->config->getByKey('default_event_theme', 'yeti')->getValue(),
         ]);
     }
