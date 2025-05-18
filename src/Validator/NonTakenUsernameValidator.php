@@ -22,6 +22,14 @@ final class NonTakenUsernameValidator extends ConstraintValidator
             return;
         }
 
+        if (str_starts_with($value, 'oauth:')) {
+            $this->context
+                ->buildViolation('Please sign up with twitch if you want an oauth account :)')
+                ->addViolation();
+
+            return;
+        }
+
         $foundUser = $this->userRepository->findOneBy([
             'login' => $value,
         ]);

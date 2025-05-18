@@ -17,50 +17,87 @@
 				<fieldset>
 					<legend>Your Information</legend>
 
-					<div class="form-group{{ utils.formClass(result, 'login') }}">
+					<div class="form-group{{ utils.formClass(form, 'login') }}">
 						<label class="col-lg-3 control-label" for="login">Username:</label>
 						<div class="col-lg-9">
-							{{ macros.form_errors(result, 'login') }}
-							<input type="text" class="form-control" id="login" name="login" autofocus required placeholder="cowen_hames69" value="{{ utils.formValue(result, 'login', '') }}">
+							<input
+                                type="text"
+                                class="form-control"
+                                id="login"
+                                autofocus
+                                required
+                                placeholder="cowen_hames69"
+                                name="{{ field_name(form.login) }}"
+                                value="{{ field_value(form.login) }}"
+                            />
 							<span class="help-block">Letters, numbers and a few special characters are allowed here. This has to
 							be unique across all users.</span>
+                            {{ form_errors(form.login) }}
 						</div>
 					</div>
 
-					<div class="form-group{{ utils.formClass(result, 'password') }}">
+					<div class="form-group{{ utils.formClass(form, 'password') }}">
 						<label class="col-lg-3 control-label" for="password">Password:</label>
 						<div class="col-lg-9">
-							{{ macros.form_errors(result, 'password') }}
-							<input type="password" class="form-control" id="password" name="password" required placeholder="secret123 is not a good password">
+							<input
+                                type="password"
+                                class="form-control"
+                                id="password"
+                                required
+                                placeholder="secret123 is not a good password"
+                                name="{{ field_name(form.password) }}"
+                                value="{{ field_value(form.password) }}"
+                            />
 							<span class="help-block">Use whatever you like, but don't whine when someone guesses your shitty password.
 							Your password is stored as a bcrypt hash.</span>
+                            {{ form_errors(form.password) }}
 						</div>
 					</div>
 
-					<div class="form-group">
+					<div class="form-group{{ utils.formClass(form, 'password2') }}">
 						<label class="col-lg-3 control-label" for="password2">Password again:</label>
 						<div class="col-lg-9">
-							<input type="password" class="form-control" id="password2" name="password2" required placeholder="secret123 is not a good password">
+							<input
+                                type="password"
+                                class="form-control"
+                                id="password2"
+                                required
+                                placeholder="secret123 is not a good password"
+                                name="{{ field_name(form.password2) }}"
+                                value="{{ field_value(form.password2) }}"
+                            />
 							<span class="help-block">Yeah yeah, just paste your password in here again.</span>
+                            {{ form_errors(form.password2) }}
 						</div>
 					</div>
 
-					<div class="form-group">
+					<div class="form-group{{ utils.formClass(form, 'display_name') }}">
 						<label class="col-lg-3 control-label" for="display_name">Display Name:</label>
 						<div class="col-lg-9">
-							<input type="text" class="form-control" id="display_name" name="display_name" placeholder="Cowen Hames">
+							<input
+                                type="text"
+                                class="form-control"
+                                id="display_name"
+                                placeholder="Cowen Hames"
+                                name="{{ field_name(form.display_name) }}"
+                                value="{{ field_value(form.display_name) }}"
+                            />
 							<span class="help-block">This is the name that will be shown within Horaro. Leave it empty to
 							just use your username. Display names don't have to be unique across all users and you can use
 							whatever letters, numbers or symbols you want in here.</span>
 						</div>
+                        {{ form_errors(form.display_name) }}
 					</div>
 
 					<div class="form-group">
 						<div class="col-lg-12 text-center">
-							<button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check"></i> Create Account</button>
+							<button type="submit" name="{{ field_name(form.submit) }}" class="btn btn-primary btn-sm"><i class="fa fa-check"></i> Create Account</button>
 						</div>
 					</div>
 				</fieldset>
+
+                {{ form_errors(form) }}
+                {{ form_rest(form) }}
 			</form>
 		</div>
 	</div>
