@@ -122,6 +122,10 @@
 	<!-- /ko -->
 </div>
 
+<script>
+    // Welcome to the dirtiest hacks, today we will just say fuck it because the application does not have access to the column names
+    window.optionsColumnId = {{ optionsColumnId|json_encode|raw }};
+</script>
 <script type="application/json" id="h-item-data">
 {{ items|json_encode|raw }}
 </script>

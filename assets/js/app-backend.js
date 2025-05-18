@@ -270,6 +270,7 @@ function mirrorColumnWidths(sourceTable, targets) {
 	self.length     = ko.observable(length);
 	self.scheduled  = ko.observable();      // will be set by calculateSchedule()
 	self.dateSwitch = ko.observable(false); // will be set by calculateSchedule()
+  self.setupTime = ko.observable(0); // will be set by calculateSchedule()
 
 	// setup simple properties for the schedule columns
 
@@ -637,12 +638,33 @@ function mirrorColumnWidths(sourceTable, targets) {
 		for (i = startIdx, len = items.length; i < len; ++i) {
 			item = items[i];
 
+      if (optionsColumnId) {
+        const columnId = 'col_' + optionsColumnId;
+        const optionsValue = item[columnId]();
+
+        if (optionsValue) {
+          try {
+            const { setup } = JSON.parse(optionsValue);
+
+            if (setup) {
+              const parsedSetup = ReadableTime.parse(setup);
+
+              item.setupTime(parsedSetup)
+            }
+          } catch (ignored) {
+            // We are being little shits and silently ignoring user errors
+          }
+        } else {
+          item.setupTime(0);
+        }
+      }
+
 			item.scheduled(scheduled);
 			item.dateSwitch(false);
 
 			date       = moment.unix(scheduled / 1000).utcOffset(scheduleTZ);
 			dayOfYear  = date.dayOfYear();
-			scheduled += ((item.length() + scheduleSetupTime) * 1000);
+			scheduled += ((item.length() + scheduleSetupTime + item.setupTime()) * 1000);
 
 			if (prev !== null && prev !== dayOfYear) {
 				item.dateSwitch(date.format('dddd, ll'));

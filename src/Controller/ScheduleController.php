@@ -106,14 +106,22 @@ final class ScheduleController extends BaseController
             ];
         }
 
+        $optionsColumnId = null;
+
         foreach ($schedule->getColumns() as $column) {
-            $columnIDs[] = $this->encodeID($column->getId(), ObscurityCodec::SCHEDULE_COLUMN);
+            $columnId = $this->encodeID($column->getId(), ObscurityCodec::SCHEDULE_COLUMN);
+            $columnIDs[] = $columnId;
+
+            if ($column->getName() === Schedule::OPTION_COLUMN_NAME) {
+                $optionsColumnId = $columnId;
+            }
         }
 
         return $this->render('schedule/detail.twig', [
             'schedule' => $schedule,
             'items' => $items ?: null,
             'columns' => $columnIDs,
+            'optionsColumnId' => $optionsColumnId,
             'maxItems' => $this->config->getByKey('max_schedule_items', 200)->getValue(),
         ]);
     }
