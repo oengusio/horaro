@@ -18,7 +18,7 @@ RUN chmod +rx /usr/bin/composer
 COPY . /build
 WORKDIR /build
 
-RUN echo"APP_ENV=prod" > .env && echo "APP_DEBUG=0" >> .env
+RUN echo "APP_ENV=prod" > .env && echo "APP_DEBUG=0" >> .env
 # Copy over files we will later override
 COPY config/parameters.dist.yml config/parameters.yml
 
