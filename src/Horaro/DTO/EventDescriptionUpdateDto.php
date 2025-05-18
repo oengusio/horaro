@@ -3,6 +3,7 @@
 namespace App\Horaro\DTO;
 
 use App\Entity\Event;
+use App\Entity\Schedule;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class EventDescriptionUpdateDto
@@ -23,11 +24,11 @@ class EventDescriptionUpdateDto
         $this->description = $description;
     }
 
-    public static function fromEvent(Event $event): static
+    public static function fromEvent(Event|Schedule $event): static
     {
         $dto = new static();
 
-        $dto->description = $event->getDescription();
+        $dto->description = $event->getDescription() ?? '';
 
         return $dto;
     }

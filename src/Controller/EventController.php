@@ -7,6 +7,7 @@ use App\Form\Type\EventCreateType;
 use App\Form\Type\EventDescriptionType;
 use App\Horaro\DTO\CreateEventDto;
 use App\Horaro\DTO\EventDescriptionUpdateDto;
+use App\Horaro\Library\ObscurityCodec;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -57,7 +58,7 @@ final class EventController extends BaseController
             $this->addSuccessMsg('Your new event has been created.');
 
             return $this->redirectToRoute('app_backend_event_detail', [
-                'event_e' => $this->encodeID($event->getId(), 'event'),
+                'event_e' => $this->encodeID($event->getId(), ObscurityCodec::EVENT),
             ]);
         }
 
@@ -109,7 +110,7 @@ final class EventController extends BaseController
             $this->addSuccessMsg('Your event has been updated.');
 
             return $this->redirectToRoute('app_backend_event_detail', [
-                'event_e' => $this->encodeID($event->getId(), 'event'),
+                'event_e' => $this->encodeID($event->getId(), ObscurityCodec::EVENT),
             ]);
         }
 
@@ -142,7 +143,7 @@ final class EventController extends BaseController
             $this->addSuccessMsg('Your event description has been updated.');
 
             return $this->redirectToRoute('app_backend_event_detail', [
-                'event_e' => $this->encodeID($event->getId(), 'event'),
+                'event_e' => $this->encodeID($event->getId(), ObscurityCodec::EVENT),
             ]);
         }
 

@@ -98,7 +98,7 @@ class TwigUtils {
 
     // TODO: fix these methods
     public function formValue(mixed $result = null, $key = '', $default = null): string {
-        return 'FORM VALUE USED, PLEASE UPGRADE FORM';
+        return 'FORM VALUE UTIL USED, PLEASE UPGRADE FORM';
     }
 
     public function formClass(?FormView $result = null, $key = ''): string
@@ -153,6 +153,7 @@ class TwigUtils {
         );
     }
 
+    // TODO: make full util class
     public function readableTime(?\DateTime $time = null): string
     {
         if (!$time) return '';
