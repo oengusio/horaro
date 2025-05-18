@@ -53,7 +53,7 @@ final class CustomSlugRulesValidator extends ConstraintValidator
         if ($existing) {
             $ref = $this->decodeConstraintItemId($constraint);
 
-            if ($ref && $existing->getId() !== $ref) {
+            if (!$ref || $existing->getId() !== $ref) {
                 $this->context->buildViolation('The slug "{{ value }}" is already in use, sorry.')
                               ->setParameter('{{ value }}', $value)
                               ->addViolation();
