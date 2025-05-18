@@ -287,6 +287,11 @@ jQuery(function($) {
 				for (i = 0; i < columns; ++i) {
 					text = row.find('.h-' + i).html();
 
+          if (!text) {
+            console.error('Could not find text for column: ', '.h-' + i);
+            continue;
+          }
+
 					if (text.trim().length === 0) {
 						tpl.find('.h-e-' + i).remove();
 					}

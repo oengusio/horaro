@@ -430,9 +430,12 @@ class Schedule
 
     public function getVisibleColumns(): Collection
     {
-        return $this->getColumns()->filter(function(ScheduleColumn $col) {
+        $filtered = $this->getColumns()->filter(function(ScheduleColumn $col) {
             return !$col->isHidden();
-        });
+        })->getValues();
+
+        // Return a new collection to reset the index keys :/
+        return new ArrayCollection($filtered);
     }
 
     public function getMaxItemWidth($columns) {
