@@ -30,7 +30,6 @@
             {% endif %}
 				<fieldset>
 					<legend>Schedule Information</legend>
-					{{ macros.csrf_token() }}
 
 					<div class="form-group">
 						<label class="col-lg-3 control-label" for="name">Belongs to:</label>
@@ -295,8 +294,6 @@
 			<form method="post" action="/-/schedules/{{ schedule.id|obscurify('schedule') }}/description">
 				<div><input type="hidden" id="_method" name="_method" value="PUT" /></div>
 				<fieldset>
-					{{ macros.csrf_token() }}
-
 					<div class="form-group{{ utils.formClass(descriptionForm, 'description') }}">
 						<textarea
                             class="form-control remarkable"

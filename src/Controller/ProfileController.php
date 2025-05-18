@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\Type\CurrentPasswordType;
 use App\Form\Type\PasswordUpdateType;
 use App\Form\Type\ProfileUpdateType;
 use App\Horaro\DTO\DeletePasswordDto;
@@ -118,10 +119,7 @@ final class ProfileController extends BaseController
     }
 
     #[Route('/-/profile/password', name: 'app_profile_unconnect_password', methods: ['DELETE'], priority: 1)]
-    public function removePassword(
-        Request $request,
-        #[MapRequestPayload] DeletePasswordDto $deleteDto,
-    ): Response {
+    public function removePassword(Request $request): Response {
         $user = $this->getCurrentUser();
 
         if ($user->getPassword() === null) {
@@ -134,11 +132,21 @@ final class ProfileController extends BaseController
             return $this->redirectToRoute('app_profile');
         }
 
-        $user->setPassword(null);
-        $this->entityManager->flush();
-        $this->createFreshSession($request, 'Your password has been removed. Login via Twitch from now on.');
+        $form = $this->createForm(CurrentPasswordType::class, new DeletePasswordDto(), [
+            'method' => 'DELETE',
+        ]);
 
-        return $this->redirectToRoute('app_profile');
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword(null);
+            $this->entityManager->flush();
+            $this->createFreshSession($request, 'Your password has been removed. Login via Twitch from now on.');
+
+            return $this->redirectToRoute('app_profile');
+        }
+
+        return $this->renderOAuthForm($user, $form);
     }
 
     protected function renderForm(User $user, FormInterface $form, FormInterface $passwordForm = null): ?Response
@@ -153,10 +161,12 @@ final class ProfileController extends BaseController
         ]);
     }
 
-    protected function renderOAuthForm(User $user, ?array $result = null): Response
+    protected function renderOAuthForm(User $user, FormInterface $form = null): Response
     {
+        $form = $form ?? $this->createForm(CurrentPasswordType::class, new DeletePasswordDto());
+
         return $this->render('profile/oauth.twig', [
-            'result' => null,
+            'form' => $form,
             'user' => $user,
         ]);
     }

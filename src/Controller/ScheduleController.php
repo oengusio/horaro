@@ -165,7 +165,6 @@ final class ScheduleController extends BaseController
     }
 
     #[IsGranted('edit', 'schedule')]
-    #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
     #[Route('/-/schedules/{schedule_e}/description', name: 'app_backend_schedule_edit_save_description', methods: ['PUT'])]
     public function saveDescription(
         Request                                 $request,

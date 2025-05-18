@@ -118,7 +118,6 @@ final class EventController extends BaseController
     }
 
     #[IsGranted('edit', 'event')]
-    #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
     #[Route('/-/events/{event_e}/description', name: 'app_backend_event_description_update', methods: ['PUT'])]
     public function updateDescription(
         Request                           $request,

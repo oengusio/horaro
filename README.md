@@ -43,7 +43,9 @@ Installation
 ------------
 
 ### Migrating from v1 (0.7.0)
-TODO :)
+TODO write instructions:
+- new parameters file
+- converting parameters file
 
 #### .env file
 Horaro now requires a .env file to be present. The file has been configured for minimal configuration with 99% of config items still being in parameters.yml
@@ -51,8 +53,7 @@ Horaro now requires a .env file to be present. The file has been configured for 
 Example production .env file:
 ```
 APP_ENV=prod
-MESSENGER_TRANSPORT_DSN=doctrine://default?auto_setup=0
-MAILER_DSN=null://null
+APP_DEBUG=0
 ```
 
 You need quite a few tools to build horaro (just downloading the source won't be

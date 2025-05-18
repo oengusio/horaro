@@ -40,7 +40,6 @@
                     {% endif %}
                     <fieldset>
                         <legend>Event Information</legend>
-                        {{ macros.csrf_token() }}
 
                         <div class="form-group{{ utils.formClass(form, 'name') }}">
                             <label class="col-lg-3 control-label" for="name">Name:</label>
@@ -131,7 +130,7 @@
                         <div class="form-group{{ utils.formClass(form, 'theme') }}">
                             <label class="col-lg-3 control-label" for="theme">Theme:</label>
                             <div class="col-lg-9">
-                                {% set t = field_value(form.theme) %}
+                                {% set t = event ? field_value(form.theme) : defaultTheme %}
                                 <select name="{{ field_name(form.theme) }}" id="theme" class="form-control h-fancy">
                                     {% for themeKey,themeName in themes %}
                                         <option value="{{ themeKey }}"{% if t == themeKey %} selected{% endif %}>{{ themeName }}</option>
@@ -216,7 +215,6 @@
                     <form method="post" action="/-/events/{{ event.id|obscurify('event') }}/description">
                         <div><input type="hidden" id="_method" name="_method" value="PUT"/></div>
                         <fieldset>
-                            {{ macros.csrf_token() }}
 
                             <div class="form-group{{ utils.formClass(descriptionForm, 'description') }}">
                                 <textarea

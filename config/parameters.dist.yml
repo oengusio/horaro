@@ -18,7 +18,6 @@ parameters:
   #   - create links to versioned assets
   # See the README.md for more details.
   debug: true
-  environment: 'dev' # Options are 'dev' or 'prod'
 
   # Read https://github.com/jenssegers/optimus on how to configure these
   #optimus:
