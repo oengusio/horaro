@@ -822,6 +822,10 @@ function mirrorColumnWidths(sourceTable, targets) {
 			hidden: self.hidden(),
 		};
 
+    if (data.name === '[[options]]') {
+      data.hidden = true;
+    }
+
 		data[csrfTokenName] = csrfToken;
 
 		self.busy(true);
