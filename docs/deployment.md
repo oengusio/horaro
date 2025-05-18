@@ -114,3 +114,41 @@ A lot of configuration keys also are no longer read and can be removed:
 - `cookie_lifetime`: Currently not used, but might be made configurable in the future
 - `session`: Currently not used, but might be made configurable in the future
 - `doctrine_proxies`: Currently not used, but might be made configurable in the future
+
+### Full configuration example
+```yaml
+parameters:
+  # Your database connection. Set the user, password and dbname. If needed, change
+  # the host.
+  database.url: "mysql://horaro_user:horaro_pass@127.0.0.1:3306/horaro_dbname?serverVersion=10.11.2-MariaDB&charset=utf8mb4"
+
+  # Your secret.
+  # This is a random string of characters. Set it to anything you want, but make it
+  # at least 10 characters long and random. You cannot leave this field blank.
+  # Something like this is good: http://www.random.org/strings/?num=1&len=20&digits=on&upperalpha=on&loweralpha=on&format=plain
+  secret: '!SuperSecretChangeMe!'
+
+  debug: false
+
+  # Read https://github.com/jenssegers/optimus on how to configure these
+  optimus:
+    prime: ENTER
+    inverse: YOUR
+    random: OWN
+
+  # Cache times.
+  # These determine how long (in minutes) responses of certain kinds (schedules,
+  # events, calendar, ...) should be cached on intermediate proxies.
+  cache_ttls:
+    schedule:  1
+    event:    10
+    homepage: 10
+    calendar: 60
+    other:    60
+
+  # The redirect url is https://example.com/-/oauth/callback (replace example with your own domain)
+  oauth:
+    twitch:
+      clientId:     ...
+      clientSecret: ...
+```
