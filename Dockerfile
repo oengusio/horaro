@@ -1,9 +1,6 @@
 FROM alpine:3.21 AS builder
 LABEL maintainer="Sgt. Kabukiman"
 
-ENV APP_ENV=prod
-ENV APP_DEBUG=0
-
 # link to search for packages https://pkgs.alpinelinux.org/packages?name=php83&branch=v3.21
 # install packages
 RUN apk --no-cache add php84 php84-cli php84-fpm php84-mysqli php84-json php84-openssl php84-curl \
@@ -21,6 +18,7 @@ RUN chmod +rx /usr/bin/composer
 COPY . /build
 WORKDIR /build
 
+RUN echo"APP_ENV=prod" > .env && echo "APP_DEBUG=0" >> .env
 # Copy over files we will later override
 COPY config/parameters.dist.yml config/parameters.yml
 
@@ -28,7 +26,7 @@ COPY config/parameters.dist.yml config/parameters.yml
 RUN composer install --no-dev --no-progress --no-suggest --prefer-dist --ignore-platform-reqs --optimize-autoloader
 
 # build assets
-RUN APP_ENV=prod php bin/console asset-map:compile && APP_ENV=prod APP_DEBUG=0 php bin/console cache:clear
+RUN php bin/console asset-map:compile && php bin/console cache:clear
 
 # determine version
 RUN git describe --tags --always > version
@@ -41,9 +39,6 @@ RUN rm -rf assets .git .gitignore tests var
 
 FROM alpine:3.21
 LABEL maintainer="Sgt. Kabukiman"
-
-ENV APP_ENV=prod
-ENV APP_DEBUG=0
 
 # install packages
 RUN apk --no-cache add php84 php84-cli php84-fpm php84-mysqli php84-json php84-openssl php84-curl \

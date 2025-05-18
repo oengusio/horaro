@@ -42,51 +42,12 @@ the ``www`` directory.
 Installation
 ------------
 
+Installation for local development read: [docs/development.md](./docs/development.md)
+
+Installation in a production environment read: [docs/deployment.md](./docs/deployment.md)
+
 ### Migrating from v1 (0.7.0)
-TODO write instructions:
-- new parameters file
-- converting parameters file
-
-#### .env file
-Horaro now requires a .env file to be present. The file has been configured for minimal configuration with 99% of config items still being in parameters.yml
-
-Example production .env file:
-```
-APP_ENV=prod
-APP_DEBUG=0
-```
-
-You need quite a few tools to build horaro (just downloading the source won't be
-enough to get it running). Make sure you have ``npm``, ``grunt-cli``, ``bower``
-and Composer installed globally on your system. Then, perform the following steps
-in your shell:
-
-1. ``npm install`` to install the required node packages for the build process
-2. ``bower install`` to download the required assets (CSS/JS)
-3. ``composer install`` to install the required PHP packages
-4. ``grunt`` to perform the actual build process
-
-Now that the source is ready, you need to prepare your database by creating a
-new one and executing ``resources/schema.sql``, which will create the needed
-tables. Afterwards, execute the ``resources/seed-data.sql``, which will
-initialize the configuration and create your very first account: **operator**
-with the password **operator** (you should obviously change that as soon as
-possible).
-
-As the last step, duplicate the ``resources/config/parameters.dist.yml`` as
-``resources/config/parameters.yml`` and edit the duplicated file. Follow the
-comments in there to complete the configuration.
-
-You're done! You should now be able to access horaro via the vhost you've created,
-e.g. ``http://horaro.local/``.
-
-Moving to Production
---------------------
-
-When you install horaro on a production machine, be sure to set the installation's
-``debug`` flag to ``false`` in the ``parameters.yml`` and then execute
-``grunt ship`` (after you have done a ``grunt`` run). This will duplicate the
-built assets and create versioned ones (e.g. ``app-backend.min.5763bb88.css``).
+Read the production deployment instructions :)
 
 License
 -------
