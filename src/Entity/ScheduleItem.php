@@ -210,7 +210,6 @@ class ScheduleItem
             }
             catch (\InvalidArgumentException $e) {
                 // ignore bad user input
-                dd($e);
             }
         }
 
