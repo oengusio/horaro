@@ -97,13 +97,14 @@ class TwigUtils {
     }
 
     // TODO: fix these methods
-    public function formValue(mixed $result = null, $key = '', $default = null): string {
-        return 'FORM VALUE UTIL USED, PLEASE UPGRADE FORM';
+    public function formValue(mixed $result = null, $key = '', $default = null): ?string {
+//        return 'FORM VALUE UTIL USED, PLEASE UPGRADE FORM';
+        return $result[$key]['filtered'] ?? $default;
     }
 
     public function formClass(?FormView $result = null, $key = ''): string
     {
-        return isset($result[$key]->vars['valid']) && $result[$key]->vars['valid'] ? '' : ' has-error';
+        return $result[$key]->vars['valid'] ?? true ? '' : ' has-error';
     }
 
     public function roleIcon($role): string
