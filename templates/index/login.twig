@@ -15,12 +15,11 @@
             <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
 
             <fieldset>
-                <div class="form-group{{ utils.formClass(result, 'login') }}">
+                <div class="form-group">
                     <label class="col-lg-3 control-label" for="login">Username:</label>
                     <div class="col-lg-9">
                         <input type="text" class="form-control" id="login" name="_username" autofocus required
                                value="{{ last_login }}">
-                        {{ macros.form_errors(result, 'login') }}
                     </div>
                 </div>
 
@@ -44,13 +43,7 @@
         </form>
     </div>
 
-    {% if result and result.form.errors and result.form.messages %}
-        <div class="alert alert-danger">
-            {% for message in result.form.messages %}
-                {{ message }}<br>
-            {% endfor %}
-        </div>
-    {% elseif error_message is defined %}
+    {% if error_message is defined %}
         <div class="alert alert-danger">{{ error_message }}</div>
     {% endif %}
 {% endblock %}
