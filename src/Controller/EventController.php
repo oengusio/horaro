@@ -16,7 +16,6 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-// TODO: merge description and event update data into a single form
 #[IsGranted('ROLE_USER')]
 final class EventController extends BaseController
 {

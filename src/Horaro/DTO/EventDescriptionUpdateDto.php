@@ -19,9 +19,9 @@ class EventDescriptionUpdateDto
         return $this->description;
     }
 
-    public function setDescription(string $description): void
+    public function setDescription(?string $description): void
     {
-        $this->description = $description;
+        $this->description = $description ?? '';
     }
 
     public static function fromEvent(Event|Schedule $event): static
