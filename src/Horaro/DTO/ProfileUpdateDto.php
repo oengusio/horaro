@@ -2,6 +2,7 @@
 
 namespace App\Horaro\DTO;
 
+use App\Entity\User;
 use App\Validator as HoraroAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -51,4 +52,14 @@ class ProfileUpdateDto
         $this->gravatar = $gravatar;
     }
 
+    public static function fromUser(User $user): self
+    {
+        $dto = new self();
+
+        $dto->display_name = $user->getDisplayName();
+        $dto->language = $user->getLanguage();
+        $dto->gravatar = $user->getGravatarHash() ?? '';
+
+        return $dto;
+    }
 }
