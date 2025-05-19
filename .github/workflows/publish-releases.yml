@@ -1,4 +1,4 @@
-name: Publish latest dev tag
+name: Publish release
 on:
   release:
     types: [ published ]
