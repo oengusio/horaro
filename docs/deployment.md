@@ -1,5 +1,7 @@
 # Horaro production deployment guide
 
+If you are upgrading from horaro 0.x please read the [migration guide](#migrating-from-the-previous-version-070) as well.
+
 ## Installing in a production environment
 
 ### With docker (recommended)
@@ -20,27 +22,47 @@ services:
 You can configure horaro by copying `config/parameters.dist.yml` to `horaro_parameters.yml` and following the instructions.
 Make sure to set the debug option to 'false' and read the [optimus instructions](#about-optimus) to configure ID obscurification.
 
+A full configuration example is available at the bottom of this page.
+
+When running `docker compose up` you will be able to see horaro by visiting `http://localhost/` or by typing the ip of your server.
+
 ### Manual (for nginx, apache2 etc)
+
+This manual "guide" assumes the files for horaro are on a server located in `/var/www/horaro`. So the `public` folder would be located in `/var/www/horaro/public`.
 
 You will need to create a dedicated vhost for horaro, because as of now, all
 assets and links are absolute. Installing to something like
 ``http://localhost/horaro/`` will **not work**. Make sure the vhost points to
-the ``www`` directory.
+the ``public`` directory.
 
-First upload the files to where you want to store horaro. Then copy config/parameters.dist.yml to config/parameters.yml and fill in the configuration items.
+First upload the files to where you want to store horaro. Then copy `config/parameters.dist.yml` to `config/parameters.yml` and fill in the configuration items.
+For this guide we are assuming that the horaro files are in `/var/www/horaro`, meaning that your config file will need to be placed in `/var/www/horaro/config/parameters.yml`.
 Make sure to set the debug option to 'false' and read the [optimus instructions](#about-optimus) to configure ID obscurification.
+
+A full configuration example is available at the bottom of this page.
 
 Create a file named `.env` and enter the following contents into it:
 ```dotenv
 APP_ENV=prod
 APP_DEBUG=0
 ```
+This file will be located in `/var/www/horaro/.env`
 
-Run `composer install --no-dev --no-progress --no-suggest --prefer-dist --ignore-platform-reqs --optimize-autoloader`
+The next step is to install the requirements that horaro needs, to do that you will need to run the following command.
+This command and all others must be run from the horaro "root" directory. This directory is where you copied the files to, for this guide we have always assumed that the location is `/var/www/horaro`.
+```shell
+composer install --no-dev --no-suggest --prefer-dist --optimize-autoloader
+```
 
-Run `php bin/console asset-map:compile`
+The next step is to compile the assets that horaro uses, you can do that via the following command:
+```shell
+php bin/console asset-map:compile
+```
 
-Run `php bin/console cache:clear`
+Finally, if you are upgrading your deployment, you may want to clear your cache by running
+```shell
+php bin/console cache:clear
+```
 
 If you want to display the current version on the website, run `git describe --tags --always > version` or manually put something in the version file.
 
@@ -48,9 +70,9 @@ If you want to display the current version on the website, run `git describe --t
 ## About Optimus
 Horaro uses Optimus to obscure database ids and prevent users from guessing the next sequential id. In order to use optimus you will need to configure it.
 
-Command `php vendor/bin/optimus spark`
+Run this command to generate the required numbers: `php vendor/bin/optimus spark`
 
-if command does not work, manual calcuation: https://github.com/jenssegers/optimus?tab=readme-ov-file#usage
+If the command does not work for whatever reason, read this guide on how to get the numbers anyway: https://github.com/jenssegers/optimus?tab=readme-ov-file#usage
 
 
 ## Migrating from the previous version (0.7.0)
