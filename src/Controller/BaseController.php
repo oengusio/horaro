@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 
+use Symfony\Component\HttpKernel\EventListener\AbstractSessionListener;
 use function is_null;
 
 abstract class BaseController extends AbstractController
@@ -97,8 +98,13 @@ abstract class BaseController extends AbstractController
         if ($user) {
             $response->setPrivate();
         } else if ($ttl > 0) {
-            $response->setTtl($ttl * 60);
-            $response->setMaxAge($ttl * 60);
+            // https://symfony.com/doc/current/http_cache.html#http-caching-and-user-sessions
+            $response->headers->set(AbstractSessionListener::NO_AUTO_CACHE_CONTROL_HEADER, 'true');
+
+            $ttlMin = $ttl * 60;
+
+            $response->setTtl($ttlMin);
+            $response->setMaxAge($ttlMin);
             $response->headers->set('X-Accel-Expires', $ttl * 60); // nginx will not honor s-maxage set by setTtl() above
         }
 
