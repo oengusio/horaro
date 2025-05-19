@@ -98,6 +98,7 @@ abstract class BaseController extends AbstractController
             $response->setPrivate();
         } else if ($ttl > 0) {
             $response->setTtl($ttl * 60);
+            $response->setMaxAge($ttl * 60);
             $response->headers->set('X-Accel-Expires', $ttl * 60); // nginx will not honor s-maxage set by setTtl() above
         }
 
