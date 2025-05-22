@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class UpdateEventDto
 {
     #[Assert\NotBlank]
-    private string $name;
+    private string $name = '';
 
     #[Assert\Length(min: 2)]
     #[Assert\Regex(pattern: '/^[a-z0-9-]{2,}$/')]
@@ -19,28 +19,28 @@ class UpdateEventDto
         match: false,
     )]
     #[HoraroAssert\CustomSlugRules(entity: Event::class, paramSuffix: '', idNeedsDecoding: false)]
-    private string $slug;
+    private string $slug = '';
 
     #[Assert\Url(requireTld: true)]
-    private string $website;
+    private ?string $website = '';
 
     #[Assert\Regex(pattern: '/^@?([a-zA-Z0-9-_]+)$/')]
-    private string $twitter;
+    private ?string $twitter = '';
 
     #[Assert\Regex(pattern: '/^[a-zA-Z0-9_-]+$/')]
-    private string $twitch;
+    private ?string $twitch = '';
 
     #[Assert\NotBlank]
     #[HoraroAssert\Theme]
-    private string $theme;
+    private string $theme = '';
 
     #[Assert\Length(max: 20)]
     #[Assert\Regex(pattern: '/^[a-zA-Z0-9_-]+$/')]
-    private string $secret;
+    private ?string $secret;
 
     #[Assert\LessThanOrEqual(999)]
     #[Assert\GreaterThan(0)] // TODO: min schedule count === current schedule count
-    private int $max_schedules;
+    private int $max_schedules = 1;
 
     private bool $featured = false;
 
@@ -49,9 +49,9 @@ class UpdateEventDto
         return $this->name;
     }
 
-    public function setName(string $name): void
+    public function setName(?string $name): void
     {
-        $this->name = $name;
+        $this->name = $name ?? '';
     }
 
     public function getSlug(): string
@@ -59,37 +59,37 @@ class UpdateEventDto
         return $this->slug;
     }
 
-    public function setSlug(string $slug): void
+    public function setSlug(?string $slug): void
     {
-        $this->slug = $slug;
+        $this->slug = $slug ?? '';
     }
 
-    public function getWebsite(): string
+    public function getWebsite(): ?string
     {
         return $this->website;
     }
 
-    public function setWebsite(string $website): void
+    public function setWebsite(?string $website): void
     {
         $this->website = $website;
     }
 
-    public function getTwitter(): string
+    public function getTwitter(): ?string
     {
         return $this->twitter;
     }
 
-    public function setTwitter(string $twitter): void
+    public function setTwitter(?string $twitter): void
     {
         $this->twitter = $twitter;
     }
 
-    public function getTwitch(): string
+    public function getTwitch(): ?string
     {
         return $this->twitch;
     }
 
-    public function setTwitch(string $twitch): void
+    public function setTwitch(?string $twitch): void
     {
         $this->twitch = $twitch;
     }
@@ -99,17 +99,17 @@ class UpdateEventDto
         return $this->theme;
     }
 
-    public function setTheme(string $theme): void
+    public function setTheme(?string $theme): void
     {
-        $this->theme = $theme;
+        $this->theme = $theme ?? '';
     }
 
-    public function getSecret(): string
+    public function getSecret(): ?string
     {
         return $this->secret;
     }
 
-    public function setSecret(string $secret): void
+    public function setSecret(?string $secret): void
     {
         $this->secret = $secret;
     }
@@ -132,5 +132,21 @@ class UpdateEventDto
     public function setFeatured(bool $featured): void
     {
         $this->featured = $featured;
+    }
+
+    public static function fromEvent(Event $event): self
+    {
+        $dto = new self();
+
+        $dto->name = $event->getName();
+        $dto->slug = $event->getSlug();
+        $dto->website = $event->getWebsite();
+        $dto->twitter = $event->getTwitter();
+        $dto->twitch = $event->getTwitch();
+        $dto->theme = $event->getTheme();
+        $dto->secret = $event->getSecret();
+        $dto->max_schedules = $event->getMaxSchedules();
+
+        return $dto;
     }
 }

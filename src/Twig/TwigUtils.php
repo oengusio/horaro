@@ -98,8 +98,8 @@ class TwigUtils {
 
     // TODO: fix these methods
     public function formValue(mixed $result = null, $key = '', $default = null): ?string {
-//        return 'FORM VALUE UTIL USED, PLEASE UPGRADE FORM';
-        return $result[$key]['filtered'] ?? $default;
+        return 'FORM VALUE UTIL USED, PLEASE UPGRADE FORM';
+//        return $result[$key]['filtered'] ?? $default;
     }
 
     public function formClass(?FormView $result = null, $key = ''): string
