@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
+use App\Form\Type\Admin\UserType;
 use App\Horaro\DTO\Admin\UpdateUserDto;
 use App\Horaro\DTO\Admin\UpdateUserPasswordDto;
 use App\Horaro\Pager;
@@ -13,12 +14,15 @@ use App\Repository\EventRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -50,11 +54,11 @@ final class UserController extends BaseController
             $page = 0;
         }
 
-        $query     = $q;
+        $query = $q;
         $eventRepo = $this->eventRepository;
-        $userRepo  = $this->userRepository;
-        $users     = $userRepo->findFiltered($query, $size, $page*$size);
-        $total     = $userRepo->countFiltered($query);
+        $userRepo = $this->userRepository;
+        $users = $userRepo->findFiltered($query, $size, $page * $size);
+        $total = $userRepo->countFiltered($query);
 
         foreach ($users as $user) {
             $user->eventCount = $eventRepo->countEvents($user);
@@ -63,48 +67,47 @@ final class UserController extends BaseController
         return $this->render('admin/users/index.twig', [
             'users' => $users,
             'pager' => new Pager($page, $total, $size),
-            'query'     => $query
+            'query' => $query,
         ]);
     }
 
-    #[Route('/-/admin/users/{user}/edit', name: 'app_admin_user_edit', methods: ['GET'])]
-    public function editUser(User $user): Response {
+    #[Route('/-/admin/users/{user}/edit', name: 'app_admin_user_edit', methods: ['GET', 'PUT'])]
+    public function editUser(Request $request, User $user): Response
+    {
         if (!$this->canEdit($user)) {
             return $this->render('admin/users/view.twig', ['user' => $user, 'languages' => $this->getLanguages()]);
         }
 
-        return $this->renderForm($user);
-    }
+        $dto = UpdateUserDto::fromUser($user);
+        $form = $this->createForm(UserType::class, $dto, [
+            'method' => 'PUT',
+        ]);
 
-    #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
-    #[Route('/-/admin/users/{user}', name: 'app_admin_user_save', methods: ['PUT'])]
-    public function saveUser(
-        User $user,
-        #[MapRequestPayload] UpdateUserDto $dto,
-    ): Response {
-        if (!$this->canEdit($user)) {
-            throw new AccessDeniedHttpException('You are not allowed to edit this user.');
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setLogin(strtolower($dto->getLogin()));
+            $user->setDisplayName($dto->getDisplayName());
+            $user->setLanguage($dto->getLanguage());
+            $user->setGravatarHash($dto->getGravatar());
+            $user->setMaxEvents($dto->getMaxEvents());
+            $user->setRole($dto->getRole());
+
+            $this->entityManager->flush();
+
+            $this->addSuccessMsg('User '.$user->getLogin().' has been updated.');
+
+            return $this->redirectToRoute('app_admin_user');
         }
 
-        $user->setLogin(strtolower($dto->getLogin()));
-        $user->setDisplayName($dto->getDisplayName());
-        $user->setLanguage($dto->getLanguage());
-        $user->setGravatarHash($dto->getGravatar());
-        $user->setMaxEvents($dto->getMaxEvents());
-        $user->setRole($dto->getRole());
-
-        $this->entityManager->flush();
-
-        $this->addSuccessMsg('User '.$user->getLogin().' has been updated.');
-
-        return $this->redirect('/-/admin/users');
+        return $this->renderForm($user, $form);
     }
 
     #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
     #[Route('/-/admin/users/{user}/password', name: 'app_admin_user_save_password', methods: ['PUT'])]
     public function updatePassword(
-        User $user,
-        UserPasswordHasherInterface $passwordHasher,
+        User                                       $user,
+        UserPasswordHasherInterface                $passwordHasher,
         #[MapRequestPayload] UpdateUserPasswordDto $dto,
     ): Response
     {
@@ -122,12 +125,13 @@ final class UserController extends BaseController
         return $this->redirect('/-/admin/users');
     }
 
-    protected function renderForm(User $user, array $result = null): Response
+    protected function renderForm(User $user, FormInterface $form): Response
     {
         return $this->render('admin/users/form.twig', [
-            'result'    => $result,
-            'user'      => $user,
-            'languages' => $this->getLanguages()
+            'result' => null,
+            'form' => $form,
+            'user' => $user,
+            'languages' => $this->getLanguages(),
         ]);
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Horaro\DTO\Admin;
 
+use App\Entity\User;
 use App\Validator as HoraroAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -25,7 +26,7 @@ class UpdateUserDto
     private string $language;
 
     #[HoraroAssert\GravatarHash]
-    private string $gravatar;
+    private ?string $gravatar;
 
     #[Assert\LessThan(999)]
     #[Assert\GreaterThan(0)] // TODO: min events count === current event count
@@ -40,9 +41,9 @@ class UpdateUserDto
         return $this->login;
     }
 
-    public function setLogin(string $login): void
+    public function setLogin(?string $login): void
     {
-        $this->login = $login;
+        $this->login = $login ?? '';
     }
 
     public function getDisplayName(): string
@@ -50,9 +51,9 @@ class UpdateUserDto
         return $this->display_name;
     }
 
-    public function setDisplayName(string $display_name): void
+    public function setDisplayName(?string $display_name): void
     {
-        $this->display_name = $display_name;
+        $this->display_name = $display_name ?? '';
     }
 
     public function getLanguage(): string
@@ -65,12 +66,12 @@ class UpdateUserDto
         $this->language = $language;
     }
 
-    public function getGravatar(): string
+    public function getGravatar(): ?string
     {
         return $this->gravatar;
     }
 
-    public function setGravatar(string $gravatar): void
+    public function setGravatar(?string $gravatar): void
     {
         $this->gravatar = $gravatar;
     }
@@ -93,5 +94,19 @@ class UpdateUserDto
     public function setRole(string $role): void
     {
         $this->role = $role;
+    }
+
+    public static function fromUser(User $user): self
+    {
+        $dto = new self();
+
+        $dto->login = $user->getLogin();
+        $dto->display_name = $user->getDisplayName();
+        $dto->language = $user->getLanguage();
+        $dto->gravatar = $user->getGravatarHash();
+        $dto->max_events = $user->getMaxEvents();
+        $dto->role = $user->getRole();
+
+        return $dto;
     }
 }

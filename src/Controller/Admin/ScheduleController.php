@@ -107,41 +107,6 @@ final class ScheduleController extends BaseController
         return $this->renderForm($schedule, $form);
     }
 
-    #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
-    #[Route('/-/admin/schedules/{schedule}', name: 'app_admin_schedule_update', methods: ['PUT'])]
-    public function updateSchedule(
-        Schedule                               $schedule,
-        #[MapRequestPayload] UpdateScheduleDto $dto
-    ): Response
-    {
-        if (!$this->canEdit($schedule)) {
-            throw new AccessDeniedHttpException('You are not allowed to edit this schedule.');
-        }
-
-        $dtoStartDate = $dto->getStartDate();
-        $dtoStartTime = $dto->getStartTime();
-        $startDateTime = \DateTime::createFromFormat('Y-m-d G:i', "$dtoStartDate $dtoStartTime");
-
-        $schedule
-            ->setName($dto->getName())
-            ->setSlug($dto->getSlug())
-            ->setTimezone($dto->getTimezone())
-            ->setStart($startDateTime)
-            ->setWebsite($dto->getWebsite())
-            ->setTwitter($dto->getTwitter())
-            ->setTwitch($dto->getTwitch())
-            ->setTheme($dto->getTheme())
-            ->setSecret($dto->getSecret())
-            ->setMaxItems($dto->getMaxItems())
-            ->touch();
-
-        $this->entityManager->flush();
-
-        $this->addSuccessMsg('Schedule '.$schedule->getName().' has been updated.');
-
-        return $this->redirect('/-/admin/schedules');
-    }
-
     #[Route('/-/admin/schedules/{schedule}/delete', name: 'app_admin_schedule_delete_form', methods: ['GET'])]
     public function deleteScheduleForm(Schedule $schedule): Response
     {
