@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Schedule;
+use App\Form\Type\Admin\ScheduleType;
 use App\Horaro\DTO\Admin\UpdateScheduleDto;
 use App\Horaro\Pager;
 use App\Horaro\RoleManager;
@@ -12,6 +13,7 @@ use App\Repository\ScheduleItemRepository;
 use App\Repository\ScheduleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
@@ -63,14 +65,46 @@ final class ScheduleController extends BaseController
         ]);
     }
 
-    #[Route('/-/admin/schedules/{schedule}/edit', name: 'app_admin_schedule_edit', methods: ['GET'])]
-    public function editForm(Schedule $schedule): Response
+    #[Route('/-/admin/schedules/{schedule}/edit', name: 'app_admin_schedule_edit', methods: ['GET', 'PUT'])]
+    public function editForm(Request $request, Schedule $schedule): Response
     {
         if (!$this->canEdit($schedule)) {
             return $this->render('admin/schedules/view.twig', ['schedule' => $schedule]);
         }
 
-        return $this->renderForm($schedule);
+        $dto = UpdateScheduleDto::fromSchedule($schedule);
+        $form = $this->createForm(ScheduleType::class, $dto, [
+            'method' => 'PUT',
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $dtoStartDate = $dto->getStartDate();
+            $dtoStartTime = $dto->getStartTime();
+            $startDateTime = \DateTime::createFromFormat('Y-m-d G:i', "$dtoStartDate $dtoStartTime");
+
+            $schedule
+                ->setName($dto->getName())
+                ->setSlug($dto->getSlug())
+                ->setTimezone($dto->getTimezone())
+                ->setStart($startDateTime)
+                ->setWebsite($dto->getWebsite())
+                ->setTwitter($dto->getTwitter())
+                ->setTwitch($dto->getTwitch())
+                ->setTheme($dto->getTheme())
+                ->setSecret($dto->getSecret())
+                ->setMaxItems($dto->getMaxItems())
+                ->touch();
+
+            $this->entityManager->flush();
+
+            $this->addSuccessMsg('Schedule '.$schedule->getName().' has been updated.');
+
+            return $this->redirectToRoute('app_admin_schedule_index');
+        }
+
+        return $this->renderForm($schedule, $form);
     }
 
     #[IsCsrfTokenValid('horaro', tokenKey: '_csrf_token')]
@@ -131,18 +165,18 @@ final class ScheduleController extends BaseController
 
         $this->addSuccessMsg('The requested schedule has been deleted.');
 
-        return $this->redirect('/-/admin/schedules');
+        return $this->redirectToRoute('app_admin_schedule_index');
     }
 
-    protected function renderForm(Schedule $schedule, array $result = null): Response
+    protected function renderForm(Schedule $schedule, FormInterface $form): Response
     {
-        $itemRepo = $this->itemRepository;
         $timezones = \DateTimeZone::listIdentifiers();
 
-        $schedule->itemCount = $itemRepo->countItems($schedule);
+        $schedule->itemCount = $this->itemRepository->countItems($schedule);
 
         return $this->render('admin/schedules/form.twig', [
-            'result' => $result,
+            'result' => null,
+            'form' => $form,
             'timezones' => $timezones,
             'themes' => $this->getParameter('horaro.themes'),
             'schedule' => $schedule,

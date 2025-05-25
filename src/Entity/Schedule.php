@@ -153,7 +153,7 @@ class Schedule
         return $this->website;
     }
 
-    public function setWebsite(string $website): static
+    public function setWebsite(?string $website): static
     {
         $this->website = $website;
 
@@ -165,7 +165,7 @@ class Schedule
         return $this->twitter;
     }
 
-    public function setTwitter(string $twitter): static
+    public function setTwitter(?string $twitter): static
     {
         $this->twitter = $twitter;
 
@@ -177,7 +177,7 @@ class Schedule
         return $this->twitch;
     }
 
-    public function setTwitch(string $twitch): static
+    public function setTwitch(?string $twitch): static
     {
         $this->twitch = $twitch;
 
@@ -201,7 +201,7 @@ class Schedule
         return $this->secret;
     }
 
-    public function setSecret(string $secret): static
+    public function setSecret(?string $secret): static
     {
         $this->secret = $secret;
 
@@ -213,7 +213,7 @@ class Schedule
         return $this->hidden_secret;
     }
 
-    public function setHiddenSecret(string $hidden_secret): static
+    public function setHiddenSecret(?string $hidden_secret): static
     {
         $this->hidden_secret = $hidden_secret;
 
@@ -225,7 +225,7 @@ class Schedule
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
 

@@ -41,13 +41,13 @@ class UpdateScheduleDto
     private string $start_time;
 
     #[Assert\Url(requireTld: true)]
-    private string $website;
+    private ?string $website;
 
     #[Assert\Regex(pattern: '/^@?([a-zA-Z0-9-_]+)$/')]
-    private string $twitter;
+    private ?string $twitter;
 
     #[Assert\Regex(pattern: '/^[a-zA-Z0-9_-]+$/')]
-    private string $twitch;
+    private ?string $twitch;
 
     #[Assert\NotBlank]
     #[HoraroAssert\Theme]
@@ -55,7 +55,7 @@ class UpdateScheduleDto
 
     #[Assert\Length(max: 20)]
     #[Assert\Regex(pattern: '/^[a-zA-Z0-9_-]+$/')]
-    private string $secret;
+    private ?string $secret;
 
     #[Assert\LessThanOrEqual(999)]
     #[Assert\GreaterThan(0)] // TODO: min item count === current item count
@@ -66,9 +66,9 @@ class UpdateScheduleDto
         return $this->name;
     }
 
-    public function setName(string $name): void
+    public function setName(?string $name): void
     {
-        $this->name = $name;
+        $this->name = $name ?? '';
     }
 
     public function getSlug(): string
@@ -76,37 +76,37 @@ class UpdateScheduleDto
         return $this->slug;
     }
 
-    public function setSlug(string $slug): void
+    public function setSlug(?string $slug): void
     {
-        $this->slug = $slug;
+        $this->slug = $slug ?? '';
     }
 
-    public function getWebsite(): string
+    public function getWebsite(): ?string
     {
         return $this->website;
     }
 
-    public function setWebsite(string $website): void
+    public function setWebsite(?string $website): void
     {
         $this->website = $website;
     }
 
-    public function getTwitter(): string
+    public function getTwitter(): ?string
     {
         return $this->twitter;
     }
 
-    public function setTwitter(string $twitter): void
+    public function setTwitter(?string $twitter): void
     {
         $this->twitter = $twitter;
     }
 
-    public function getTwitch(): string
+    public function getTwitch(): ?string
     {
         return $this->twitch;
     }
 
-    public function setTwitch(string $twitch): void
+    public function setTwitch(?string $twitch): void
     {
         $this->twitch = $twitch;
     }
@@ -116,17 +116,17 @@ class UpdateScheduleDto
         return $this->theme;
     }
 
-    public function setTheme(string $theme): void
+    public function setTheme(?string $theme): void
     {
-        $this->theme = $theme;
+        $this->theme = $theme ?? '';
     }
 
-    public function getSecret(): string
+    public function getSecret(): ?string
     {
         return $this->secret;
     }
 
-    public function setSecret(string $secret): void
+    public function setSecret(?string $secret): void
     {
         $this->secret = $secret;
     }
@@ -146,9 +146,9 @@ class UpdateScheduleDto
         return $this->timezone;
     }
 
-    public function setTimezone(string $timezone): void
+    public function setTimezone(?string $timezone): void
     {
-        $this->timezone = $timezone;
+        $this->timezone = $timezone ?? '';
     }
 
     public function getStartDate(): string
@@ -156,9 +156,9 @@ class UpdateScheduleDto
         return $this->start_date;
     }
 
-    public function setStartDate(string $start_date): void
+    public function setStartDate(?string $start_date): void
     {
-        $this->start_date = $start_date;
+        $this->start_date = $start_date ?? '';
     }
 
     public function getStartTime(): string
@@ -166,8 +166,26 @@ class UpdateScheduleDto
         return $this->start_time;
     }
 
-    public function setStartTime(string $start_time): void
+    public function setStartTime(?string $start_time): void
     {
-        $this->start_time = $start_time;
+        $this->start_time = $start_time ?? '';
+    }
+
+    public static function fromSchedule(Schedule $schedule): self {
+        $dto = new self();
+
+        $dto->name = $schedule->getName();
+        $dto->slug = $schedule->getSlug();
+        $dto->timezone = $schedule->getTimezone();
+        $dto->start_date = $schedule->getStart()->format('Y-m-d');
+        $dto->start_time = $schedule->getStart()->format('H:i');
+        $dto->website = $schedule->getWebsite();
+        $dto->twitter = $schedule->getTwitter();
+        $dto->twitch = $schedule->getTwitch();
+        $dto->theme = $schedule->getTheme();
+        $dto->secret = $schedule->getSecret();
+        $dto->max_items = $schedule->getMaxItems();
+
+        return $dto;
     }
 }
