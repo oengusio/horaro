@@ -10,6 +10,9 @@ use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 
+use function mb_strtolower;
+use function preg_replace;
+
 #[AsTargetedValueResolver('scheduleSlug')]
 readonly class ScheduleSlugValueResolver implements ValueResolverInterface
 {
@@ -31,12 +34,24 @@ readonly class ScheduleSlugValueResolver implements ValueResolverInterface
 
         $eventSlug = $request->attributes->get('eventSlug');
         $scheduleSlug = $request->get($options->resolver);
+        $origSlug = $scheduleSlug;
+        $scheduleSlug = mb_strtolower($scheduleSlug);
+
+        // strip bad trailing characters from badly detected links on other sites
+        $scheduleSlug = preg_replace('/^(.*?)[^a-z0-9-].*/i', '$1', $scheduleSlug);
 
         $foundSchedule = $this->repository->findBySlug($eventSlug, $scheduleSlug);
 
         if (!$foundSchedule) {
             throw new ScheduleNotFoundException();
         }
+
+        // TODO: redirect to the correct version to avoid duplicate content
+        /*if ($origSlug !== $scheduleSlug || $foundSchedule->getEvent()->getSlug() !== $eventSlug) {
+            throw new RedirectionException(
+                new RedirectResponse($foundSchedule->getLink(), 301)
+            );
+        }*/
 
         return [$foundSchedule];
     }
