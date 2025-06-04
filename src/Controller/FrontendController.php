@@ -223,8 +223,13 @@ final class FrontendController extends BaseController
     protected function handleScheduleAccess(Event $event, Schedule $schedule, $key): bool
     {
         $needsEventKey = strlen($event->getSecret()) > 0;
-        $needsScheduleKey = strlen($schedule->getSecret()) > 0;
         $validEventKey = $needsEventKey && $this->hasGoodEventKey($event, $key);
+
+        if ($needsEventKey && !$validEventKey && !$this->hasGoodSchedulesKey($event, $key)) {
+            throw new PrivateEventException();
+        }
+
+        $needsScheduleKey = strlen($schedule->getSecret()) > 0;
         $validScheduleKey = $needsScheduleKey && $this->hasGoodScheduleKey($schedule, $key);
 
         $eventAccess = !$needsEventKey || $validEventKey;
