@@ -42,7 +42,7 @@ final class OAuthController extends BaseController
         if ($currentUser) {
             // do not allow to re-link
             if ($currentUser->getTwitchOAuth() !== null) {
-                return $this->redirect('/-/profile');
+                return $this->redirectToRoute('app_profile');
             }
         } else {
             $session->start();
@@ -72,7 +72,7 @@ final class OAuthController extends BaseController
         $provider     = $this->getProvider($request, $providerName);
 
         if (!$code || !$state || $state !== $oldState || !$provider) {
-            return $this->redirect($currentUser ? '/-/profile' : '/');
+            return $this->redirectToRoute($currentUser ? 'app_profile' : 'app_welcome');
         }
 
         try {
@@ -86,7 +86,7 @@ final class OAuthController extends BaseController
 
             if ($currentUser) {
                 $this->addErrorMsg($message);
-                return $this->redirect('/-/profile');
+                return $this->redirectToRoute('app_profile');
             }
 
             $response = $this->render('index/login.twig', [
@@ -139,12 +139,12 @@ final class OAuthController extends BaseController
             // we're done for logged-in users
             if ($currentUser) {
                 $this->addSuccessMsg('You have successfully linked your accounts.');
-                return $this->redirect('/-/profile');
+                return $this->redirectToRoute('app_profile');
             }
         } else {
             if ($currentUser) {
                 $this->addSuccessMsg('This account is already used by another Horaro account.');
-                return $this->redirect('/-/profile');
+                return $this->redirectToRoute('app_profile');
             }
 
             if ($existing->getRole() === 'ROLE_GHOST') {
@@ -172,7 +172,7 @@ final class OAuthController extends BaseController
         // auth, not sure if RememberMeBadge works, keep testing
         $authenticatorManager->authenticateUser($user, $this->authenticator, $request, [new RememberMeBadge()]);
 
-        return $this->redirect('/');
+        return $this->redirectToRoute('app_home');
     }
 
     private function getProvider(Request $request, string $providerName): ?AbstractProvider
