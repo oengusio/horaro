@@ -28,6 +28,9 @@ class CreateEventDto
     #[Assert\Regex(pattern: '/^@?([a-zA-Z0-9-_]+)$/')]
     private string $twitter = '';
 
+    #[Assert\Regex(pattern: '/^@?([a-zA-Z0-9-_.]+)$/')]
+    private string $bluesky = '';
+
     #[Assert\Regex(pattern: '/^[a-zA-Z0-9_-]+$/')]
     private string $twitch = '';
 
@@ -79,6 +82,16 @@ class CreateEventDto
         $this->twitter = $twitter ?? '';
     }
 
+    public function getBluesky(): string
+    {
+        return $this->bluesky;
+    }
+
+    public function setBluesky(string $bluesky): void
+    {
+        $this->bluesky = $bluesky;
+    }
+
     public function getTwitch(): string
     {
         return $this->twitch;
@@ -117,6 +130,7 @@ class CreateEventDto
         $dto->website = $event->getWebsite();
         $dto->twitter = $event->getTwitter();
         $dto->twitch = $event->getTwitch();
+        $dto->bluesky = $event->getBluesky();
         $dto->theme = $event->getTheme();
         $dto->secret = $event->getSecret();
 

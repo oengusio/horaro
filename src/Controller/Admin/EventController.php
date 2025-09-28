@@ -88,6 +88,7 @@ final class EventController extends BaseController
             ->setSlug($dto->getSlug())
             ->setWebsite($dto->getWebsite())
             ->setTwitter($dto->getTwitter())
+            ->setBluesky($dto->getBluesky())
             ->setTwitch($dto->getTwitch())
             ->setTheme($dto->getTheme())
             ->setMaxSchedules($dto->getMaxSchedules());

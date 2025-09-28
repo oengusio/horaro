@@ -30,6 +30,9 @@ class Event
     private ?string $twitter = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    private ?string $bluesky = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $twitch = null;
 
     #[ORM\Column(length: 255)]
@@ -111,6 +114,18 @@ class Event
     public function setTwitter(?string $twitter): static
     {
         $this->twitter = $twitter;
+
+        return $this;
+    }
+
+    public function getBluesky(): ?string
+    {
+        return $this->bluesky;
+    }
+
+    public function setBluesky(?string $bluesky): static
+    {
+        $this->bluesky = $bluesky;
 
         return $this;
     }
