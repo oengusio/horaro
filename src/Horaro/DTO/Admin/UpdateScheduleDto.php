@@ -49,6 +49,9 @@ class UpdateScheduleDto
     #[Assert\Regex(pattern: '/^[a-zA-Z0-9_-]+$/')]
     private string $twitch;
 
+    #[Assert\Regex(pattern: '/^@?([a-zA-Z0-9-_.]+)$/')]
+    private string $bluesky = '';
+
     #[Assert\NotBlank]
     #[HoraroAssert\Theme]
     private string $theme;
@@ -109,6 +112,16 @@ class UpdateScheduleDto
     public function setTwitch(string $twitch): void
     {
         $this->twitch = $twitch;
+    }
+
+    public function getBluesky(): string
+    {
+        return $this->bluesky;
+    }
+
+    public function setBluesky(string $bluesky): void
+    {
+        $this->bluesky = $bluesky;
     }
 
     public function getTheme(): string

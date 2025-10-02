@@ -23,16 +23,16 @@ class CreateEventDto
 
     #[Assert\NotNull]
     #[Assert\Url(requireTld: true)]
-    private string $website = '';
+    private ?string $website = null;
 
     #[Assert\Regex(pattern: '/^@?([a-zA-Z0-9-_]+)$/')]
-    private string $twitter = '';
+    private ?string $twitter = null;
 
     #[Assert\Regex(pattern: '/^@?([a-zA-Z0-9-_.]+)$/')]
-    private string $bluesky = '';
+    private ?string $bluesky = null;
 
     #[Assert\Regex(pattern: '/^[a-zA-Z0-9_-]+$/')]
-    private string $twitch = '';
+    private ?string $twitch = null;
 
     #[Assert\NotBlank]
     #[HoraroAssert\Theme]
@@ -40,7 +40,7 @@ class CreateEventDto
 
     #[Assert\Length(max: 20)]
     #[Assert\Regex(pattern: '/^[a-zA-Z0-9_-]+$/')]
-    private string $secret = '';
+    private ?string $secret = '';
 
     public function getName(): string
     {
@@ -62,44 +62,44 @@ class CreateEventDto
         $this->slug = $slug;
     }
 
-    public function getWebsite(): string
+    public function getWebsite(): ?string
     {
         return $this->website;
     }
 
     public function setWebsite(?string $website): void
     {
-        $this->website = $website ?? '';
+        $this->website = $website;
     }
 
-    public function getTwitter(): string
+    public function getTwitter(): ?string
     {
         return $this->twitter;
     }
 
     public function setTwitter(?string $twitter): void
     {
-        $this->twitter = $twitter ?? '';
+        $this->twitter = $twitter;
     }
 
-    public function getBluesky(): string
+    public function getBluesky(): ?string
     {
         return $this->bluesky;
     }
 
-    public function setBluesky(string $bluesky): void
+    public function setBluesky(?string $bluesky): void
     {
         $this->bluesky = $bluesky;
     }
 
-    public function getTwitch(): string
+    public function getTwitch(): ?string
     {
         return $this->twitch;
     }
 
     public function setTwitch(?string $twitch): void
     {
-        $this->twitch = $twitch ?? '';
+        $this->twitch = $twitch;
     }
 
     public function getTheme(): string
@@ -112,14 +112,14 @@ class CreateEventDto
         $this->theme = $theme;
     }
 
-    public function getSecret(): string
+    public function getSecret(): ?string
     {
         return $this->secret;
     }
 
     public function setSecret(?string $secret): void
     {
-        $this->secret = $secret ?? '';
+        $this->secret = $secret;
     }
 
     public static function fromEvent(Event $event): static {

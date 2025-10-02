@@ -37,13 +37,16 @@ class CreateScheduleDto
     private string $start_time = '';
 
     #[Assert\Url(requireTld: true)]
-    private string $website = '';
+    private ?string $website = null;
 
     #[Assert\Regex(pattern: '/^@?([a-zA-Z0-9-_]+)$/')]
-    private string $twitter = '';
+    private ?string $twitter = null;
 
     #[Assert\Regex(pattern: '/^[a-zA-Z0-9_-]+$/')]
-    private string $twitch = '';
+    private ?string $twitch = null;
+
+    #[Assert\Regex(pattern: '/^@?([a-zA-Z0-9-_.]+)$/')]
+    private ?string $bluesky = null;
 
     #[Assert\NotBlank]
     #[HoraroAssert\Theme]
@@ -51,11 +54,11 @@ class CreateScheduleDto
 
     #[Assert\Length(max: 20)]
     #[Assert\Regex(pattern: '/^[a-zA-Z0-9_-]+$/')]
-    private string $secret = '';
+    private ?string $secret = '';
 
     #[Assert\Length(max: 20)]
     #[Assert\Regex(pattern: '/^[a-zA-Z0-9_-]+$/')]
-    private string $hidden_secret = '';
+    private ?string $hidden_secret = null;
 
     #[Assert\NotNull]
     #[HoraroAssert\ReadableTime]
@@ -113,34 +116,44 @@ class CreateScheduleDto
         $this->start_time = $start_time;
     }
 
-    public function getWebsite(): string
+    public function getWebsite(): ?string
     {
         return $this->website;
     }
 
     public function setWebsite(?string $website): void
     {
-        $this->website = $website ?? '';
+        $this->website = $website;
     }
 
-    public function getTwitter(): string
+    public function getTwitter(): ?string
     {
         return $this->twitter;
     }
 
     public function setTwitter(?string $twitter): void
     {
-        $this->twitter = $twitter ?? '';
+        $this->twitter = $twitter;
     }
 
-    public function getTwitch(): string
+    public function getTwitch(): ?string
     {
         return $this->twitch;
     }
 
     public function setTwitch(?string $twitch): void
     {
-        $this->twitch = $twitch ?? '';
+        $this->twitch = $twitch;
+    }
+
+    public function getBluesky(): ?string
+    {
+        return $this->bluesky;
+    }
+
+    public function setBluesky(?string $bluesky): void
+    {
+        $this->bluesky = $bluesky;
     }
 
     public function getTheme(): string
@@ -153,34 +166,34 @@ class CreateScheduleDto
         $this->theme = $theme;
     }
 
-    public function getSecret(): string
+    public function getSecret(): ?string
     {
         return $this->secret;
     }
 
     public function setSecret(?string $secret): void
     {
-        $this->secret = $secret ?? '';
+        $this->secret = $secret;
     }
 
-    public function getHiddenSecret(): string
+    public function getHiddenSecret(): ?string
     {
         return $this->hidden_secret;
     }
 
     public function setHiddenSecret(?string $hidden_secret): void
     {
-        $this->hidden_secret = $hidden_secret ?? '';
+        $this->hidden_secret = $hidden_secret;
     }
 
-    public function getSetupTime(): string
+    public function getSetupTime(): ?string
     {
         return $this->setup_time;
     }
 
     public function setSetupTime(?string $setup_time): void
     {
-        $this->setup_time = $setup_time ?? '';
+        $this->setup_time = $setup_time;
     }
 
     public function getParsedSetupTime(): ?\DateTimeInterface
@@ -205,6 +218,7 @@ class CreateScheduleDto
         $dto->website = $schedule->getWebsite();
         $dto->twitter = $schedule->getTwitter();
         $dto->twitch = $schedule->getTwitch();
+        $dto->bluesky = $schedule->getBluesky();
         $dto->theme = $schedule->getTheme();
         $dto->secret = $schedule->getSecret();
         $dto->hidden_secret = $schedule->getHiddenSecret();

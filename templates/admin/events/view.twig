@@ -108,7 +108,7 @@
 				{% set end   = schedule.localEnd   %}
 				<div class="well well-sm">
 					<h4 class="h-jail">
-						<a href="/-/admin/schedules/{{ schedule.id }}/edit"><i class="fa fa-calendar"></i> {{ schedule.name|shorten(30) }}</a>
+						<a href="/-/admin/schedules/{{ schedule.id }}/edit"><i class="fa-regular fa-calendar-days"></i> {{ schedule.name|shorten(30) }}</a>
 						<span class="badge">{{ schedule.items|length }}</span><br>
 						<small>
 							{% if start.format('Ymd') == end.format('Ymd') %}

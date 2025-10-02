@@ -13,6 +13,7 @@
         <script src="{{ asset('trd_party/select2.min.js') }}"></script>
         <script src="{{ asset('trd_party/remarkable.min.js') }}"></script>
 
+        <script src="{{ macros.asset('vendor/@fortawesome/fontawesome-free/js/all.min.js') }}"></script>
         <script src="{{ asset('js/vendor-backend.js') }}"></script>
         <script src="{{ asset('js/i18n/' ~ app.locale ~ '.js') }}"></script>
         <script src="{{ asset('js/app-backend.js') }}"></script>
@@ -48,7 +49,7 @@
                     <ul class="h-mru">
                         {% for schedule in recent %}
                             <li class="h-jail">
-                                <a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}" class="item"><i class="fa fa-calendar"></i> {{ schedule.name|shorten(25) }}</a>
+                                <a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}" class="item"><i class="fa-regular fa-calendar-days"></i> {{ schedule.name|shorten(25) }}</a>
                                 <small class="text-muted">{{ schedule.event.name|shorten(45) }}</small>
                             </li>
                         {% endfor %}
@@ -99,7 +100,7 @@
                     {% for row in live %}
                         <li class="h-jail">
                             <a href="/{{ row.event.slug }}" class="item"><i class="fa fa-gamepad"></i> {{ row.event.name|shorten(60) }}</a>
-                            ({% for schedule in row.schedules %}<i class="fa fa-calendar"></i> <a href="/{{ row.event.slug }}/{{ schedule.slug }}">{{ schedule.name|shorten(45) }}</a>{% if not loop.last %}, {% endif %}{% endfor %})
+                            ({% for schedule in row.schedules %}<i class="fa-regular fa-calendar-days"></i> <a href="/{{ row.event.slug }}/{{ schedule.slug }}">{{ schedule.name|shorten(45) }}</a>{% if not loop.last %}, {% endif %}{% endfor %})
                         </li>
                     {% endfor %}
                 </ul>
@@ -114,7 +115,7 @@
                             {% set start = row.schedules[0].localStart %}
                             <a href="/{{ row.event.slug }}" class="item"><i class="fa fa-gamepad"></i> {{ row.event.name|shorten(45) }}</a>
                             <time datetime="{{ start.format('Y-m-d\\TH:i:sP') }}" title="{{ start.format('l, F d, Y \\a\\t H:i') }} ({{ row.schedules[0].timezone }} time)" class="h-relative h-fuzzy text-muted">on {{ start.format('l, F d, Y') }}</time>
-                            ({% for schedule in row.schedules %}<i class="fa fa-calendar"></i> <a href="/{{ row.event.slug }}/{{ schedule.slug }}">{{ schedule.name|shorten(45) }}</a>{% if not loop.last %}, {% endif %}{% endfor %})
+                            ({% for schedule in row.schedules %}<i class="fa-regular fa-calendar-days"></i> <a href="/{{ row.event.slug }}/{{ schedule.slug }}">{{ schedule.name|shorten(45) }}</a>{% if not loop.last %}, {% endif %}{% endfor %})
                         </li>
                     {% endfor %}
                 </ul>

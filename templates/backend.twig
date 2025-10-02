@@ -4,7 +4,7 @@
 {% block styles %}
 {{ macros.csrf_token_meta() }}
 <link href="{{ macros.asset('styles/vendor-backend.css') }}" rel="stylesheet">
-<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ macros.asset('vendor/@fortawesome/fontawesome-free/css/fontawesome.min.css') }}"/>
 <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet">
 <link href="//cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2.min.css" rel="stylesheet">
 <link href="//cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2-bootstrap.min.css" rel="stylesheet">
@@ -20,6 +20,7 @@
 <script src="//cdn.jsdelivr.net/remarkable/1.6.0/remarkable.min.js"></script>
 <script src="{{ macros.asset('js/vendor-backend.js') }}"></script>
 <script src="{{ macros.asset('js/i18n/' ~ app.locale ~ '.js') }}"></script>
+<script src="{{ macros.asset('vendor/@fortawesome/fontawesome-free/js/all.min.js') }}"></script>
 <script src="{{ macros.asset('js/app-backend.js') }}"></script>
 <script src="{{ macros.asset('js/readableTimeJs.js') }}"></script>
 {% endblock %}

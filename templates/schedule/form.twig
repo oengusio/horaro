@@ -129,6 +129,25 @@
 						</div>
 					</div>
 
+					<div class="form-group{{ utils.formClass(form, 'bluesky') }}">
+						<label class="col-lg-3 control-label" for="bluesky">Bluesky Account:</label>
+						<div class="col-lg-9">
+							<div class="input-group">
+								<div class="input-group-addon">@</div>
+								<input
+                                    type="text"
+                                    class="form-control"
+                                    id="bluesky"
+                                    placeholder="pongathon.bsky.app"
+                                    name="{{ field_name(form.bluesky) }}"
+                                    value="{{ field_value(form.bluesky) }}"
+                                />
+							</div>
+							{{ form_errors(form.bluesky) }}
+							<span class="help-block">If you leave this empty, the event's account {% if event.bluesky %}(@{{ event.bluesky }}) {% endif %}will be used.</span>
+						</div>
+					</div>
+
 					<div class="form-group{{ utils.formClass(form, 'timezone') }}">
 						<label class="col-lg-3 control-label" for="timezone">Timezone:</label>
 						<div class="col-lg-9">

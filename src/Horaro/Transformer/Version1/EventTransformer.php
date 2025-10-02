@@ -26,6 +26,7 @@ class EventTransformer extends BaseTransformer
             'owner'       => $owner->getName(),
             'website'     => $event->getWebsite(),
             'twitter'     => $event->getTwitter(),
+            'bluesky'     => $event->getBluesky(),
             'twitch'      => $event->getTwitch(),
             'links'       => $links,
         ];

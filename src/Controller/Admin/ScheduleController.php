@@ -96,6 +96,7 @@ final class ScheduleController extends BaseController
             ->setWebsite($dto->getWebsite())
             ->setTwitter($dto->getTwitter())
             ->setTwitch($dto->getTwitch())
+            ->setBluesky($dto->getBluesky())
             ->setTheme($dto->getTheme())
             ->setSecret($dto->getSecret())
             ->setMaxItems($dto->getMaxItems())
