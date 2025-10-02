@@ -40,7 +40,7 @@ class CreateEventDto
 
     #[Assert\Length(max: 20)]
     #[Assert\Regex(pattern: '/^[a-zA-Z0-9_-]+$/')]
-    private ?string $secret = '';
+    private ?string $secret = null;
 
     public function getName(): string
     {
