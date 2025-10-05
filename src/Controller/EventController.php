@@ -45,6 +45,7 @@ final class EventController extends BaseController
                 ->setWebsite($createDto->getWebsite())
                 ->setTwitter($createDto->getTwitter())
                 ->setTwitch($createDto->getTwitch())
+                ->setBluesky($createDto->getBluesky())
                 ->setTheme($createDto->getTheme())
                 ->setSecret($createDto->getSecret())
                 ->setMaxSchedules($this->config->getByKey('max_schedules', 10)->getValue());
@@ -99,6 +100,7 @@ final class EventController extends BaseController
                 ->setWebsite($createDto->getWebsite())
                 ->setTwitter($createDto->getTwitter())
                 ->setTwitch($createDto->getTwitch())
+                ->setBluesky($createDto->getBluesky())
                 ->setTheme($createDto->getTheme())
                 ->setSecret($createDto->getSecret());
 

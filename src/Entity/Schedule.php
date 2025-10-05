@@ -48,6 +48,9 @@ class Schedule
     private ?string $twitch = null;
 
     #[ORM\Column(length: 255)]
+    private ?string $bluesky = null;
+
+    #[ORM\Column(length: 255)]
     private ?string $theme = null;
 
     #[ORM\Column(length: 255)]
@@ -153,7 +156,7 @@ class Schedule
         return $this->website;
     }
 
-    public function setWebsite(string $website): static
+    public function setWebsite(?string $website): static
     {
         $this->website = $website;
 
@@ -165,7 +168,7 @@ class Schedule
         return $this->twitter;
     }
 
-    public function setTwitter(string $twitter): static
+    public function setTwitter(?string $twitter): static
     {
         $this->twitter = $twitter;
 
@@ -177,9 +180,21 @@ class Schedule
         return $this->twitch;
     }
 
-    public function setTwitch(string $twitch): static
+    public function setTwitch(?string $twitch): static
     {
         $this->twitch = $twitch;
+
+        return $this;
+    }
+
+    public function getBluesky(): ?string
+    {
+        return $this->bluesky;
+    }
+
+    public function setBluesky(?string $bluesky): static
+    {
+        $this->bluesky = $bluesky;
 
         return $this;
     }
@@ -201,7 +216,7 @@ class Schedule
         return $this->secret;
     }
 
-    public function setSecret(string $secret): static
+    public function setSecret(?string $secret): static
     {
         $this->secret = $secret;
 
@@ -213,7 +228,7 @@ class Schedule
         return $this->hidden_secret;
     }
 
-    public function setHiddenSecret(string $hidden_secret): static
+    public function setHiddenSecret(?string $hidden_secret): static
     {
         $this->hidden_secret = $hidden_secret;
 
@@ -225,7 +240,7 @@ class Schedule
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
 
@@ -249,7 +264,7 @@ class Schedule
         return $this->max_items;
     }
 
-    public function setMaxItems(int $max_items): static
+    public function setMaxItems(?int $max_items): static
     {
         $this->max_items = $max_items;
 
@@ -261,7 +276,7 @@ class Schedule
         return $this->updated_at;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updated_at): static
+    public function setUpdatedAt(?\DateTimeInterface $updated_at): static
     {
         $this->updated_at = $updated_at;
 

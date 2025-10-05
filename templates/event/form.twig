@@ -127,6 +127,24 @@
                             </div>
                         </div>
 
+                        <div class="form-group{{ utils.formClass(form, 'bluesky') }}">
+                            <label class="col-lg-3 control-label" for="bluesky">BlueSky Account:</label>
+                            <div class="col-lg-9">
+                                <div class="input-group">
+                                    <div class="input-group-addon">@</div>
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="bluesky"
+                                        placeholder="pongathon.bluesky.social"
+                                        name="{{ field_name(form.bluesky) }}"
+                                        value="{{ field_value(form.bluesky) }}"
+                                    />
+                                </div>
+                                {{ form_errors(form.bluesky ) }}
+                            </div>
+                        </div>
+
                         <div class="form-group{{ utils.formClass(form, 'theme') }}">
                             <label class="col-lg-3 control-label" for="theme">Theme:</label>
                             <div class="col-lg-9">

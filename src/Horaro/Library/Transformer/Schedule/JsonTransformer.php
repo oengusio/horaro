@@ -67,6 +67,7 @@ class JsonTransformer extends BaseTransformer
                 'website'     => $schedule->getWebsite() ?: $event->getWebsite(),
                 'twitter'     => $schedule->getTwitter() ?: $event->getTwitter(),
                 'twitch'      => $schedule->getTwitch() ?: $event->getTwitch(),
+                'bluesky'     => $schedule->getBluesky() ?: $event->getBluesky(),
                 'description' => $schedule->getDescription(),
                 'setup'       => $schedule->getSetupTimeISODuration(),
                 'setup_t'     => $schedule->getSetupTimeInSeconds(),

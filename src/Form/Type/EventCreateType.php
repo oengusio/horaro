@@ -19,6 +19,7 @@ class EventCreateType extends AbstractType
             ->add('slug', TextType::class)
             ->add('website', UrlType::class)
             ->add('twitter', TextType::class)
+            ->add('bluesky', TextType::class)
             ->add('twitch', TextType::class)
             ->add('theme', TextType::class)
             ->add('secret', TextType::class)

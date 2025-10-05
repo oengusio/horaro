@@ -21,7 +21,7 @@
                     <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                         <div class="well well-sm">
                             <h4><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}">
-                                    <span><i class="fa fa-calendar fa-3x"></i></span>
+                                    <span><i class="fa-regular fa-calendar-days fa-3x"></i></span>
                                     <span>{{ schedule.name|shorten(45) }}</span>
                                 </a></h4>
                         </div>
@@ -67,7 +67,7 @@
                         <dt>Website</dt>
                         <dd>
                             {% if event.websitehost %}
-                                <a href="{{ event.website }}" target="_blank"><i class="fa fa-globe"></i> {{ event.websitehost }}</a> <sup><small><i class="fa fa-external-link"></i></small></sup>
+                                <a href="{{ event.website }}" target="_blank"><i class="fa-solid fa-globe"></i> {{ event.websitehost }}</a> <sup><small><i class="fa-solid fa-external-link"></i></small></sup>
                             {% elseif event.website %}
                                 {{ event.website }}
                             {% else %}
@@ -77,14 +77,24 @@
                         <dt>Twitch Stream</dt>
                         <dd>
                             {% if event.twitch %}
-                                <a href="http://twitch.tv/{{ event.twitch }}" target="_blank"><i class="fa fa-twitch"></i> {{ event.twitch }}</a> <sup><small><i class="fa fa-external-link"></i></small></sup>
+                                <a href="https://twitch.tv/{{ event.twitch }}" target="_blank"><i class="fa-brands fa-twitch"></i> {{ event.twitch }}</a> <sup><small><i class="fa-solid fa-external-link"></i></small></sup>
                             {% else %}
                                 (none)
                             {% endif %}
+
+                        <dt>Bluesky Account</dt>
+                        <dd>
+                            {% if event.bluesky %}
+                                <a href="https://bsky.app/profile/{{ event.bluesky }}" target="_blank"><i class="fa-brands fa-bluesky"></i> {{ event.bluesky }}</a> <sup><small><i class="fa-solid fa-external-link"></i></small></sup>
+                            {% else %}
+                                (none)
+                            {% endif %}
+                        </dd>
+
                         <dt>Twitter Account</dt>
                         <dd>
                             {% if event.twitter %}
-                                <a href="http://twitter.com/{{ event.twitter }}" target="_blank"><i class="fa fa-twitter"></i> {{ event.twitter }}</a> <sup><small><i class="fa fa-external-link"></i></small></sup>
+                                <a href="https://twitter.com/{{ event.twitter }}" target="_blank"><i class="fa-brands fa-twitter"></i> {{ event.twitter }}</a> <sup><small><i class="fa-solid fa-external-link"></i></small></sup>
                             {% else %}
                                 (none)
                             {% endif %}
@@ -92,7 +102,7 @@
                     </dl>
 
                     <div class="text-center">
-                        <a href="/-/events/{{ event.id|obscurify('event') }}/delete" class="btn btn-warning btn-sm"><i class="fa fa-trash-o"></i> Delete Event</a>
+                        <a href="/-/events/{{ event.id|obscurify('event') }}/delete" class="btn btn-warning btn-sm"><i class="fa-solid fa-trash"></i> Delete Event</a>
                     </div>
                 </fieldset>
             </div>
