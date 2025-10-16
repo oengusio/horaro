@@ -1,0 +1,5 @@
+Canonical: https://horaro.net/.well-known/security.txt
+Contact: mailto:contact@oengus.io
+Encryption: https://github.com/duncte123.gpg
+Expires: 2099-12-31T12:00:00Z
+Preferred-Languages: en
