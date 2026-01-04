@@ -60,9 +60,8 @@ class CreateScheduleDto
     #[Assert\Regex(pattern: '/^[a-zA-Z0-9_-]+$/')]
     private ?string $hidden_secret = null;
 
-    #[Assert\NotNull]
     #[HoraroAssert\ReadableTime]
-    private string $setup_time = '';
+    private ?string $setup_time = null;
 
     private ?\DateTimeInterface $parsedSetupTime = null;
 
