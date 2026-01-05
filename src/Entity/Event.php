@@ -53,6 +53,7 @@ class Event
     /**
      * @var Collection<int, Schedule>
      */
+    #[ORM\OrderBy(['start' => 'ASC'])]
     #[ORM\OneToMany(targetEntity: Schedule::class, mappedBy: 'event', orphanRemoval: false)]
     private Collection $schedules;
 
