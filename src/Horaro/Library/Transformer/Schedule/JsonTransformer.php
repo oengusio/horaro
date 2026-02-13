@@ -13,7 +13,7 @@ class JsonTransformer extends BaseTransformer
     const DATE_FORMAT_TZ  = 'Y-m-d\TH:i:sP';
     const DATE_FORMAT_UTC = 'Y-m-d\TH:i:s\Z';
 
-    protected $hint = true;
+    protected bool $hint = true;
 
     public function getContentType(): string
     {

@@ -8,6 +8,13 @@ use App\Horaro\Library\ReadableTime;
 use App\Repository\ScheduleRepository;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
+use function array_keys;
+use function in_array;
+use function trim;
+use function mb_strlen;
+use function preg_match;
+use function date;
+
 class SchduleImportValidator
 {
     protected array $result = [];
@@ -173,7 +180,7 @@ class SchduleImportValidator
     public function validateTheme($theme, Event $event, Schedule $ref = null, $throwUp = false) {
         $theme = trim($theme);
 
-        if (!in_array($theme, $this->themes, true)) {
+        if (!in_array($theme, array_keys($this->themes), true)) {
             $this->addError('theme', 'Your selected theme is invalid.', $throwUp);
 
             return $ref ? $ref->getTheme() : $event->getTheme();

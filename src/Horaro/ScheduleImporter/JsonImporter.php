@@ -7,6 +7,17 @@ use App\Entity\ScheduleColumn;
 use App\Entity\ScheduleItem;
 use JsonSchema\Validator as JSONValidator;
 
+use function json_decode;
+use function file_get_contents;
+use function json_last_error;
+use function realpath;
+use function sprintf;
+use function implode;
+use function str_starts_with;
+use function in_array;
+use function array_last;
+use function json_encode;
+
 class JsonImporter extends BaseImporter
 {
     public function import(string $filePath, Schedule $schedule, bool $ignoreErrors, bool $updateMetadata): array
@@ -38,13 +49,24 @@ class JsonImporter extends BaseImporter
         // import columns
         $pos = 1;
         $columns = [];
+        $needsOptionsColumnAdded = isset($data->schedule->items[0]->options);
+
+        $hiddenColumns = $data->schedule->hidden_columns ?? [];
 
         foreach ($data->schedule->columns as $col) {
             if ($pos <= 10) {
+                if ($col === Schedule::OPTION_COLUMN_NAME) {
+                    $needsOptionsColumnAdded = false;
+                }
+
                 $column = new ScheduleColumn();
                 $column->setName($col)
                        ->setPosition($pos)
-                       ->setHidden($col === Schedule::OPTION_COLUMN_NAME);
+                       ->setHidden(
+                           $col === Schedule::OPTION_COLUMN_NAME ||
+                           str_starts_with($col, 'hidden:') ||
+                           in_array($col, $hiddenColumns)
+                       );
 
                 $columns[] = $column;
                 $this->log('ok', 'Imported column #'.$pos.', "'.$col.'"');
@@ -55,11 +77,23 @@ class JsonImporter extends BaseImporter
             $pos++;
         }
 
+        if ($needsOptionsColumnAdded) {
+            $column = new ScheduleColumn();
+            $column->setName(Schedule::OPTION_COLUMN_NAME)
+                   ->setPosition($pos)
+                   ->setHidden(true);
+
+            $columns[] = $column;
+            $this->log('ok', 'Created options column');
+        }
+
         // and now we finally read through the items and import them
         $pos = 1;
         $items = [];
         $tmpDate = new \DateTime('@0');
         $maxItems = $schedule->getMaxItems();
+        /** @var ScheduleColumn $optionsColumn */
+        $optionsColumn = array_last($columns);
 
         foreach ($data->schedule->items as $idx => $it) {
             $seconds = 0;
@@ -103,6 +137,10 @@ class JsonImporter extends BaseImporter
 
             // avoid the overhead of setExtra()'s json_encoding
             $item->tmpExtra = array_values($it->data);
+
+            if (isset($it->options)) {
+                $item->tmpExtra[$optionsColumn->getPosition() - 1] = json_encode($it->options);
+            }
 
             $items[] = $item;
             $this->log('ok', 'Imported row #'.($idx + 1).'.');

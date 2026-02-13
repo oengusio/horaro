@@ -8,6 +8,8 @@ use App\Entity\ScheduleItem;
 use League\Csv\Info;
 use League\Csv\Reader;
 
+use function str_starts_with;
+
 class CsvImporter extends BaseImporter
 {
     public function import(string $filePath, Schedule $schedule, bool $ignoreErrors, bool $updateMetadata): array
@@ -70,7 +72,10 @@ class CsvImporter extends BaseImporter
                 $column = new ScheduleColumn();
                 $column->setName(mb_substr($col, 0, 128))
                        ->setPosition($pos)
-                       ->setHidden($col === Schedule::OPTION_COLUMN_NAME);
+                       ->setHidden(
+                           $col === Schedule::OPTION_COLUMN_NAME ||
+                           str_starts_with($col, 'hidden:')
+                       );
 
                 $columns[] = $column;
                 $this->log('ok', 'Imported column #'.$pos.', "'.$col.'"');

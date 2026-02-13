@@ -261,7 +261,7 @@
 							<button name="{{ field_name(form.submit) }}" type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check"> </i> {% if schedule %}Update{% else %}Create{% endif %} Schedule</button>
 							{% if schedule %}
 							&ndash; or &ndash;
-							<a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/delete" class="btn btn-warning btn-sm"><i class="fa fa-trash-o"></i> Delete Schedule</a>
+							<a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/delete" class="btn btn-warning btn-sm"><i class="fa-solid fa-trash"></i> Delete Schedule</a>
 							{% endif %}
 						</div>
 					</div>

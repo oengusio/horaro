@@ -266,7 +266,7 @@ final class ScheduleController extends BaseController
 
         return new Response($data, 200, [
             'Content-Type' => $transformer->getContentType(),
-            'Content-Disposition' => 'filename="'.$filename.'"',
+            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
         ]);
     }
 

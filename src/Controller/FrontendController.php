@@ -100,7 +100,7 @@ final class FrontendController extends BaseController
         $headers = ['Content-Type' => $transformer->getContentType()];
 
         if ($request->query->get('named')) {
-            $headers['Content-Disposition'] = 'filename="'.$filename.'"';
+            $headers['Content-Disposition'] = 'attachment; filename="'.$filename.'"';
         }
 
         $response = new Response($data, 200, $headers);
