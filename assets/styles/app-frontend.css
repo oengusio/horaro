@@ -109,6 +109,19 @@ footer small span {
   background: rgba(175, 175, 175, 0.4)
 }
 
+.h-cal-cell.today {
+  background: rgba(255, 213, 15, 0.3);
+  position: relative;
+}
+
+.h-cal-cell.today::before {
+  content: '';
+  pointer-events: none;
+  position: absolute;
+  inset: -1px;
+  border: 1px solid #c2b27a;
+}
+
 .h-cal-cell.overflow {
   background: transparent
 }
