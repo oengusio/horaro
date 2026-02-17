@@ -480,6 +480,7 @@ final class IndexController extends BaseController
         $nextYear->modify('+1 year');
 
         $response = $this->render('index/calendar.twig', [
+            'today'     => date('Y-m-d'),
             'stacks'    => $stacks,
             'month'     => $month,
             'prevMonth' => $prevMonth,

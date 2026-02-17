@@ -1,3 +1,8 @@
+:root {
+  --calendar-bar-background-opacity: 0.8;
+  --calendar-bar-border-opacity: 0.8;
+}
+
 .nope {
   display: none
 }
@@ -50,6 +55,10 @@ footer small span {
   }
 }
 
+.h-calendar {
+  border-collapse: separate;
+}
+
 .h-calendar, .h-calendar-vertical {
   width: 100%
 }
@@ -60,13 +69,55 @@ footer small span {
   font-weight: normal
 }
 
+.h-calendar-vertical .h-day .schedule:not(:first-child) {
+  margin-top: 3px;
+}
+
+.h-calendar-vertical .h-day .schedule a {
+  padding: 0 3px;
+  border-width: 1px;
+  border-style: solid;
+  display: inline-block;
+}
+
+.h-calendar-vertical .text-muted {
+  color: #545454;
+}
+
 .h-cal-cell {
   height: 93px;
   width: 14.28571429%;
   border: 1px solid #aaaaaa;
   position: relative;
   vertical-align: top;
-  background: rgba(175, 175, 175, 0.2)
+  background: rgba(175, 175, 175, 0.2);
+  padding-bottom: 32px;
+  border-left-width: 0;
+  border-top-width: 0;
+}
+
+tbody tr:first-child .h-cal-cell {
+  border-top-width: 1px;
+}
+
+tbody .h-cal-cell:first-child {
+  border-left-width: 1px;
+}
+
+tbody tr:first-child .h-cal-cell:first-child {
+  border-top-left-radius: 6px;
+}
+
+tbody tr:first-child .h-cal-cell:last-child {
+  border-top-right-radius: 6px;
+}
+
+tbody tr:last-child .h-cal-cell:first-child {
+  border-bottom-left-radius: 6px;
+}
+
+tbody tr:last-child .h-cal-cell:last-child {
+  border-bottom-right-radius: 6px;
 }
 
 .h-cal-cell.height-4 {
@@ -107,6 +158,11 @@ footer small span {
 
 .h-cal-cell.weekend {
   background: rgba(175, 175, 175, 0.4)
+}
+
+.h-cal-cell.today {
+  background: rgba(255, 213, 15, 0.3);
+  position: relative;
 }
 
 .h-cal-cell.overflow {
@@ -160,8 +216,26 @@ footer small span {
   border-right-style: solid
 }
 
+/* Ensure the colored calendar bars overlap the table borders. */
+.h-cal-cell .bar.state-begin:not(.state-end) {
+  margin-right: -1px;
+}
+.h-cal-cell .bar.state-progress {
+  margin-right: -1px;
+}
+
+/* Draw the first item on top, so the text never goes behind a background. */
+.h-cal-cell .bar.state-begin {
+  z-index: 50;
+}
+
+.h-cal-cell .bar.state-begin .jail {
+  text-overflow: ellipsis;
+}
+
 .h-cal-cell .bar.state-end .jail {
-  overflow: hidden
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .h-cal-cell.sunday .jail {
@@ -169,43 +243,51 @@ footer small span {
 }
 
 .bar-theme-a {
-  background: rgba(26, 188, 156, 0.4);
-  border-color: rgba(26, 188, 156, 0.8)
+  /* Cyan */
+  background: rgba(126, 226, 212, var(--calendar-bar-background-opacity));
+  border-color: rgba(49, 159, 140, var(--calendar-bar-border-opacity));
 }
 
 .bar-theme-b {
-  background: rgba(52, 152, 219, 0.4);
-  border-color: rgba(52, 152, 219, 0.8)
+  /* Blue */
+  background: rgba(125, 197, 238, var(--calendar-bar-background-opacity));
+  border-color: rgba(79, 151, 179, var(--calendar-bar-border-opacity));
 }
 
 .bar-theme-c {
-  background: rgba(155, 89, 182, 0.4);
-  border-color: rgba(155, 89, 182, 0.8)
+  /* Magenta */
+  background: rgba(205, 159, 219, var(--calendar-bar-background-opacity));
+  border-color: rgba(151, 111, 166, var(--calendar-bar-border-opacity));
 }
 
 .bar-theme-d {
-  background: rgba(52, 73, 94, 0.4);
-  border-color: rgba(52, 73, 94, 0.8)
+  /* Denim */
+  background: rgba(145, 169, 188, var(--calendar-bar-background-opacity));
+  border-color: rgba(67, 85, 101, var(--calendar-bar-border-opacity));
 }
 
 .bar-theme-e {
-  background: rgba(241, 196, 15, 0.4);
-  border-color: rgba(241, 196, 15, 0.8)
+  /* Yellow */
+  background: rgba(250, 220, 78, var(--calendar-bar-background-opacity));
+  border-color: rgba(201, 166, 25, var(--calendar-bar-border-opacity));
 }
 
 .bar-theme-f {
-  background: rgba(230, 126, 34, 0.4);
-  border-color: rgba(230, 126, 34, 0.8)
+  /* Orange */
+  background: rgba(245, 176, 104, var(--calendar-bar-background-opacity));
+  border-color: rgba(182, 128, 61, var(--calendar-bar-border-opacity));
 }
 
 .bar-theme-g {
-  background: rgba(231, 76, 60, 0.4);
-  border-color: rgba(231, 76, 60, 0.8)
+  /* Red */
+  background: rgba(237, 135, 115, var(--calendar-bar-background-opacity));
+  border-color: rgba(178, 84, 79, var(--calendar-bar-border-opacity));
 }
 
 .bar-theme-h {
-  background: rgba(127, 140, 141, 0.4);
-  border-color: rgba(127, 140, 141, 0.8)
+  /* Light gray */
+  background: rgba(178, 187, 188, var(--calendar-bar-background-opacity));
+  border-color: rgba(137, 144, 145, var(--calendar-bar-border-opacity));
 }
 
 .h-day td {
