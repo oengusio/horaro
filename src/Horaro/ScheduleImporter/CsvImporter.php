@@ -15,7 +15,7 @@ class CsvImporter extends BaseImporter
     public function import(string $filePath, Schedule $schedule, bool $ignoreErrors, bool $updateMetadata): array
     {
         try {
-            $csv = Reader::createFromPath($filePath);
+            $csv = Reader::from($filePath);
         }
         catch (\Exception $e) {
             throw new \Exception('This file does not look like CSV at all.', null, $e);
@@ -165,12 +165,12 @@ class CsvImporter extends BaseImporter
             $item->tmpExtra = $extra;
 
             $items[] = $item;
-            $this->log('ok', 'Imported row #'.($rowIdx+1).'.');
+            $this->log('ok', 'Imported row #'.($rowIdx).'.');
 
             $pos++;
 
             if ($pos > $maxItems) {
-                $this->log('warn', 'Ignoring any further rows.');
+                $this->log('warn', 'Maximum allowed rows of '.$maxItems.' reached. Ignoring any further rows.');
                 break;
             }
         }
