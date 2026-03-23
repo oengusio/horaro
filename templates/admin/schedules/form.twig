@@ -85,6 +85,17 @@
 						</div>
 					</div>
 
+					<div class="form-group{{ utils.formClass(result, 'bluesky') }}">
+						<label class="col-lg-4 control-label" for="bluesky">Bluesky Account:</label>
+						<div class="col-lg-8">
+							<div class="input-group">
+								<div class="input-group-addon">@</div>
+								<input type="text" class="form-control" id="bluesky" name="bluesky" value="{{ utils.formValue(result, 'bluesky', schedule.bluesky) }}">
+							</div>
+							{{ macros.form_errors(result, 'bluesky') }}
+						</div>
+					</div>
+
 					<div class="form-group{{ utils.formClass(result, 'timezone') }}">
 						<label class="col-lg-4 control-label" for="timezone">Timezone:</label>
 						<div class="col-lg-8">
