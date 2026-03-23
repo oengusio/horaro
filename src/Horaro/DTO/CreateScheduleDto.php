@@ -14,7 +14,10 @@ class CreateScheduleDto
     private string $name = '';
 
     #[Assert\Length(min: 2)]
-    #[Assert\Regex(pattern: '/^[a-z0-9-]{2,}$/')]
+    #[Assert\Regex(
+        pattern: '/^[a-z0-9-]{2,}$/',
+        message: 'The slug can only contain lowercase letters, numbers and dashes',
+    )]
     #[Assert\Regex(
         pattern: '/^-+$/',
         message: 'The slug cannot be all dashes only.',
