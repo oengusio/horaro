@@ -148,7 +148,7 @@ class JsonImporter extends BaseImporter
             $pos++;
 
             if ($pos > $maxItems) {
-                $this->log('warn', 'Ignoring any further rows.');
+                $this->log('warn', 'Maximum allowed rows of '.$maxItems.' reached. Ignoring any further rows.');
                 break;
             }
         }

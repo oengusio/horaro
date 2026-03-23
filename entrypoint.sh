@@ -7,6 +7,8 @@ set -e
 
 # make sure mounted directories have proper permissions
 chown horaro:horaro tmp/upload tmp/session log
+# nginx runs has the horaro user
+chown -R horaro:horaro /var/lib/nginx/tmp/client_body
 
 # hand control over to supervisord
 exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
