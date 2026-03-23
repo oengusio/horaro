@@ -8,6 +8,7 @@ set -e
 # make sure mounted directories have proper permissions
 chown horaro:horaro tmp/upload tmp/session log
 # nginx runs has the horaro user
+mkdir -p /var/lib/nginx/tmp/client_body
 chown -R horaro:horaro /var/lib/nginx/tmp/client_body
 
 # hand control over to supervisord
