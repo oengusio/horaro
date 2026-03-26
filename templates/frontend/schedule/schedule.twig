@@ -6,6 +6,7 @@
 {% set numCols   = columns|length %}
 {% set fluid     = numCols > 4 %}
 {% set appendix  = key ? '?key=' ~ key : '' %}
+{# needsSeconds calls scheduledItems which uses the iterator #}
 {% set precision = schedule.needsSeconds ? 'seconds' : 'minutes' %}
 {% set dtformat  = precision == 'seconds' ? 'H:i:s' : 'H:i' %}
 

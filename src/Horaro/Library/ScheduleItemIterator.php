@@ -13,7 +13,7 @@ class ScheduleItemIterator implements \Iterator
     protected \DateTime $time;
     protected \DateInterval $setup;
     protected mixed $optionsCol;
-    protected ?ScheduleItem $current;
+    protected ?ScheduleItem $current = null;
     protected int $position;
 
     public function __construct(Schedule $schedule) {
@@ -67,6 +67,7 @@ class ScheduleItemIterator implements \Iterator
         $item = null;
 
         if ($this->valid()) {
+            /** @var ScheduleItem $item */
             $item = $this->items[$this->position];
             $item->setScheduled($this->time);
         }

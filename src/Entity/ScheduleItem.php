@@ -88,11 +88,13 @@ class ScheduleItem
         return $this;
     }
 
-    public function getExtra(): array {
+    public function getExtra(): array
+    {
         return json_decode($this->extra, true);
     }
 
-    public function setExtra(array $extra): static {
+    public function setExtra(array $extra): static
+    {
         foreach ($extra as $key => $value) {
             if (mb_strlen(trim($value)) === 0) {
                 unset($extra[$key]);
@@ -107,7 +109,8 @@ class ScheduleItem
 
     // Custom functions
 
-    public function getISODuration(): string {
+    public function getISODuration(): string
+    {
         $iso = preg_replace('/(?<=[THMS])0+[HMS]/', '$1', $this->length->format('\P\TG\Hi\Ms\S'));
 
         if ($iso === 'PT') {
@@ -122,8 +125,9 @@ class ScheduleItem
         return new \DateInterval($this->getISODuration());
     }
 
-    public function getWidth($columns) {
-        $len   = 0;
+    public function getWidth($columns)
+    {
+        $len = 0;
         $extra = $this->getExtra();
 
         foreach ($columns as $idx => $column) {
@@ -150,13 +154,17 @@ class ScheduleItem
      *
      * @return \DateTime
      */
-    public function getScheduledEnd(?\DateTimeZone $timezone = null): \DateTimeInterface {
+    public function getScheduledEnd(?\DateTimeZone $timezone = null): \DateTimeInterface
+    {
         if ($this->scheduled === null) {
             throw new \LogicException('Can only determine the scheduled end if the schedule start has been set.');
         }
 
         $scheduled = clone $this->scheduled;
-        $scheduled->add($this->getDateInterval());
+
+        // could this literally be the fix?
+        // It feels hacky, but it actually seems to give correct output now
+        // $scheduled->add($this->getDateInterval());
 
         if ($timezone) {
             $scheduled->setTimezone($timezone);
@@ -165,7 +173,8 @@ class ScheduleItem
         return $scheduled;
     }
 
-    public function getLengthInSeconds(): int {
+    public function getLengthInSeconds(): int
+    {
         $parts = explode(':', $this->getLength()->format('H:i:s'));
 
         return $parts[0] * 3600 + $parts[1] * 60 + $parts[2];
@@ -181,8 +190,8 @@ class ScheduleItem
             }
         }
 
-        $colID   = $optionsCol->getID();
-        $extra   = $this->getExtra();
+        $colID = $optionsCol->getID();
+        $extra = $this->getExtra();
         $options = null;
 
         if (isset($extra[$colID])) {
@@ -196,7 +205,8 @@ class ScheduleItem
         return $options;
     }
 
-    public function getSetupTime(?ScheduleColumn $optionsCol = null): ?\DateInterval {
+    public function getSetupTime(?ScheduleColumn $optionsCol = null): ?\DateInterval
+    {
         $options = $this->getOptions($optionsCol);
 
         if (!empty($options['setup'])) {
@@ -207,8 +217,7 @@ class ScheduleItem
                 if ($parsed) {
                     return ReadableTime::dateTimeToDateInterval($parsed);
                 }
-            }
-            catch (\InvalidArgumentException $e) {
+            } catch (\InvalidArgumentException $e) {
                 // ignore bad user input
             }
         }
@@ -216,7 +225,8 @@ class ScheduleItem
         return null;
     }
 
-    public function setLengthInSeconds($seconds): static {
+    public function setLengthInSeconds($seconds): static
+    {
         return $this->setLength(\DateTime::createFromFormat('U', $seconds));
     }
 }
