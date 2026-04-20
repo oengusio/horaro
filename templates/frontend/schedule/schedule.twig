@@ -1,4 +1,5 @@
 {% extends "frontend/layout.twig" %}
+{% import "macros.twig" as macros %}
 
 {% set theme     = schedule.theme %}
 {% set start     = schedule.localStart %}
@@ -26,7 +27,7 @@
 
 {% block styles %}
     <link href="{{ asset('styles/theme/theme-' ~ theme ~ '.min.css') }}" rel="stylesheet">
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ macros.asset('vendor/@fortawesome/fontawesome-free/css/fontawesome.min.css') }}"/>
     <link href="{{ asset('styles/app-frontend.css') }}" rel="stylesheet">
 {% endblock %}
 
