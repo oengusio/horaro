@@ -1,5 +1,6 @@
 twig:
     file_name_pattern: '*.twig'
+    strict_variables: true
     globals:
       utils: '@App\Twig\TwigUtils'
       rolemanager: '@App\Horaro\RoleManager'
