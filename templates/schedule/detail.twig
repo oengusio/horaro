@@ -16,24 +16,24 @@
 
 <div class="row h-scheduler-header">
 	<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-		<h2 class="h-jail"><a href="{{ schedule.link }}" target="_blank">{{ schedule.name|shorten(45) }}</a> <sup><small><i class="fa fa-external-link"></i></small></sup></h2>
+		<h2 class="h-jail"><a href="{{ schedule.link }}" target="_blank">{{ schedule.name|shorten(45) }}</a> <sup><small><i class="fa-solid fa-arrow-up-right-from-square"></i></small></sup></h2>
 	</div>
 
 	<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 		<div class="btn-group pull-right">
 			<button type="button" class="btn dropdown-toggle btn-sm" data-toggle="dropdown">
-				<i class="fa fa-cog"></i> Actions <span class="caret"></span>
+				<i class="fa-solid fa-gear"></i> Actions <span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu" role="menu">
 				<li><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/edit"><i class="fa-regular fa-calendar-days"></i> Edit schedule…</a></li>
-				<li><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/columns/edit"><i class="fa fa-columns"></i> Edit columns…</a></li>
+				<li><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/columns/edit"><i class="fa-solid fa-table-columns"></i> Edit columns…</a></li>
 				<li class="divider"></li>
-				<li><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/export?format=json"><i class="fa fa-save"></i> Export as JSON</a></li>
-				<li><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/export?format=xml"><i class="fa fa-save"></i> Export as XML</a></li>
-				<li><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/export?format=ical"><i class="fa fa-save"></i> Export as iCal</a></li>
-				<li><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/export?format=csv"><i class="fa fa-save"></i> Export as CSV</a></li>
+				<li><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/export?format=json"><i class="fa-solid fa-floppy-disk"></i> Export as JSON</a></li>
+				<li><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/export?format=xml"><i class="fa-solid fa-floppy-disk"></i> Export as XML</a></li>
+				<li><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/export?format=ical"><i class="fa-solid fa-floppy-disk"></i> Export as iCal</a></li>
+				<li><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/export?format=csv"><i class="fa-solid fa-floppy-disk"></i> Export as CSV</a></li>
 				<li class="divider"></li>
-				<li><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/import"><i class="fa fa-upload"></i> Import…</a></li>
+				<li><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/import"><i class="fa-solid fa-upload"></i> Import…</a></li>
 			</ul>
 		</div>
 	</div>
@@ -108,7 +108,7 @@
 	<!-- ko if: hasNewItem() || isFull() -->
 	<div class="row">
 		<div class="col-lg-2 col-lg-offset-5 col-md-2 col-md-offset-5 col-sm-4 col-sm-offset-4 col-xs-4 col-xs-offset-4 text-center">
-			<a href="#" id="h-add-model" class="btn btn-success btn-block btn-sm disabled"><i class="fa fa-plus fa-1x"></i> add row</a>
+			<a href="#" id="h-add-model" class="btn btn-success btn-block btn-sm disabled"><i class="fa-solid fa-plus"></i> add row</a>
 		</div>
 	</div>
 	<!-- /ko -->
@@ -116,7 +116,7 @@
 	<!-- ko if: !hasNewItem() && !isFull() -->
 	<div class="row">
 		<div class="col-lg-2 col-lg-offset-5 col-md-2 col-md-offset-5 col-sm-4 col-sm-offset-4 col-xs-4 col-xs-offset-4 text-center">
-			<a href="#" id="h-add-model" data-bind="click: add, activate: add" class="btn btn-success btn-block btn-sm"><i class="fa fa-plus fa-1x"></i> add row</a>
+			<a href="#" id="h-add-model" data-bind="click: add, activate: add" class="btn btn-success btn-block btn-sm"><i class="fa-solid fa-plus"></i> add row</a>
 		</div>
 	</div>
 	<!-- /ko -->

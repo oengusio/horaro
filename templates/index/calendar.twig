@@ -13,9 +13,9 @@
 		<nav class="h-calendar-nav text-center">{% apply spaceless %}
 			<span>
 				{% if prevMonth.format('Y') < minYear %}
-					<span class="btn btn-link btn-xs disabled"><i class="fa fa-ban"></i></span>
+					<span class="btn btn-link btn-xs disabled"><i class="fa-solid fa-ban"></i></span>
 				{% else %}
-					<a href="/-/calendar/{{ prevMonth.format('Y/m') }}" class="btn btn-link btn-xs"><i class="fa fa-backward"></i></a>
+					<a href="/-/calendar/{{ prevMonth.format('Y/m') }}" class="btn btn-link btn-xs"><i class="fa-solid fa-backward"></i></a>
 				{% endif %}
 
 				<select name="month" id="month" class="form-control">
@@ -26,17 +26,17 @@
 				</select>
 
 				{% if nextMonth.format('Y') > maxYear %}
-					<span class="btn btn-link btn-xs disabled"><i class="fa fa-ban"></i></span>
+					<span class="btn btn-link btn-xs disabled"><i class="fa-solid fa-ban"></i></span>
 				{% else %}
-					<a href="/-/calendar/{{ nextMonth.format('Y/m') }}" class="btn btn-link btn-xs"><i class="fa fa-forward"></i></a>
+					<a href="/-/calendar/{{ nextMonth.format('Y/m') }}" class="btn btn-link btn-xs"><i class="fa-solid fa-forward"></i></a>
 				{% endif %}
 			</span>
 
 			<span>
 				{% if prevYear.format('Y') < minYear %}
-					<span class="btn btn-link btn-xs disabled"><i class="fa fa-ban"></i></span>
+					<span class="btn btn-link btn-xs disabled"><i class="fa-solid fa-ban"></i></span>
 				{% else %}
-					<a href="/-/calendar/{{ prevYear.format('Y/m') }}" class="btn btn-link btn-xs"><i class="fa fa-backward"></i></a>
+					<a href="/-/calendar/{{ prevYear.format('Y/m') }}" class="btn btn-link btn-xs"><i class="fa-solid fa-backward"></i></a>
 				{% endif %}
 
 				<select name="month" id="month" class="form-control">
@@ -48,9 +48,9 @@
 				</select>
 
 				{% if nextYear.format('Y') > maxYear %}
-					<span class="btn btn-link btn-xs disabled"><i class="fa fa-ban"></i></span>
+					<span class="btn btn-link btn-xs disabled"><i class="fa-solid fa-ban"></i></span>
 				{% else %}
-					<a href="/-/calendar/{{ nextYear.format('Y/m') }}" class="btn btn-link btn-xs"><i class="fa fa-forward"></i></a>
+					<a href="/-/calendar/{{ nextYear.format('Y/m') }}" class="btn btn-link btn-xs"><i class="fa-solid fa-forward"></i></a>
 				{% endif %}
 			</span>
 		{% endapply %}</nav>
@@ -79,7 +79,7 @@
 											<div class="bar {% if bar.state == 'single' %}state-begin state-end{% else %}state-{{ bar.state }}{% endif %} bar-theme-{{ bar.color }}">
 												<div class="jail">{% apply spaceless %}
 													{% if bar.state in ['single', 'begin'] or bar.continued %}
-													<a href="{{ bar.url }}" title="{{ bar.title }}"><i class="fa fa-gamepad"></i> {{ bar.title|shorten(30) }}</a>
+													<a href="{{ bar.url }}" title="{{ bar.title }}"><i class="fa-solid fa-gamepad"></i> {{ bar.title|shorten(30) }}</a>
 													{% else %}
 													&nbsp;
 													{% endif %}
@@ -118,11 +118,11 @@
 									<li class="schedule">
 										<div class="h-jail">
 											{% if bar.state == 'begin' %}
-												<a href="{{ bar.url }}" title="{{ bar.title }}" class="bar-theme-{{ bar.color }}"><i class="fa fa-gamepad"></i> {{ bar.title|shorten(30) }}</a> <small class="text-muted">begins.</small>
+												<a href="{{ bar.url }}" title="{{ bar.title }}" class="bar-theme-{{ bar.color }}"><i class="fa-solid fa-gamepad"></i> {{ bar.title|shorten(30) }}</a> <small class="text-muted">begins.</small>
 											{% elseif bar.state == 'end' %}
-												<a href="{{ bar.url }}" title="{{ bar.title }}" class="bar-theme-{{ bar.color }}"><i class="fa fa-flag-checkered"></i> {{ bar.title|shorten(30) }}</a> <small class="text-muted">ends.</small>
+												<a href="{{ bar.url }}" title="{{ bar.title }}" class="bar-theme-{{ bar.color }}"><i class="fa-solid fa-flag-checkered"></i> {{ bar.title|shorten(30) }}</a> <small class="text-muted">ends.</small>
 											{% else %}
-												<a href="{{ bar.url }}" title="{{ bar.title }}" class="bar-theme-{{ bar.color }}"><i class="fa fa-gamepad"></i> {{ bar.title|shorten(30) }}</a>
+												<a href="{{ bar.url }}" title="{{ bar.title }}" class="bar-theme-{{ bar.color }}"><i class="fa-solid fa-gamepad"></i> {{ bar.title|shorten(30) }}</a>
 											{% endif %}
 										</div>
 									</li>

@@ -93,9 +93,9 @@
 					<label class="col-lg-4 control-label">Secret:</label>
 					<div class="col-lg-8">
 						{% if schedule.secret %}
-						<p class="form-control-static text-warning"><i class="fa fa-lock"></i> {{ schedule.secret }}</p>
+						<p class="form-control-static text-warning"><i class="fa-solid fa-lock"></i> {{ schedule.secret }}</p>
 						{% else %}
-						<p class="form-control-static text-success"><i class="fa fa-unlock-alt"></i> This schedule has no secret{% if event.secret %}, but the event has one{% endif %}.</p>
+						<p class="form-control-static text-success"><i class="fa-solid fa-unlock"></i> This schedule has no secret{% if event.secret %}, but the event has one{% endif %}.</p>
 						{% endif %}
 					</div>
 				</div>
@@ -110,7 +110,7 @@
 		</div>
 
 		<div class="alert alert-warning">
-			<i class="fa fa-info-circle"></i> You cannot edit this schedule. You need the blue key first.
+			<i class="fa-solid fa-circle-info"></i> You cannot edit this schedule. You need the blue key first.
 		</div>
 	</div>
 

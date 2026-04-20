@@ -110,14 +110,15 @@ class TwigUtils {
     public function roleIcon($role): string
     {
         $classes = [
-            'ROLE_OP'    => 'fa-android',
-            'ROLE_ADMIN' => 'fa-user-md',
+//            'ROLE_OP'    => 'fa-robot',
+            'ROLE_OP'    => 'fa-user-astronaut',
+            'ROLE_ADMIN' => 'fa-user-doctor',
             'ROLE_USER'  => 'fa-user',
             'ROLE_GHOST' => 'fa-ban'
         ];
         $cls = $classes[$role] ?? 'fa-question';
 
-        return sprintf('<i class="fa %s"></i>', $cls);
+        return sprintf('<i class="fa-solid %s"></i>', $cls);
     }
 
     public function roleClass($role): string

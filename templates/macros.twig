@@ -40,7 +40,7 @@
 {% endmacro %}
 
 {% macro back_button() %}
-<button class="h-back-btn btn btn-default btn-sm"><i class="fa fa-arrow-left"></i> Go Back</button>
+<button class="h-back-btn btn btn-default btn-sm"><i class="fa-solid fa-arrow-left"></i> Go Back</button>
 {% endmacro %}
 
 {% macro backend_date(date) %}
@@ -62,7 +62,7 @@
 	{% else %}
 	<span class="text-{{ event.secret ? 'warning' : 'success' }}">
 	{% endif %}
-	<i class="fa fa-{{ event.secret ? 'lock' : 'unlock' }}"></i> {{ event.name|shorten(40) }}
+	<i class="fa-solid fa-{{ event.secret ? 'lock' : 'unlock' }}"></i> {{ event.name|shorten(40) }}
 	{% if utils.userHasAdministrativeAccess(event) %}</a>{% endif %}
 {% endapply %}
 {% endmacro %}
@@ -74,7 +74,7 @@
 	{% else %}
 	<span class="text-{{ schedule.secret ? 'warning' : 'success' }}">
 	{% endif %}
-	<i class="fa fa-{{ schedule.secret ? 'lock' : 'unlock' }}"></i> {{ schedule.name|shorten(30) }}
+	<i class="fa-solid fa-{{ schedule.secret ? 'lock' : 'unlock' }}"></i> {{ schedule.name|shorten(30) }}
 	{% if utils.userHasAdministrativeAccess(schedule) %}</a>{% endif %}
 {% endapply %}
 {% endmacro %}

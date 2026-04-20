@@ -61,18 +61,18 @@
             </li>
         {% endif %}
         <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i> Tools <span
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa-solid fa-wrench"></i> Tools <span
                     class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li><a href="/{{ event.slug }}/{{ schedule.slug }}/ical-feed{{ appendix }}"><i
                             class="fa-regular fa-calendar-days"></i> iCal Feed</a></li>
                 <li class="divider"></li>
                 <li><a href="/{{ event.slug }}/{{ schedule.slug }}.json?named=true{{ key ? '&key=' ~ key : '' }}"><i
-                            class="fa fa-download"></i> Export as JSON</a></li>
+                            class="fa-solid fa-download"></i> Export as JSON</a></li>
                 <li><a href="/{{ event.slug }}/{{ schedule.slug }}.xml?named=true{{ key ? '&key=' ~ key : '' }}"><i
-                            class="fa fa-download"></i> Export as XML</a></li>
+                            class="fa-solid fa-download"></i> Export as XML</a></li>
                 <li><a href="/{{ event.slug }}/{{ schedule.slug }}.csv?named=true{{ key ? '&key=' ~ key : '' }}"><i
-                            class="fa fa-download"></i> Export as CSV</a></li>
+                            class="fa-solid fa-download"></i> Export as CSV</a></li>
             </ul>
         </li>
     </ul>
@@ -112,7 +112,7 @@
         <div class="row">
             <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-9 col-sm-offset-1 col-xs-12">
                 <div class="alert alert-info">
-                    <i class="fa fa-info-circle"></i> This schedule is currently empty. Check back later.
+                    <i class="fa-solid fa-circle-info"></i> This schedule is currently empty. Check back later.
                 </div>
             </div>
         </div>
@@ -204,8 +204,7 @@
         <div class="col-lg-4 col-lg-offset-2 col-md-4 col-md-offset-2 col-sm-5 col-sm-offset-1">
             <div class="panel panel-success h-current">
                 <div class="panel-heading">
-                    <h3 class="panel-title pull-right"><a href="#" class="h-jumper">jump to <i
-                                class="fa fa-angle-double-down"></i></a></h3>
+                    <h3 class="panel-title pull-right"><a href="#" class="h-jumper">jump to <i class="fa-solid fa-angles-down"></i></a></h3>
                     <h3 class="panel-title">Currently showing:</h3>
                 </div>
                 <div class="panel-body">&nbsp;</div>
@@ -228,7 +227,7 @@
     {% if numCols > 1 %}
         <script type="text/html" id="toggler">
             <div class="text-right h-l{{ schedule.getMaxItemWidth(columns) }}">
-                <button class="btn-link btn-xs btn-default h-co" id="h-toggle-usability"><i class="fa fa-table"></i>
+                <button class="btn-link btn-xs btn-default h-co" id="h-toggle-usability"><i class="fa-solid fa-table"></i>
                     Toggle full view
                 </button>
             </div>
@@ -236,9 +235,9 @@
 
         <script type="text/html" id="controls">
             <td class="h-co">
-                <button class="btn btn-link btn-xs" rel="more"><i class="fa fa-angle-double-down"></i> more</button>
-                <button class="btn btn-link btn-xs" rel="less"><i class="fa fa-angle-double-up"></i> less</button>
-                <button class="btn btn-link btn-xs" disabled><i class="fa fa-angle-double-down"></i> more</button>
+                <button class="btn btn-link btn-xs" rel="more"><i class="fa-solid fa-angles-down"></i> more</button>
+                <button class="btn btn-link btn-xs" rel="less"><i class="fa-solid fa-angles-up"></i> less</button>
+                <button class="btn btn-link btn-xs" disabled><i class="fa-solid fa-angles-down"></i> more</button>
             </td>
         </script>
 
