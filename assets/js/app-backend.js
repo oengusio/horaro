@@ -81,10 +81,10 @@ jQuery(function($) {
 	$.fn.editable.defaults.mode = 'popup';
 	$.fn.editableform.buttons =
 		'<button type="submit" class="btn btn-primary btn-xs editable-submit">'+
-			'<i class="fa fa-check"></i>'+
+			'<i class="fa-solid fa-check"></i>'+
 		'</button>'+
 		'<button type="button" class="btn btn-default btn-xs editable-cancel">'+
-			'<i class="fa fa-ban"></i>'+
+			'<i class="fa-solid fa-ban"></i>'+
 		'</button>';
 
 	// markdown helper for inline content
@@ -567,7 +567,7 @@ function mirrorColumnWidths(sourceTable, targets) {
 			// Turn links into glorified spans, as they won't work anyway because we have click listeners
 			// set up for X-Editable.
 			var m      = $('<div>' + markup + '</div>');
-			var suffix = ' <sup><i class="fa fa-external-link"></i></sup>';
+			var suffix = ' <sup><i class="fa-solid fa-arrow-up-right-from-square"></i></sup>';
 
 			m.find('a').each(function() {
 				var link   = $(this);

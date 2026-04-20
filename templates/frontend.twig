@@ -4,7 +4,6 @@
 {% block styles %}
 <link href="{{ asset('vendor/bootswatch/yeti/bootstrap.min.css') }}" rel="stylesheet">
 <link rel="stylesheet" href="{{ macros.asset('vendor/@fortawesome/fontawesome-free/css/fontawesome.min.css') }}"/>
-<link href="{{ asset('vendor/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
 <link href="{{ asset('styles/app-frontend.css') }}" rel="stylesheet">
 {% endblock %}
 
@@ -12,6 +11,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <script src="{{ macros.asset('js/vendor-frontend.js') }}"></script>
+{# TODO: find a way to get rid of fontawesome scripts, I don't like them and it should not be needed #}
 <script src="{{ macros.asset('vendor/@fortawesome/fontawesome-free/js/all.min.js') }}"></script>
 <script src="{{ macros.asset('js/app-frontend.js') }}"></script>
 {% endblock %}

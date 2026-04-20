@@ -72,9 +72,9 @@
 					<label class="col-lg-4 control-label">Secret:</label>
 					<div class="col-lg-8">
 						{% if event.secret %}
-						<p class="form-control-static text-warning"><i class="fa fa-lock"></i> {{ event.secret }}</p>
+						<p class="form-control-static text-warning"><i class="fa-solid fa-lock"></i> {{ event.secret }}</p>
 						{% else %}
-						<p class="form-control-static text-success"><i class="fa fa-unlock-alt"></i> None, this event is public.</p>
+						<p class="form-control-static text-success"><i class="fa-solid fa-unlock"></i> None, this event is public.</p>
 						{% endif %}
 					</div>
 				</div>
@@ -89,7 +89,7 @@
 		</div>
 
 		<div class="alert alert-warning">
-			<i class="fa fa-info-circle"></i> You cannot edit this event. You need the blue key first.
+			<i class="fa-solid fa-circle-info"></i> You cannot edit this event. You need the blue key first.
 		</div>
 	</div>
 
@@ -98,7 +98,7 @@
 
 		{% if numSchedules == 0 %}
 		<div class="alert alert-info">
-			<i class="fa fa-info-circle"></i> This event has no schedules yet.
+			<i class="fa-solid fa-circle-info"></i> This event has no schedules yet.
 		</div>
 		{% else %}
 		<ul class="row h-node-list">

@@ -19,34 +19,34 @@
 
 		{% if failed %}
 			<div class="alert alert-danger">
-				<i class="fa fa-exclamation-triangle"></i> {{ log.message|nl2br }}
+				<i class="fa-solid fa-triangle-exclamation"></i> {{ log.message|nl2br }}
 			</div>
 
 			<div class="text-center">{{ macros.back_button() }}</div>
 		{% else %}
 			{% if stopped %}
 				<div class="alert alert-warning">
-					<i class="fa fa-exclamation-triangle"></i> The importer found an error in <strong>{{ upload.clientOriginalName|shorten(50) }}</strong> and aborted the import.<br>
+					<i class="fa-solid fa-triangle-exclamation"></i> The importer found an error in <strong>{{ upload.clientOriginalName|shorten(50) }}</strong> and aborted the import.<br>
 					No changes have been applied to the schedule.
 				</div>
 
 				<div class="text-center">{{ macros.back_button() }}</div>
 			{% else %}
 				<div class="alert alert-success">
-					<i class="fa fa-info-circle"></i> The file <strong>{{ upload.clientOriginalName|shorten(50) }}</strong> has been imported successfully!
+					<i class="fa-solid fa-circle-info"></i> The file <strong>{{ upload.clientOriginalName|shorten(50) }}</strong> has been imported successfully!
 				</div>
 
 				{% if errors %}
 					<div class="alert alert-warning">
-						<i class="fa fa-exclamation-triangle"></i> There have been errors in your data, please see the log below for more information.
+						<i class="fa-solid fa-triangle-exclamation"></i> There have been errors in your data, please see the log below for more information.
 					</div>
 					<div class="text-center">
 						{{ macros.back_button() }} &ndash; or &ndash;
-						<a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}" class="btn btn-primary btn-sm"><i class="fa fa-arrow-right"></i> Go to Schedule</a>
+						<a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}" class="btn btn-primary btn-sm"><i class="fa-solid fa-arrow-right"></i> Go to Schedule</a>
 					</div>
 				{% else %}
 					<div class="text-center">
-						<a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}" class="btn btn-primary btn-sm"><i class="fa fa-arrow-right"></i> Go to Schedule</a>
+						<a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}" class="btn btn-primary btn-sm"><i class="fa-solid fa-arrow-right"></i> Go to Schedule</a>
 					</div>
 				{% endif %}
 			{% endif %}
@@ -55,7 +55,7 @@
 			<ul class="h-importlog">
 				{% for row in log %}
 				<li class="text-{{ row[0] == 'ok' ? 'success' : (row[0] == 'warn' ? 'warning' : 'danger') }}">
-					<i class="fa fa-{{ row[0] == 'ok' ? 'check' : (row[0] == 'warn' ? 'exclamation' : 'times') }}-circle"></i>
+					<i class="fa-solid fa-circle-{{ row[0] == 'ok' ? 'check' : (row[0] == 'warn' ? 'exclamation' : 'xmark') }}"></i>
 					{{ row[1] }}
 				</li>
 				{% endfor %}

@@ -258,7 +258,7 @@
 
 					<div class="form-group">
 						<div class="col-lg-12 text-center">
-							<button name="{{ field_name(form.submit) }}" type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check"> </i> {% if schedule %}Update{% else %}Create{% endif %} Schedule</button>
+							<button name="{{ field_name(form.submit) }}" type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-check"></i> {% if schedule %}Update{% else %}Create{% endif %} Schedule</button>
 							{% if schedule %}
 							&ndash; or &ndash;
 							<a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/delete" class="btn btn-warning btn-sm"><i class="fa-solid fa-trash"></i> Delete Schedule</a>
@@ -343,7 +343,7 @@
 
 					<div class="form-group">
 						<div class="col-lg-12 text-center">
-							<button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check"> </i> Update Description</button>
+							<button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-check"></i> Update Description</button>
 						</div>
 
                         {{ form_errors(descriptionForm) }}

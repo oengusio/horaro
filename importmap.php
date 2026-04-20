@@ -23,7 +23,7 @@ return [
         'version' => '3.2.2',
     ],
     '@hotwired/turbo' => [
-        'version' => '8.0.13',
+        'version' => '8.0.23',
     ],
     '@popperjs/core' => [
         'version' => '2.11.8',
@@ -32,15 +32,11 @@ return [
         'version' => '3.2.0',
         'type' => 'css',
     ],
-    'font-awesome/css/font-awesome.min.css' => [
-        'version' => '4.7.0',
-        'type' => 'css',
-    ],
     '@fortawesome/fontawesome-free/js/all.min.js' => [
-        'version' => '7.0.1',
+        'version' => '7.2.0',
     ],
     '@fortawesome/fontawesome-free/css/fontawesome.min.css' => [
-        'version' => '7.0.1',
+        'version' => '7.2.0',
         'type' => 'css',
     ],
 ];

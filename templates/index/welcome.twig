@@ -51,12 +51,12 @@
                         {% endfor %}
                     </ul>
                     <p class="text-center">
-                        <a href="/-/events/new" class="btn btn-sm btn-default"><i class="fa fa-plus"></i> Create New Event</a>
+                        <a href="/-/events/new" class="btn btn-sm btn-default"><i class="fa-solid fa-plus"></i> Create New Event</a>
                     </p>
                 {% else %}
                     <p>It seems like you have not created anything yet.</p>
                     <p class="text-center">
-                        <a href="/-/events/new" class="btn btn-primary"><i class="fa fa-gamepad"></i> Create Your First Event</a>
+                        <a href="/-/events/new" class="btn btn-primary"><i class="fa-solid fa-gamepad"></i> Create Your First Event</a>
                     </p>
                 {% endif %}
             {% else %}
@@ -71,7 +71,7 @@
                         <p><small><em>User registration is not available in this installation.</em></small></p>
                     {% else %}
                         {% if oauth_settings is empty %}
-                            <p><a href="/-/register" class="btn btn-primary btn-md" role="button"><i class="fa fa-user"></i> Create an Account</a>
+                            <p><a href="/-/register" class="btn btn-primary btn-md" role="button"><i class="fa-solid fa-user"></i> Create an Account</a>
                                 <small>or log-in with your existing account.</small></p>
                         {% else %}
                             <p class="h-small">
@@ -95,7 +95,7 @@
                 <ul class="h-eventlist">
                     {% for row in live %}
                         <li class="h-jail">
-                            <a href="/{{ row.event.slug }}" class="item"><i class="fa fa-gamepad"></i> {{ row.event.name|shorten(60) }}</a>
+                            <a href="/{{ row.event.slug }}" class="item"><i class="fa-solid fa-gamepad"></i> {{ row.event.name|shorten(60) }}</a>
                             ({% for schedule in row.schedules %}<i class="fa-regular fa-calendar-days"></i> <a href="/{{ row.event.slug }}/{{ schedule.slug }}">{{ schedule.name|shorten(45) }}</a>{% if not loop.last %}, {% endif %}{% endfor %})
                         </li>
                     {% endfor %}
@@ -109,7 +109,7 @@
                     {% for row in upcoming %}
                         <li class="h-jail">
                             {% set start = row.schedules[0].localStart %}
-                            <a href="/{{ row.event.slug }}" class="item"><i class="fa fa-gamepad"></i> {{ row.event.name|shorten(45) }}</a>
+                            <a href="/{{ row.event.slug }}" class="item"><i class="fa-solid fa-gamepad"></i> {{ row.event.name|shorten(45) }}</a>
                             <time datetime="{{ start.format('Y-m-d\\TH:i:sP') }}" title="{{ start.format('l, F d, Y \\a\\t H:i') }} ({{ row.schedules[0].timezone }} time)" class="h-relative h-fuzzy text-muted">on {{ start.format('l, F d, Y') }}</time>
                             ({% for schedule in row.schedules %}<i class="fa-regular fa-calendar-days"></i> <a href="/{{ row.event.slug }}/{{ schedule.slug }}">{{ schedule.name|shorten(45) }}</a>{% if not loop.last %}, {% endif %}{% endfor %})
                         </li>
@@ -126,7 +126,7 @@
             {% if featured|length > 0 %}
                 <ul class="h-eventlist">
                     {% for event in featured %}
-                        <li class="h-jail"><a href="/{{ event.slug }}" class="item"><i class="fa fa-gamepad"></i> {{ event.name|shorten(45) }}</a></li>
+                        <li class="h-jail"><a href="/{{ event.slug }}" class="item"><i class="fa-solid fa-gamepad"></i> {{ event.name|shorten(45) }}</a></li>
                     {% endfor %}
                 </ul>
             {% endif %}
