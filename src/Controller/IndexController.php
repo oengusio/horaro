@@ -110,12 +110,10 @@ final class IndexController extends BaseController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        $response = $this->render('index/login.twig', [
+        return $this->render('index/login.twig', [
             'error' => $error,
             'last_login' => $lastUsername,
         ]);
-
-        return $this->setCachingHeader($response, 'other');
     }
 
     #[Route('/-/register', name: 'app_register_form', methods: ['GET', 'POST'], priority: 1)]
@@ -169,9 +167,7 @@ final class IndexController extends BaseController
             return $this->redirectToRoute('app_home');
         }
 
-        $html = $this->render('index/register.twig', ['form' => $form, 'result' => null]);
-
-        return $this->setCachingHeader($html, 'other');
+        return $this->render('index/register.twig', ['form' => $form, 'result' => null]);
     }
 
     #[Route('/-/contact', name: 'app_contact', methods: ['GET'], priority: 1)]
