@@ -1,5 +1,9 @@
 twig:
     file_name_pattern: '*.twig'
+    globals:
+      utils: '@App\Twig\TwigUtils'
+      rolemanager: '@App\Horaro\RoleManager'
+      oauth_settings: '%oauth%'
 
 when@test:
     twig:
