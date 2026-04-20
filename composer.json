@@ -113,7 +113,7 @@
         "symfony/css-selector": "7.4.*",
         "symfony/debug-bundle": "7.4.*",
         "symfony/maker-bundle": "^1.65.1",
-        "symfony/phpunit-bridge": "^7.4.3",
+        "symfony/phpunit-bridge": "^8.0.8",
         "symfony/stopwatch": "7.4.*",
         "symfony/web-profiler-bundle": "7.4.*"
     }
