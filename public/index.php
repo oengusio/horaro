@@ -2,7 +2,8 @@
 
 use App\Kernel;
 
-// No clue how this file gets loaded more than once per request
+// Symfony re-loads this script via autoload_runtime and then runs the function this script returns
+// Hence root might be defined twice, thanks for the black magic Symfony xD
 if (!defined('HORARO_ROOT')) {
     define('HORARO_ROOT', dirname(__DIR__));
 }
