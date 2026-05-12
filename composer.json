@@ -18,7 +18,7 @@
         "justinrainbow/json-schema": "^6.4",
         "league/commonmark": "^2.8",
         "league/csv": "^9.28",
-        "league/fractal": "^0.20.2",
+        "league/fractal": "^0.21",
         "league/oauth2-client": "^2.9",
         "nelmio/cors-bundle": "^2.6",
         "phpdocumentor/reflection-docblock": "^5.6",
