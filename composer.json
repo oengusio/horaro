@@ -9,7 +9,7 @@
         "ext-iconv": "*",
         "ext-xml": "*",
         "ext-xmlwriter": "*",
-        "doctrine/dbal": "^3",
+        "doctrine/dbal": "^4",
         "doctrine/doctrine-bundle": "^2.14",
         "doctrine/doctrine-migrations-bundle": "^3.4",
         "doctrine/orm": "^3.3",
