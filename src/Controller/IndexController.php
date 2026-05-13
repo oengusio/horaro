@@ -93,9 +93,9 @@ final class IndexController extends BaseController
 
         $html = $this->render('index/welcome.twig', [
             'noRegister' => $this->exceedsMaxUsers(),
-            'live'       => array_slice($live, 0, 5),
-            'upcoming'   => array_slice($upcoming, 0, 5),
-            'featured'   => array_slice($featured, 0, 5),
+            'live'       => array_slice($live, 0, 10),
+            'upcoming'   => array_slice($upcoming, 0, 10),
+            'featured'   => array_slice($featured, 0, 10),
             'recent'     => $recent,
         ]);
 
