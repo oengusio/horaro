@@ -1,3 +1,10 @@
+
+> [!WARNING]  
+> You are currently on the LEGACY master branch. If you are making a PR please target the v2 branch instead.
+> This branch only exists for legacy reasons in case someone wants to see the old horaro code.
+
+
+
 horaro - Beautiful Schedules for the Web
 ========================================
 
