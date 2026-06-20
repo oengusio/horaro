@@ -34,7 +34,7 @@ final class CustomSlugRulesValidator extends ConstraintValidator
         }
 
         if (preg_match('/^-|-$/', $value)) {
-            $this->context->buildViolation('The s$entityName, $constraint->paramSuffix, $constraint->idNeedsDecodinglug cannot start or end with a dash.')
+            $this->context->buildViolation('The slug cannot start or end with a dash.')
                 ->addViolation();
 
             return;
