@@ -141,17 +141,4 @@ final class CustomSlugRulesValidator extends ConstraintValidator
             ->getRepository($constraint->entity)
             ->findOneBy(['id' => $decodedId]);*/
     }
-
-    private function fetchParentFromDb(\App\Entity\Event|\App\Entity\Schedule $existing, string $paramName): ?object
-    {
-        $casedName = ucfirst($paramName);
-        $getterName = "get{$casedName}";
-
-        if (method_exists($existing, $getterName)) {
-            return $existing->$getterName();
-        }
-
-
-        return null;
-    }
 }
