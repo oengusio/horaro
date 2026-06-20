@@ -37,7 +37,7 @@ jobs:
           push: true
           tags: |
             oengusio/horaro:latest
-            oengusio/horaro:${{ github.ref_name }}
+            oengusio/horaro:${{ github.ref }}
           cache-from: type=gha
           cache-to: type=gha
 
