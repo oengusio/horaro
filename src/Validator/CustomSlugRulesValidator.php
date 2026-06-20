@@ -13,13 +13,14 @@ use function in_array;
 use function strtolower;
 use function explode;
 use function count;
+use function ucfirst;
 
 final class CustomSlugRulesValidator extends ConstraintValidator
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly RequestStack $requestStack,
-        private readonly ObscurityCodecService $obscurityCodec,
+        private readonly RequestStack           $requestStack,
+        private readonly ObscurityCodecService  $obscurityCodec,
     )
     {
     }
@@ -33,16 +34,16 @@ final class CustomSlugRulesValidator extends ConstraintValidator
         }
 
         if (preg_match('/^-|-$/', $value)) {
-            $this->context->buildViolation('The slug cannot start or end with a dash.')
-                         ->addViolation();
+            $this->context->buildViolation('The s$entityName, $constraint->paramSuffix, $constraint->idNeedsDecodinglug cannot start or end with a dash.')
+                ->addViolation();
 
             return;
         }
 
         if (in_array($value, ['-', 'assets'], true)) {
             $this->context->buildViolation('The slug "{{ value }}" is reserved for internal usage.')
-                          ->setParameter('{{ value }}', $value)
-                         ->addViolation();
+                ->setParameter('{{ value }}', $value)
+                ->addViolation();
 
             return;
         }
@@ -55,26 +56,51 @@ final class CustomSlugRulesValidator extends ConstraintValidator
 
             if (!$ref || $existing->getId() !== $ref) {
                 $this->context->buildViolation('The slug "{{ value }}" is already in use, sorry.')
-                              ->setParameter('{{ value }}', $value)
-                              ->addViolation();
+                    ->setParameter('{{ value }}', $value)
+                    ->addViolation();
             }
         }
     }
 
-    private function lookupExistingInDb(CustomSlugRules $constraint, string $slug) {
+    private function lookupExistingInDb(CustomSlugRules $constraint, string $slug): ?object
+    {
         $searchParams = [
             'slug' => $slug,
         ];
 
         if ($constraint->parent) {
             $parentName = $this->parseParameterName($constraint->parent);
-            $parentId = $this->decodeItemId($parentName, $constraint->paramSuffix, $constraint->idNeedsDecoding);
+            $parentId = $this->decodeItemIdFromParameter(
+                $parentName,
+                $constraint->paramSuffix,
+                $constraint->idNeedsDecoding,
+            );
+
+            if (!$parentId) {
+                $entityId = $this->decodeConstraintItemId($constraint);
+
+                if ($entityId) {
+                    $entity = $this->entityManager->getRepository($constraint->entity)->find($entityId); // +1 db call
+
+                    if ($entity) {
+                        $getter = 'get'.ucfirst($parentName); // eg "getEvent"
+
+                        if (method_exists($entity, $getter) && $parent = $entity->$getter()) { // +1 db call
+                            $parentId = $parent->getId();
+                        }
+                    }
+                }
+            }
 
             if ($parentId) {
                 $searchParams[$parentName] = $parentId;
             }
         }
 
+        // This db call is the only one that should be required
+        // Could possibly restructure url to always include parent id (would be more restfull even though it's a UI)
+        // That would save the 2 database calls I had to introduce just now
+        // https://github.com/oengusio/horaro/issues/54
         return $this->entityManager
             ->getRepository($constraint->entity)
             ->findOneBy($searchParams);
@@ -89,13 +115,14 @@ final class CustomSlugRulesValidator extends ConstraintValidator
 
     private function decodeConstraintItemId(CustomSlugRules $constraint): ?int
     {
-        return $this->decodeItemId(
+        return $this->decodeItemIdFromParameter(
             $this->parseParameterName($constraint->entity),
             $constraint->paramSuffix, $constraint->idNeedsDecoding,
         );
     }
 
-    private function decodeItemId(string $paramName, string $suffix, bool $needsDecoding): ?int {
+    private function decodeItemIdFromParameter(string $paramName, string $suffix, bool $needsDecoding): ?int
+    {
         $requestArg = $paramName.$suffix;
         $paramId = $this->requestStack->getCurrentRequest()->attributes->get($requestArg);
 
@@ -113,5 +140,18 @@ final class CustomSlugRulesValidator extends ConstraintValidator
         /*return $this->entityManager
             ->getRepository($constraint->entity)
             ->findOneBy(['id' => $decodedId]);*/
+    }
+
+    private function fetchParentFromDb(\App\Entity\Event|\App\Entity\Schedule $existing, string $paramName): ?object
+    {
+        $casedName = ucfirst($paramName);
+        $getterName = "get{$casedName}";
+
+        if (method_exists($existing, $getterName)) {
+            return $existing->$getterName();
+        }
+
+
+        return null;
     }
 }
