@@ -1,5 +1,37 @@
 <?php
 
+$bootswatchThemes = [
+    'cerulean',
+    'cosmo',
+    'cyborg',
+    'darkly',
+    'flatly',
+    'journal',
+    'litera',
+    'lumen',
+    'lux',
+    'materia',
+    'minty',
+    'pulse',
+    'sandstone',
+    'simplex',
+    'sketchy',
+    'slate',
+    'solar',
+    'spacelab',
+    'superhero',
+    'united',
+    'yeti',
+];
+$themesResult = [];
+
+foreach ($bootswatchThemes as $theme) {
+    $themesResult["bootswatch/dist/$theme/bootstrap.min.css"] = [
+        'version' => '4.6.2',
+        'type' => 'css',
+    ];
+}
+
 /**
  * Returns the importmap for this application.
  *
@@ -28,10 +60,6 @@ return [
     '@popperjs/core' => [
         'version' => '2.11.8',
     ],
-    'bootswatch/yeti/bootstrap.min.css' => [
-        'version' => '3.2.0',
-        'type' => 'css',
-    ],
     '@fortawesome/fontawesome-free/js/all.min.js' => [
         'version' => '7.2.0',
     ],
@@ -39,4 +67,22 @@ return [
         'version' => '7.2.0',
         'type' => 'css',
     ],
+    'bootstrap' => [
+        'version' => '4.6.2',
+    ],
+    'jquery' => [
+        'version' => '3.6.0',
+    ],
+    'popper.js' => [
+        'version' => '1.16.1',
+    ],
+    'bootstrap/dist/css/bootstrap.min.css' => [
+        'version' => '4.6.2',
+        'type' => 'css',
+    ],
+    'bootswatch/dist/yeti/bootstrap.min.css' => [
+        'version' => '4.6.2',
+        'type' => 'css',
+    ],
+    ...$themesResult,
 ];

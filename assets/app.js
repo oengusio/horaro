@@ -1,4 +1,10 @@
-import './bootstrap.js';
+// import './bootstrap.js';
+import jQuery from 'jquery';
+
+// backwards compat for old code
+window.jQuery = jQuery;
+window.$ = jQuery;
+
 /*
  * Welcome to your app's main JavaScript file!
  *

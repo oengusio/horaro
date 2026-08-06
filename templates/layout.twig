@@ -31,17 +31,14 @@
 </head>
 <body{% block body_attr %} class="theme-horaro"{% endblock %}>
 	{% block navbar %}
-	<nav class="navbar navbar-default navbar-static-top" id="top" role="navigation">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark -fixed-top" id="top" role="navigation">
 		<div class="{{ fluid|default(false) ? 'container-fluid' : 'container' }}">
 			{% block navheader %}
 			<div class="navbar-header">
-				<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#h-collapse-nav">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				{% block brand %}<a href="/" class="navbar-brand">Horaro</a>{% endblock %}
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#h-collapse-nav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                {% block brand %}<a href="/" class="navbar-brand">Horaro</a>{% endblock %}
 			</div>
 			{% endblock %}
 
