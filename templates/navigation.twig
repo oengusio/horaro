@@ -33,10 +33,10 @@
 
 	<ul class="navbar-nav ml-auto">
 		<li class="nav-item">
-			<form method="post" action="/-/logout">
-				{{ macros.csrf_token() }}
-				<button type="submit" class="btn btn-link"><i class="fa-solid fa-power-off"></i> Log-out</button>
-			</form>
+            <form method="post" class="form-inline" action="/-/logout">
+                {{ macros.csrf_token() }}
+                <button type="submit" class="btn btn-link nav-link pt-2 pb-0"><i class="fa-solid fa-power-off"></i> Log-out</button>
+            </form>
 		</li>
 		<li class="nav-item">
 			<a href="/-/home" class="nav-link"><i class="fa-solid fa-house"></i> <span class="d-block d-sm-none">Regular Backend</span></a>
@@ -85,10 +85,10 @@
 			</a>
 		</li>
 		<li class="nav-item">
-			<form method="post" action="/-/logout">
-				{{ macros.csrf_token() }}
-				<button type="submit" class="btn btn-link"><i class="fa-solid fa-power-off"></i> Log-out</button>
-			</form>
+            <form method="post" class="form-inline" action="/-/logout">
+                {{ macros.csrf_token() }}
+                <button type="submit" class="btn btn-link nav-link pt-2 pb-0"><i class="fa-solid fa-power-off"></i> Log-out</button>
+            </form>
 		</li>
 		{% if utils.userIsAdmin() %}
 		<li class="nav-item">
