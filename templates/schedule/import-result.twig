@@ -6,12 +6,14 @@
 {% block title %}{{ schedule.name }} &ndash; {{ event.name }}{% endblock %}
 
 {% block content %}
-<ul class="breadcrumb h-jail">
-	<li><a href="/-/home">Home</a></li>
-	<li><a href="/-/events/{{ event.id|obscurify('event') }}">{{ event.name|shorten(45) }}</a></li>
-	<li><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}">{{ schedule.name|shorten(45) }}</a></li>
-	<li>Import…</li>
-</ul>
+<nav aria-label="breadcrumb">
+<ol class="breadcrumb h-jail">
+	<li class="breadcrumb-item"><a href="/-/home">Home</a></li>
+	<li class="breadcrumb-item"><a href="/-/events/{{ event.id|obscurify('event') }}">{{ event.name|shorten(45) }}</a></li>
+	<li class="breadcrumb-item"><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}">{{ schedule.name|shorten(45) }}</a></li>
+	<li class="breadcrumb-item active">Import…</li>
+</ol>
+</nav>
 
 <div class="row">
 	<div class="col-lg-12 col-md-12">

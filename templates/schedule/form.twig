@@ -4,16 +4,18 @@
 {% block title %}{% if schedule %}{{ schedule.name }}{% else %}New Schedule…{% endif %} &ndash; {{ event.name }}{% endblock %}
 
 {% block content %}
-<ul class="breadcrumb h-jail">
-	<li><a href="/-/home">Home</a></li>
-	<li><a href="/-/events/{{ event.id|obscurify('event') }}">{{ event.name|shorten(45) }}</a></li>
+<nav aria-label="breadcrumb">
+<ol class="breadcrumb h-jail">
+	<li class="breadcrumb-item"><a href="/-/home">Home</a></li>
+	<li class="breadcrumb-item"><a href="/-/events/{{ event.id|obscurify('event') }}">{{ event.name|shorten(45) }}</a></li>
 	{% if schedule %}
-	<li><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}">{{ schedule.name|shorten(45) }}</a></li>
-	<li>Update Schedule…</li>
+	<li class="breadcrumb-item"><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}">{{ schedule.name|shorten(45) }}</a></li>
+	<li class="breadcrumb-item active">Update Schedule…</li>
 	{% else %}
-	<li>New Schedule…</li>
+	<li class="breadcrumb-item active">New Schedule…</li>
 	{% endif %}
-</ul>
+</ol>
+</nav>
 
 <div class="row">
 	<div class="col-lg-12 col-md-12">
@@ -23,23 +25,23 @@
 
 <div class="row">
 	<div class="col-lg-6 col-md-6 col-sm-7">
-		<div class="well">
-            <form method="post" action="{% if schedule %}/-/schedules/{{ schedule.id|obscurify('schedule') }}/edit{% else %}/-/events/{{ event.id|obscurify('event') }}/schedules/new{% endif %}" class="form-horizontal">
+		<div class="card card-body">
+            <form method="post" action="{% if schedule %}/-/schedules/{{ schedule.id|obscurify('schedule') }}/edit{% else %}/-/events/{{ event.id|obscurify('event') }}/schedules/new{% endif %}">
             {% if schedule %}
                 <div><input type="hidden" id="_method" name="_method" value="PUT" /></div>
             {% endif %}
 				<fieldset>
 					<legend>Schedule Information</legend>
 
-					<div class="form-group">
-						<label class="col-lg-3 control-label" for="name">Belongs to:</label>
+					<div class="form-group row">
+						<label class="col-lg-3 col-form-label" for="name">Belongs to:</label>
 						<div class="col-lg-9">
-							<p class="form-control-static h-jail">{{ event.name }}</p>
+							<p class="form-control-plaintext h-jail">{{ event.name }}</p>
 						</div>
 					</div>
 
-					<div class="form-group{{ utils.formClass(form, 'name') }}">
-						<label class="col-lg-3 control-label" for="name">Name:</label>
+					<div class="form-group row{{ utils.formClass(form, 'name') }}">
+						<label class="col-lg-3 col-form-label" for="name">Name:</label>
 						<div class="col-lg-9">
 							<input
                                 type="text"
@@ -55,11 +57,11 @@
 						</div>
 					</div>
 
-					<div class="form-group{{ utils.formClass(form, 'slug') }}">
-						<label class="col-lg-3 control-label" for="slug">Slug:</label>
+					<div class="form-group row{{ utils.formClass(form, 'slug') }}">
+						<label class="col-lg-3 col-form-label" for="slug">Slug:</label>
 						<div class="col-lg-9">
 							<div class="input-group">
-								<div class="input-group-addon">/{{ event.slug }}/</div>
+								<div class="input-group-prepend"><span class="input-group-text">/{{ event.slug }}/</span></div>
 								<input
                                     type="text"
                                     class="form-control"
@@ -75,8 +77,8 @@
 						</div>
 					</div>
 
-					<div class="form-group{{ utils.formClass(form, 'website') }}">
-						<label class="col-lg-3 control-label" for="website">Website:</label>
+					<div class="form-group row{{ utils.formClass(form, 'website') }}">
+						<label class="col-lg-3 col-form-label" for="website">Website:</label>
 						<div class="col-lg-9">
 							<input
                                 type="text"
@@ -87,15 +89,15 @@
                                 value="{{ field_value(form.website) }}"
                             />
 							{{ form_errors(form.website) }}
-							<span class="help-block">If you leave this empty, the event's website {% if event.website %}({{ event.websitehost }}) {% endif %}will be used.</span>
+							<small class="form-text text-muted">If you leave this empty, the event's website {% if event.website %}({{ event.websitehost }}) {% endif %}will be used.</small>
 						</div>
 					</div>
 
-					<div class="form-group{{ utils.formClass(form, 'twitch') }}">
-						<label class="col-lg-3 control-label" for="twitch">Twitch Stream:</label>
+					<div class="form-group row{{ utils.formClass(form, 'twitch') }}">
+						<label class="col-lg-3 col-form-label" for="twitch">Twitch Stream:</label>
 						<div class="col-lg-9">
 							<div class="input-group">
-								<div class="input-group-addon">https://twitch.tv/</div>
+								<div class="input-group-prepend"><span class="input-group-text">https://twitch.tv/</span></div>
 								<input
                                     type="text"
                                     class="form-control"
@@ -106,15 +108,15 @@
                                 />
 							</div>
 							{{ form_errors(form.twitch) }}
-							<span class="help-block">If you leave this empty, the event's stream {% if event.twitch %}({{ event.twitch }}) {% endif %}will be used.</span>
+							<small class="form-text text-muted">If you leave this empty, the event's stream {% if event.twitch %}({{ event.twitch }}) {% endif %}will be used.</small>
 						</div>
 					</div>
 
-					<div class="form-group{{ utils.formClass(form, 'twitter') }}">
-						<label class="col-lg-3 control-label" for="twitter">Twitter Account:</label>
+					<div class="form-group row{{ utils.formClass(form, 'twitter') }}">
+						<label class="col-lg-3 col-form-label" for="twitter">Twitter Account:</label>
 						<div class="col-lg-9">
 							<div class="input-group">
-								<div class="input-group-addon">@</div>
+								<div class="input-group-prepend"><span class="input-group-text">@</span></div>
 								<input
                                     type="text"
                                     class="form-control"
@@ -125,15 +127,15 @@
                                 />
 							</div>
 							{{ form_errors(form.twitter) }}
-							<span class="help-block">If you leave this empty, the event's account {% if event.twitter %}(@{{ event.twitter }}) {% endif %}will be used.</span>
+							<small class="form-text text-muted">If you leave this empty, the event's account {% if event.twitter %}(@{{ event.twitter }}) {% endif %}will be used.</small>
 						</div>
 					</div>
 
-					<div class="form-group{{ utils.formClass(form, 'bluesky') }}">
-						<label class="col-lg-3 control-label" for="bluesky">Bluesky Account:</label>
+					<div class="form-group row{{ utils.formClass(form, 'bluesky') }}">
+						<label class="col-lg-3 col-form-label" for="bluesky">Bluesky Account:</label>
 						<div class="col-lg-9">
 							<div class="input-group">
-								<div class="input-group-addon">@</div>
+								<div class="input-group-prepend"><span class="input-group-text">@</span></div>
 								<input
                                     type="text"
                                     class="form-control"
@@ -144,12 +146,12 @@
                                 />
 							</div>
 							{{ form_errors(form.bluesky) }}
-							<span class="help-block">If you leave this empty, the event's account {% if event.bluesky %}(@{{ event.bluesky }}) {% endif %}will be used.</span>
+							<small class="form-text text-muted">If you leave this empty, the event's account {% if event.bluesky %}(@{{ event.bluesky }}) {% endif %}will be used.</small>
 						</div>
 					</div>
 
-					<div class="form-group{{ utils.formClass(form, 'timezone') }}">
-						<label class="col-lg-3 control-label" for="timezone">Timezone:</label>
+					<div class="form-group row{{ utils.formClass(form, 'timezone') }}">
+						<label class="col-lg-3 col-form-label" for="timezone">Timezone:</label>
 						<div class="col-lg-9">
 							{% set tz = schedule ? field_value(form.timezone) : 'UTC' %}
 							<select name="{{ field_name(form.timezone) }}" id="timezone" class="form-control h-fancy">
@@ -161,11 +163,11 @@
 						</div>
 					</div>
 
-					<div class="form-group{{ utils.formClass(form, 'start_date') }}{{ utils.formClass(form, 'start_time') }}">
-						<label class="col-lg-3 control-label" for="start_date">Start:</label>
+					<div class="form-group row{{ utils.formClass(form, 'start_date') }}{{ utils.formClass(form, 'start_time') }}">
+						<label class="col-lg-3 col-form-label" for="start_date">Start:</label>
 						<div class="col-lg-9">
 							<div class="row">
-  								<div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+  								<div class="col-lg-7 col-md-7 col-sm-7 col-7">
 									<input
                                         type="text"
                                         class="form-control"
@@ -177,7 +179,7 @@
                                     />
 								</div>
 
-  								<div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+  								<div class="col-lg-5 col-md-5 col-sm-5 col-5">
 									<input
                                         type="text"
                                         class="form-control"
@@ -194,8 +196,8 @@
 						</div>
 					</div>
 
-					<div class="form-group{{ utils.formClass(form, 'setup_time') }}">
-						<label class="col-lg-3 control-label" for="setup_time">Setup Time:</label>
+					<div class="form-group row{{ utils.formClass(form, 'setup_time') }}">
+						<label class="col-lg-3 col-form-label" for="setup_time">Setup Time:</label>
 						<div class="col-lg-9">
 							<input
                                 type="text"
@@ -206,15 +208,15 @@
                                 value="{{ field_value(form.setup_time) }}"
                             />
 							{{ form_errors(form.setup_time) }}
-							<span class="help-block">
+							<small class="form-text text-muted">
 								This time will be added automatically in between all items in the schedule.
 								Enter something like &quot;5min&quot; for 5 minutes or &quot;5m 30s&quot; for 5 minutes and 30 seconds.
-							</span>
+							</small>
 						</div>
 					</div>
 
-					<div class="form-group{{ utils.formClass(form, 'theme') }}">
-						<label class="col-lg-3 control-label" for="theme">Theme:</label>
+					<div class="form-group row{{ utils.formClass(form, 'theme') }}">
+						<label class="col-lg-3 col-form-label" for="theme">Theme:</label>
 						<div class="col-lg-9">
 							{% set t = schedule ? field_value(form.theme) : defaultTheme %}
 							<select name="{{ field_name(form.theme) }}" id="theme" class="form-control h-fancy">
@@ -226,8 +228,8 @@
 						</div>
 					</div>
 
-					<div class="form-group{{ utils.formClass(form, 'secret') }}">
-						<label class="col-lg-3 control-label" for="secret">Secret:</label>
+					<div class="form-group row{{ utils.formClass(form, 'secret') }}">
+						<label class="col-lg-3 col-form-label" for="secret">Secret:</label>
 						<div class="col-lg-9">
 							<input
                                 type="text"
@@ -241,8 +243,8 @@
 						</div>
 					</div>
 
-					<div class="form-group{{ utils.formClass(form, 'hidden_secret') }}">
-						<label class="col-lg-3 control-label" for="hidden_secret">Hidden Column Secret:</label>
+					<div class="form-group row{{ utils.formClass(form, 'hidden_secret') }}">
+						<label class="col-lg-3 col-form-label" for="hidden_secret">Hidden Column Secret:</label>
 						<div class="col-lg-9">
 							<input
                                 type="text"
@@ -256,7 +258,7 @@
 						</div>
 					</div>
 
-					<div class="form-group">
+					<div class="form-group row">
 						<div class="col-lg-12 text-center">
 							<button name="{{ field_name(form.submit) }}" type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-check"></i> {% if schedule %}Update{% else %}Create{% endif %} Schedule</button>
 							{% if schedule %}
@@ -274,7 +276,7 @@
 	</div>
 
 	<div class="col-lg-6 col-md-6 col-sm-5 h-formhelp">
-		<legend><span class="hidden-xs">Side</span><span class="hidden-lg hidden-md hidden-sm">Foot</span> Notes</legend>
+		<legend><span class="d-none d-sm-inline">Side</span><span class="d-sm-none">Foot</span> Notes</legend>
 		<p>The <strong>slug</strong> is used for the URLs to view the schedule and is appended to the
 		slug of the event (i.e. <code>/eventslug/scheduleslug</code>). Use something alphanumeric and short,
 		e.g. &quot;schedule&quot; if your event will only have one schedule. The slug has to be unique
@@ -309,18 +311,18 @@
 			embedding images: mobile users do not want to download a 5 MB .gif over 3G (actually,
 			pretty much nobody wants .gifs that large).</p>
 
-		<div class="well">
+		<div class="card card-body">
 			<form method="post" action="/-/schedules/{{ schedule.id|obscurify('schedule') }}/description">
 				<div><input type="hidden" id="_method" name="_method" value="PUT" /></div>
 				<fieldset>
-					<div class="form-group{{ utils.formClass(descriptionForm, 'description') }}">
+					<div class="form-group row{{ utils.formClass(descriptionForm, 'description') }}">
 						<textarea
                             class="form-control remarkable"
                             name="{{ field_name(descriptionForm.description) }}"
                             rows="10"
                         >{{ field_value(descriptionForm.description) }}</textarea>
 						{{ form_errors(descriptionForm.description) }}
-						<span class="help-block">
+						<small class="form-text text-muted">
 							The description uses
 							<a href="https://web.archive.org/web/20180328173148/https://packetlife.net/media/library/16/Markdown.pdf" target="_blank">Markdown</a><sup>(PDF)</sup>
 							for formatting:
@@ -328,20 +330,20 @@
 							<em>*italic*</em>,
 							[link target](https://example.com/),
 							![image description](https://example.com/image.png)
-						</span>
-						<span class="help-block">
+						</small>
+						<small class="form-text text-muted">
 							Preview of your description (<strong>Note:</strong> for security reasons, external images will not show up in this preview, but they will on
 							the public schedule page):
-						</span>
+						</small>
 					</div>
 
-					<div class="form-group">
-						<div class="panel panel-default remarkable-preview-panel">
-							<div class="panel-body remarkable-preview" id="description-preview" data-placeholder="{{ macros.asset('images/placeholder.jpg') }}"></div>
+					<div class="form-group row">
+						<div class="card remarkable-preview-panel">
+							<div class="card-body remarkable-preview" id="description-preview" data-placeholder="{{ macros.asset('images/placeholder.jpg') }}"></div>
 						</div>
 					</div>
 
-					<div class="form-group">
+					<div class="form-group row">
 						<div class="col-lg-12 text-center">
 							<button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-check"></i> Update Description</button>
 						</div>
@@ -364,7 +366,7 @@
 
 <div class="row">
 	{% for key,name in themes %}
-	<div class="col-lg-2 col-md-3 col-sm-3 col-xs-4 text-center">
+	<div class="col-lg-2 col-md-3 col-sm-3 col-4 text-center">
 		<img src="{{ macros.asset('images/themes/' ~ key ~ '-small.png') }}" alt="Example screenshot of the {{ name }} theme in action" class="img-thumbnail">
 		<h4>{{ name }}</h4>
 	</div>

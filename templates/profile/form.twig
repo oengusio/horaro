@@ -4,10 +4,10 @@
 {% block title %}Your Profile{% endblock %}
 
 {% block content %}
-<ul class="breadcrumb">
-	<li><a href="/-/home">Home</a></li>
-	<li>Update Profile…</li>
-</ul>
+<nav aria-label="breadcrumb"><ol class="breadcrumb">
+	<li class="breadcrumb-item"><a href="/-/home">Home</a></li>
+	<li class="breadcrumb-item active">Update Profile…</li>
+</ol></nav>
 
 <div class="row">
 	<div class="col-lg-12 col-md-12">
@@ -17,15 +17,15 @@
 
 <div class="row">
 	<div class="col-lg-6 col-md-6 col-sm-7">
-		<div class="well">
-			<form method="post" action="/-/profile" class="form-horizontal">
+		<div class="card card-body">
+			<form method="post" action="/-/profile">
 				<div><input type="hidden" id="_method" name="_method" value="PUT" /></div>
 
 				<fieldset>
 					<legend>Profile Information</legend>
 
-					<div class="form-group">
-						<label class="col-lg-4 control-label" for="display_name">Display Name:</label>
+					<div class="form-group row">
+						<label class="col-lg-4 col-form-label" for="display_name">Display Name:</label>
 						<div class="col-lg-8">
 							<input
                                 type="text"
@@ -36,13 +36,13 @@
                                 placeholder="Cowen Hames"
                                 value="{{ field_value(form.display_name) }}"
                             />
-							<span class="help-block">This is the name that will be shown within Horaro. Leave it empty to
-							just use your username. You can use whatever letters, numbers or symbols you want in here.</span>
+							<small class="form-text text-muted">This is the name that will be shown within Horaro. Leave it empty to
+							just use your username. You can use whatever letters, numbers or symbols you want in here.</small>
 						</div>
 					</div>
 
-					<div class="form-group{{ utils.formClass(form, 'language') }}">
-						<label class="col-lg-4 control-label" for="language">Language:</label>
+					<div class="form-group row{{ utils.formClass(form, 'language') }}">
+						<label class="col-lg-4 col-form-label" for="language">Language:</label>
 						<div class="col-lg-8">
 							{% set lng = field_value(form.language) %}
 							<select name="{{ field_name(form.language) }}" id="language" class="form-control h-fancy">
@@ -54,8 +54,8 @@
 						</div>
 					</div>
 
-					<div class="form-group{{ utils.formClass(form, 'gravatar') }}">
-						<label class="col-lg-4 control-label" for="gravatar">Gravatar Info:</label>
+					<div class="form-group row{{ utils.formClass(form, 'gravatar') }}">
+						<label class="col-lg-4 col-form-label" for="gravatar">Gravatar Info:</label>
 						<div class="col-lg-8">
 							<input
                                 type="text"
@@ -64,12 +64,12 @@
                                 name="{{ field_name(form.gravatar) }}"
                                 value="{{ field_value(form.gravatar) }}"
                             />
-							<span class="help-block">Enter your e-mail address or its MD5 hash to enable avatars within Horaro.</span>
+							<small class="form-text text-muted">Enter your e-mail address or its MD5 hash to enable avatars within Horaro.</small>
 							{{ form_errors(form.gravatar) }}
 						</div>
 					</div>
 
-					<div class="form-group">
+					<div class="form-group row">
 						<div class="col-lg-12 text-center">
 							<button type="submit" name="{{ field_name(form.submit) }}" class="btn btn-primary btn-sm"><i class="fa-solid fa-check"></i> Update</button>
 						</div>
@@ -83,7 +83,7 @@
 	</div>
 
 	<div class="col-lg-6 col-md-6 col-sm-5 h-formhelp">
-		<legend><span class="hidden-xs">Side</span><span class="hidden-lg hidden-md hidden-sm">Foot</span> Notes</legend>
+		<legend><span class="d-none d-sm-inline">Side</span><span class="d-sm-none">Foot</span> Notes</legend>
 		<p>To enable an Gravatar-based avatar for your account, enter your e-mail address in the Gravatar
 		field. If you don't want to enter it, you can also instead enter its MD5 hash.</p>
 		<p>Note that only the MD5 hash is stored anyway (even if you enter your e-mail address). So if
@@ -96,42 +96,42 @@
 {% if user.password %}
 <div class="row">
 	<div class="col-lg-6 col-md-6 col-sm-7">
-		<div class="well">
+		<div class="card card-body">
             {% if error is defined and error %}
                 <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
             {% endif %}
 
-			<form method="post" action="/-/profile/password" class="form-horizontal">
+			<form method="post" action="/-/profile/password">
 				<div><input type="hidden" id="_method" name="_method" value="PUT" /></div>
 
 				<fieldset>
 					<legend>Change Password</legend>
 
-					<div class="form-group{{ utils.formClass(passwordForm, 'current') }}">
-						<label class="col-lg-4 control-label" for="current">Current Password:</label>
+					<div class="form-group row{{ utils.formClass(passwordForm, 'current') }}">
+						<label class="col-lg-4 col-form-label" for="current">Current Password:</label>
 						<div class="col-lg-8">
 							<input type="password" class="form-control" id="current" name="{{ field_name(passwordForm.current) }}" required>
 							{{ form_errors(passwordForm.current) }}
 						</div>
 					</div>
 
-					<div class="form-group{{ utils.formClass(passwordForm, 'password') }}">
-						<label class="col-lg-4 control-label" for="password">New Password:</label>
+					<div class="form-group row{{ utils.formClass(passwordForm, 'password') }}">
+						<label class="col-lg-4 col-form-label" for="password">New Password:</label>
 						<div class="col-lg-8">
 							<input type="password" class="form-control" id="password" name="{{ field_name(passwordForm.password) }}" required>
 							{{ form_errors(passwordForm.password) }}
 						</div>
 					</div>
 
-					<div class="form-group{{ utils.formClass(passwordForm, 'password2') }}">
-						<label class="col-lg-4 control-label" for="password2">New Password again:</label>
+					<div class="form-group row{{ utils.formClass(passwordForm, 'password2') }}">
+						<label class="col-lg-4 col-form-label" for="password2">New Password again:</label>
 						<div class="col-lg-8">
 							<input type="password" class="form-control" id="password2" name="{{ field_name(passwordForm.password2) }}" required>
 							{{ form_errors(passwordForm.password2) }}
 						</div>
 					</div>
 
-					<div class="form-group">
+					<div class="form-group row">
 						<div class="col-lg-12 text-center">
 							<button type="submit" name="{{ field_name(passwordForm.submit) }}" class="btn btn-primary btn-sm"><i class="fa-solid fa-check"></i> Change Password</button>
 						</div>

@@ -4,12 +4,14 @@
 {% block body_attr %} class="theme-horaro" data-ui="columnist"{% endblock %}
 
 {% block content %}
-<ul class="breadcrumb h-jail">
-	<li><a href="/-/home">Home</a></li>
-	<li><a href="/-/events/{{ schedule.event.id|obscurify('event') }}">{{ schedule.event.name|shorten(45) }}</a></li>
-	<li><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}">{{ schedule.name|shorten(45) }}</a></li>
-	<li>Edit Columns…</li>
-</ul>
+<nav aria-label="breadcrumb">
+<ol class="breadcrumb h-jail">
+	<li class="breadcrumb-item"><a href="/-/home">Home</a></li>
+	<li class="breadcrumb-item"><a href="/-/events/{{ schedule.event.id|obscurify('event') }}">{{ schedule.event.name|shorten(45) }}</a></li>
+	<li class="breadcrumb-item"><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}">{{ schedule.name|shorten(45) }}</a></li>
+	<li class="breadcrumb-item active">Edit Columns…</li>
+</ol>
+</nav>
 
 <div class="row">
 	<div class="col-lg-12 col-md-12">
@@ -47,7 +49,7 @@
 
 		<!-- ko if: hasNewColumn() -->
 		<div class="row">
-			<div class="col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-4 col-xs-offset-4 text-center">
+			<div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-6 offset-sm-3 col-4 offset-4 text-center">
 				<a href="#" id="h-add-model" class="btn btn-success btn-block btn-sm disabled"><i class="fa-solid fa-plus"></i> add column</a>
 			</div>
 		</div>
@@ -55,7 +57,7 @@
 
 		<!-- ko if: !hasNewColumn() -->
 		<div class="row">
-			<div class="col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-6 col-xs-offset-3 text-center">
+			<div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-6 offset-sm-3 col-6 offset-3 text-center">
 				<a href="#" id="h-add-model" data-bind="click: add, activate: add" class="btn btn-success btn-block btn-sm"><i class="fa-solid fa-plus"></i> add column</a>
 			</div>
 		</div>

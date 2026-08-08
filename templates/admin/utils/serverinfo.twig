@@ -8,18 +8,18 @@
 {% if hasPhpinfo %}
 <iframe src="/-/admin/utils/serverinfo/phpinfo" seamless class="h-phpinfo"></iframe>
 {% else %}
-<div class="well form-horizontal">
-	<div class="form-group">
-		<label class="col-lg-4 control-label">PHP version:</label>
+<div class="card card-body">
+	<div class="form-group row">
+		<label class="col-lg-4 col-form-label">PHP version:</label>
 		<div class="col-lg-8">
-			<p class="form-control-static">{{ phpversion }}</p>
+			<p class="form-control-plaintext">{{ phpversion }}</p>
 		</div>
 	</div>
 
-	<div class="form-group">
-		<label class="col-lg-4 control-label">Root directory:</label>
+	<div class="form-group row">
+		<label class="col-lg-4 col-form-label">Root directory:</label>
 		<div class="col-lg-8">
-			<p class="form-control-static">{{ root }}</p>
+			<p class="form-control-plaintext">{{ root }}</p>
 		</div>
 	</div>
 </div>

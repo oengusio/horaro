@@ -4,12 +4,14 @@
 {% block title %}{{ schedule.name }} &ndash; {{ schedule.event.name }}{% endblock %}
 
 {% block content %}
-<ul class="breadcrumb h-jail">
-	<li><a href="/-/home">Home</a></li>
-	<li><a href="/-/events/{{ schedule.event.id|obscurify('event') }}">{{ schedule.event.name|shorten(45) }}</a></li>
-	<li><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}">{{ schedule.name|shorten(45) }}</a></li>
-	<li>Delete Schedule</li>
-</ul>
+<nav aria-label="breadcrumb">
+<ol class="breadcrumb h-jail">
+	<li class="breadcrumb-item"><a href="/-/home">Home</a></li>
+	<li class="breadcrumb-item"><a href="/-/events/{{ schedule.event.id|obscurify('event') }}">{{ schedule.event.name|shorten(45) }}</a></li>
+	<li class="breadcrumb-item"><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}">{{ schedule.name|shorten(45) }}</a></li>
+	<li class="breadcrumb-item active">Delete Schedule</li>
+</ol>
+</nav>
 
 <div class="row">
 	<div class="col-lg-12">
@@ -21,11 +23,11 @@
 </div>
 
 <div class="row">
-	<div class="col-lg-3 col-lg-offset-3 col-md-3 col-md-offset-3 col-sm-4 col-sm-offset-2 col-xs-6 text-right">
-		<a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}" class="btn btn-default btn-sm"><i class="fa-solid fa-rotate-left"></i> No thanks</a>
+	<div class="col-lg-3 offset-lg-3 col-md-3 offset-md-3 col-sm-4 offset-sm-2 col-6 text-right">
+		<a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}" class="btn btn-secondary btn-sm"><i class="fa-solid fa-rotate-left"></i> No thanks</a>
 	</div>
 
-	<div class="col-lg-3 col-md-3 col-sm-4 col-xs-6">
+	<div class="col-lg-3 col-md-3 col-sm-4 col-6">
 		<form method="post" action="/-/schedules/{{ schedule.id|obscurify('schedule') }}">
 			<div>
 				{{ macros.csrf_token() }}

@@ -31,18 +31,13 @@
 </head>
 <body{% block body_attr %} class="theme-horaro"{% endblock %}>
 	{% block navbar %}
-    <nav class="navbar navbar-default navbar-static-top" id="top" role="navigation">
+    <nav class="navbar navbar-light bg-light navbar-expand-md" id="top" role="navigation">
 		<div class="{{ fluid|default(false) ? 'container-fluid' : 'container' }}">
 			{% block navheader %}
-			<div class="navbar-header">
-                <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#h-collapse-nav">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#h-collapse-nav" aria-controls="h-collapse-nav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
                 </button>
                 {% block brand %}<a href="/" class="navbar-brand">Horaro</a>{% endblock %}
-			</div>
 			{% endblock %}
 
 			<div class="collapse navbar-collapse" id="h-collapse-nav">
@@ -58,13 +53,13 @@
 		{% block footer %}
 		<footer class="text-muted">
 			<div class="row">
-				<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+				<div class="col-lg-8 col-md-8 col-sm-8 col-8">
 					<small>
 						Horaro – <span>open source scheduling.</span> <span>Because we ♥ open data.</span><br>
 						<span><a href="/-/contact"><i class="fa-regular fa-envelope"></i> Contact</a></span> – <span><a href="https://github.com/oengusio/horaro" target="_blank"><i class="fa-brands fa-github"></i> GitHub</a></span> – <span><a href="/-/api"><i class="fa-solid fa-plug"></i> API</a></span> – <span><a href="/-/licenses"><i class="fa-solid fa-gavel"></i> Acknowledgments</a></span>
 					</small>
 				</div>
-				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-right">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-4 text-right">
 					<small>{{ utils.appVersion }}</small>
 				</div>
 			</div>

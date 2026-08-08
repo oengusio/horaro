@@ -12,58 +12,58 @@
 
 <div class="row">
 	<div class="col-lg-6 col-md-6 col-sm-7">
-		<div class="well form-horizontal">
+		<div class="card card-body">
 			<fieldset>
 				<legend>User Information <span class="text-muted">(ID {{ user.id|obscurify('user') }})</span></legend>
 
-				<div class="form-group">
-					<label class="col-lg-4 control-label" for="login">Username:</label>
+				<div class="form-group row">
+					<label class="col-lg-4 col-form-label" for="login">Username:</label>
 					<div class="col-lg-8">
-						<p class="form-control-static">{{ user.login }}</p>
+						<p class="form-control-plaintext">{{ user.login }}</p>
 					</div>
 				</div>
 
-				<div class="form-group">
-					<label class="col-lg-4 control-label" for="display_name">Display Name:</label>
+				<div class="form-group row">
+					<label class="col-lg-4 col-form-label" for="display_name">Display Name:</label>
 					<div class="col-lg-8">
-						<p class="form-control-static h-jail">{{ user.displayName|default('N/A') }}</p>
+						<p class="form-control-plaintext h-jail">{{ user.displayName|default('N/A') }}</p>
 					</div>
 				</div>
 
-				<div class="form-group">
-					<label class="col-lg-4 control-label" for="gravatar">Gravatar Info:</label>
+				<div class="form-group row">
+					<label class="col-lg-4 col-form-label" for="gravatar">Gravatar Info:</label>
 					<div class="col-lg-8">
-						<p class="form-control-static">{{ user.gravatarHash|default('N/A') }}</p>
+						<p class="form-control-plaintext">{{ user.gravatarHash|default('N/A') }}</p>
 					</div>
 				</div>
 
-				<div class="form-group">
-					<label class="col-lg-4 control-label" for="language">Language:</label>
+				<div class="form-group row">
+					<label class="col-lg-4 col-form-label" for="language">Language:</label>
 					<div class="col-lg-8">
-						<p class="form-control-static">{{ languages[user.language] }}</p>
+						<p class="form-control-plaintext">{{ languages[user.language] }}</p>
 					</div>
 				</div>
 
-				<div class="form-group">
-					<label class="col-lg-4 control-label" for="max_events">Max # of events:</label>
+				<div class="form-group row">
+					<label class="col-lg-4 col-form-label" for="max_events">Max # of events:</label>
 					<div class="col-lg-8">
-						<p class="form-control-static">{{ user.maxEvents }} ({{ user.events|length }} used)</p>
+						<p class="form-control-plaintext">{{ user.maxEvents }} ({{ user.events|length }} used)</p>
 					</div>
 				</div>
 
-				<div class="form-group">
-					<label class="col-lg-4 control-label">Registered at:</label>
+				<div class="form-group row">
+					<label class="col-lg-4 col-form-label">Registered at:</label>
 					<div class="col-lg-8">
-						<p class="form-control-static">{{ macros.backend_date(user.createdAt) }}</p>
+						<p class="form-control-plaintext">{{ macros.backend_date(user.createdAt) }}</p>
 					</div>
 				</div>
 
 				{% set roles = {ROLE_OP: 'Operator', ROLE_ADMIN: 'Administrator', ROLE_USER: 'Regular User', ROLE_GHOST: 'Ghost (disabled)'} %}
 
-				<div class="form-group">
-					<label class="col-lg-4 control-label">Role:</label>
+				<div class="form-group row">
+					<label class="col-lg-4 col-form-label">Role:</label>
 					<div class="col-lg-8">
-						<p class="form-control-static">{{ roles[user.role] }}</p>
+						<p class="form-control-plaintext">{{ roles[user.role] }}</p>
 					</div>
 				</div>
 			</fieldset>

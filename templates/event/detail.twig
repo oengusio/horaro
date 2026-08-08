@@ -3,10 +3,10 @@
 {% block title %}{{ event.name }}{% endblock %}
 
 {% block content %}
-    <ul class="breadcrumb h-jail">
-        <li><a href="/-/home">Home</a></li>
-        <li>{{ event.name|shorten(45) }}</li>
-    </ul>
+    <nav aria-label="breadcrumb"><ol class="breadcrumb h-jail">
+        <li class="breadcrumb-item"><a href="/-/home">Home</a></li>
+        <li class="breadcrumb-item active">{{ event.name|shorten(45) }}</li>
+    </ol></nav>
 
     <div class="row">
         <div class="col-lg-12 col-md-12">
@@ -18,8 +18,8 @@
         <div class="col-lg-8 col-md-7">
             <div class="row h-tiles">
                 {% for schedule in event.schedules %}
-                    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                        <div class="well well-sm">
+                    <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+                        <div class="card card-body">
                             <h4><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}">
                                     <span><i class="fa-regular fa-calendar-days fa-3x"></i></span>
                                     <span>{{ schedule.name|shorten(45) }}</span>
@@ -29,8 +29,8 @@
                 {% endfor %}
 
                 {% if not isFull %}
-                    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                        <div class="well well-sm h-adder">
+                    <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+                        <div class="card card-body h-adder">
                             <h4><a href="/-/events/{{ event.id|obscurify('event') }}/schedules/new" class="text-muted">
                                     <span><i class="fa-solid fa-plus fa-3x"></i></span>
                                     <span>New…</span>
@@ -49,9 +49,9 @@
         </div>
 
         <div class="col-lg-4 col-md-5">
-            <div class="well">
+            <div class="card card-body">
                 <fieldset>
-                    <legend>Event Information <a href="/-/events/{{ event.id|obscurify('event') }}/edit" class="btn btn-link btn-sm pull-right">Edit…</a></legend>
+                    <legend>Event Information <a href="/-/events/{{ event.id|obscurify('event') }}/edit" class="btn btn-link btn-sm float-right">Edit…</a></legend>
 
                     <dl class="h-indented">
                         <dt>Name</dt>

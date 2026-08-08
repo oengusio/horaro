@@ -10,15 +10,15 @@
 		<td data-bind="attr: { class: 'text-right h-controls ' + rowClass() }">
 			<!-- ko if: !deleting() -->
 			<!-- ko if: !fixed -->
-			<button data-bind="click: moveUp, activate: moveUp, attr: { class: 'btn move-up btn-xs' + (first() && ' disabled' || ' btn-default') }"><i class="fa-solid fa-user"></i></button>
-			<button data-bind="click: moveDown, activate: moveDown, attr: { class: 'btn move-down btn-xs' + (last() && ' disabled' || ' btn-default') }"><i class="fa-solid fa-arrow-down"></i></button>
+			<button data-bind="click: moveUp, activate: moveUp, attr: { class: 'btn move-up btn-sm' + (first() && ' disabled' || ' btn-secondary') }"><i class="fa-solid fa-user"></i></button>
+			<button data-bind="click: moveDown, activate: moveDown, attr: { class: 'btn move-down btn-sm' + (last() && ' disabled' || ' btn-secondary') }"><i class="fa-solid fa-arrow-down"></i></button>
 			<!-- /ko -->
-			<button data-bind="click: confirmDelete, activate: confirmDelete, attr: { class: 'btn btn-danger btn-xs' + deleteBtnClass() }"><i class="fa-solid fa-trash"></i></button>
+			<button data-bind="click: confirmDelete, activate: confirmDelete, attr: { class: 'btn btn-danger btn-sm' + deleteBtnClass() }"><i class="fa-solid fa-trash"></i></button>
 			<!-- /ko -->
 
 			<!-- ko if: deleting() -->
-			<button class="btn btn-danger btn-xs" data-bind="click: doDelete, activate: doDelete"><i class="fa-solid fa-trash"></i></button>
-			<button class="btn btn-default btn-xs" data-bind="click: cancelDelete, activate: cancelDelete"><i class="fa-solid fa-rotate-left"></i></button>
+			<button class="btn btn-danger btn-sm" data-bind="click: doDelete, activate: doDelete"><i class="fa-solid fa-trash"></i></button>
+			<button class="btn btn-secondary btn-sm" data-bind="click: cancelDelete, activate: cancelDelete"><i class="fa-solid fa-rotate-left"></i></button>
 			<!-- /ko -->
 		</td>
 	</tr>

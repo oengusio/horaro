@@ -104,7 +104,7 @@ class TwigUtils {
 
     public function formClass(?FormView $result = null, $key = ''): string
     {
-        return $result[$key]->vars['valid'] ?? true ? '' : ' has-error';
+        return $result[$key]->vars['valid'] ?? true ? '' : ' is-invalid';
     }
 
     public function roleIcon($role): string
@@ -127,7 +127,7 @@ class TwigUtils {
             'ROLE_OP'    => 'danger',
             'ROLE_ADMIN' => 'warning',
             'ROLE_USER'  => 'primary',
-            'ROLE_GHOST' => 'default'
+            'ROLE_GHOST' => 'secondary'
         ];
 
         return $classes[$role] ?? 'primary';
@@ -150,7 +150,7 @@ class TwigUtils {
         $key = strtolower(str_replace('ROLE_', '', $role));
 
         return sprintf(
-            '<span class="label h-role h-role-%s label-%s">%s %s</span>',
+            '<span class="badge h-role h-role-%s badge-%s">%s %s</span>',
             $key, $this->roleClass($role), $this->roleIcon($role), $this->roleName($role)
         );
     }

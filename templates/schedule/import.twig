@@ -6,12 +6,14 @@
 {% block title %}{{ schedule.name }} &ndash; {{ event.name }}{% endblock %}
 
 {% block content %}
-<ul class="breadcrumb h-jail">
-	<li><a href="/-/home">Home</a></li>
-	<li><a href="/-/events/{{ event.id|obscurify('event') }}">{{ event.name|shorten(45) }}</a></li>
-	<li><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}">{{ schedule.name|shorten(45) }}</a></li>
-	<li>Import…</li>
-</ul>
+<nav aria-label="breadcrumb">
+<ol class="breadcrumb h-jail">
+	<li class="breadcrumb-item"><a href="/-/home">Home</a></li>
+	<li class="breadcrumb-item"><a href="/-/events/{{ event.id|obscurify('event') }}">{{ event.name|shorten(45) }}</a></li>
+	<li class="breadcrumb-item"><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}">{{ schedule.name|shorten(45) }}</a></li>
+	<li class="breadcrumb-item active">Import…</li>
+</ol>
+</nav>
 
 <div class="row">
 	<div class="col-lg-12 col-md-12">
@@ -21,32 +23,30 @@
 
 <div class="row">
 	<div class="col-lg-6 col-md-6 col-sm-7">
-		<div class="well">
-			<form method="post" action="/-/schedules/{{ schedule.id|obscurify('schedule') }}/import" class="form-horizontal" enctype="multipart/form-data">
+		<div class="card card-body">
+			<form method="post" action="/-/schedules/{{ schedule.id|obscurify('schedule') }}/import" enctype="multipart/form-data">
 				<fieldset>
 					<legend>File Selection</legend>
 					{{ macros.csrf_token() }}
 
-					<div class="form-group{{ utils.formClass(result, 'file') }}">
-						<label class="col-lg-3 control-label" for="file">Import File:</label>
+					<div class="form-group row{{ utils.formClass(result, 'file') }}">
+						<label class="col-lg-3 col-form-label" for="file">Import File:</label>
 						<div class="col-lg-9">
 							<input type="file" class="form-control" id="file" name="file" autofocus required>
 							{{ macros.form_errors(result, 'file') }}
-							<span class="help-block"><strong>JSON</strong> or <strong>CSV</strong>; maximum allowed file size is <strong>{{ max_size }} KiB</strong>.</span>
-							<div class="checkbox">
-								<label>
-									<input type="checkbox" name="metadata" value="1"> Update schedule metadata if possible.
-								</label>
+							<small class="form-text text-muted"><strong>JSON</strong> or <strong>CSV</strong>; maximum allowed file size is <strong>{{ max_size }} KiB</strong>.</small>
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" name="metadata" value="1">
+								<label class="form-check-label">Update schedule metadata if possible.</label>
 							</div>
-							<div class="checkbox">
-								<label>
-									<input type="checkbox" name="ignore" value="1"> Ignore broken rows and keep on importing.
-								</label>
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" name="ignore" value="1">
+								<label class="form-check-label">Ignore broken rows and keep on importing.</label>
 							</div>
 						</div>
 					</div>
 
-					<div class="form-group">
+					<div class="form-group row">
 						<div class="col-lg-12 text-center">
 							<button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-upload"></i> Start Import</button>
 						</div>
@@ -57,7 +57,7 @@
 	</div>
 
 	<div class="col-lg-6 col-md-6 col-sm-5 h-formhelp">
-		<legend><span class="hidden-xs">Side</span><span class="hidden-lg hidden-md hidden-sm">Foot</span> Notes</legend>
+		<legend><span class="d-none d-sm-inline">Side</span><span class="d-sm-none">Foot</span> Notes</legend>
 		<p>Importing a schedule means <strong>overwriting</strong> the current schedule rows with whatever you choose
 		to import, so all existing rows will be removed. This also modifies the schedule columns to match the import
 		data.</p>

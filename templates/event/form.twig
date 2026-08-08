@@ -4,15 +4,15 @@
 {% block title %}{% if event %}{{ event.name }}{% else %}New Event…{% endif %}{% endblock %}
 
 {% block content %}
-    <ul class="breadcrumb h-jail">
-        <li><a href="/-/home">Home</a></li>
+    <nav aria-label="breadcrumb"><ol class="breadcrumb h-jail">
+        <li class="breadcrumb-item"><a href="/-/home">Home</a></li>
         {% if event %}
-            <li><a href="/-/events/{{ event.id|obscurify('event') }}">{{ event.name|shorten(45) }}</a></li>
-            <li>Update Event…</li>
+            <li class="breadcrumb-item"><a href="/-/events/{{ event.id|obscurify('event') }}">{{ event.name|shorten(45) }}</a></li>
+            <li class="breadcrumb-item active">Update Event…</li>
         {% else %}
-            <li>New Event…</li>
+            <li class="breadcrumb-item active">New Event…</li>
         {% endif %}
-    </ul>
+    </ol></nav>
 
     <div class="row">
         <div class="col-lg-12 col-md-12">
@@ -22,7 +22,7 @@
 
     <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-7">
-            <div class="well">
+            <div class="card card-body">
                 {% set globalErrors = form_errors(form) %}
 
                 {% if globalErrors %}
@@ -32,7 +32,7 @@
                 {% endif %}
 
                 <form method="post" action="/-/events{% if event %}/{{ event.id|obscurify('event') }}/edit{% else %}/new{% endif %}"
-                      class="form-horizontal">
+                      >
                     {% if event %}
                         <div><input type="hidden" id="_method" name="_method" value="PUT"/></div>
                     {% else %}
@@ -41,8 +41,8 @@
                     <fieldset>
                         <legend>Event Information</legend>
 
-                        <div class="form-group{{ utils.formClass(form, 'name') }}">
-                            <label class="col-lg-3 control-label" for="name">Name:</label>
+                        <div class="form-group row{{ utils.formClass(form, 'name') }}">
+                            <label class="col-lg-3 col-form-label" for="name">Name:</label>
                             <div class="col-lg-9">
                                 <input
                                     name="{{ field_name(form.name) }}"
@@ -59,8 +59,8 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ utils.formClass(form, 'slug') }}">
-                            <label class="col-lg-3 control-label" for="slug">Slug:</label>
+                        <div class="form-group row{{ utils.formClass(form, 'slug') }}">
+                            <label class="col-lg-3 col-form-label" for="slug">Slug:</label>
                             <div class="col-lg-9">
                                 <input
                                     name="{{ field_name(form.slug) }}"
@@ -76,8 +76,8 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ utils.formClass(form, 'website') }}">
-                            <label class="col-lg-3 control-label" for="website">Website:</label>
+                        <div class="form-group row{{ utils.formClass(form, 'website') }}">
+                            <label class="col-lg-3 col-form-label" for="website">Website:</label>
                             <div class="col-lg-9">
                                 <input
                                     type="text"
@@ -91,11 +91,11 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ utils.formClass(form, 'twitch') }}">
-                            <label class="col-lg-3 control-label" for="twitch">Twitch Stream:</label>
+                        <div class="form-group row{{ utils.formClass(form, 'twitch') }}">
+                            <label class="col-lg-3 col-form-label" for="twitch">Twitch Stream:</label>
                             <div class="col-lg-9">
                                 <div class="input-group">
-                                    <div class="input-group-addon">https://twitch.tv/</div>
+                                    <div class="input-group-prepend"><span class="input-group-text">https://twitch.tv/</span></div>
                                     <input
                                         type="text"
                                         class="form-control"
@@ -109,11 +109,11 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ utils.formClass(form, 'twitter') }}">
-                            <label class="col-lg-3 control-label" for="twitter">Twitter Account:</label>
+                        <div class="form-group row{{ utils.formClass(form, 'twitter') }}">
+                            <label class="col-lg-3 col-form-label" for="twitter">Twitter Account:</label>
                             <div class="col-lg-9">
                                 <div class="input-group">
-                                    <div class="input-group-addon">@</div>
+                                    <div class="input-group-prepend"><span class="input-group-text">@</span></div>
                                     <input
                                         type="text"
                                         class="form-control"
@@ -127,11 +127,11 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ utils.formClass(form, 'bluesky') }}">
-                            <label class="col-lg-3 control-label" for="bluesky">BlueSky Account:</label>
+                        <div class="form-group row{{ utils.formClass(form, 'bluesky') }}">
+                            <label class="col-lg-3 col-form-label" for="bluesky">BlueSky Account:</label>
                             <div class="col-lg-9">
                                 <div class="input-group">
-                                    <div class="input-group-addon">@</div>
+                                    <div class="input-group-prepend"><span class="input-group-text">@</span></div>
                                     <input
                                         type="text"
                                         class="form-control"
@@ -145,8 +145,8 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ utils.formClass(form, 'theme') }}">
-                            <label class="col-lg-3 control-label" for="theme">Theme:</label>
+                        <div class="form-group row{{ utils.formClass(form, 'theme') }}">
+                            <label class="col-lg-3 col-form-label" for="theme">Theme:</label>
                             <div class="col-lg-9">
                                 {% set t = event ? field_value(form.theme) : defaultTheme %}
                                 <select name="{{ field_name(form.theme) }}" id="theme" class="form-control h-fancy">
@@ -158,8 +158,8 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ utils.formClass(form, 'secret') }}">
-                            <label class="col-lg-3 control-label" for="secret">Secret:</label>
+                        <div class="form-group row{{ utils.formClass(form, 'secret') }}">
+                            <label class="col-lg-3 col-form-label" for="secret">Secret:</label>
                             <div class="col-lg-9">
                                 <input
                                     type="text"
@@ -173,7 +173,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group row">
                             <div class="col-lg-12 text-center">
                                 <button
                                     type="submit"
@@ -192,7 +192,7 @@
         </div>
 
         <div class="col-lg-6 col-md-6 col-sm-5 h-formhelp">
-            <legend><span class="hidden-xs">Side</span><span class="hidden-lg hidden-md hidden-sm">Foot</span> Notes
+            <legend><span class="d-none d-sm-inline">Side</span><span class="d-sm-none">Foot</span> Notes
             </legend>
             <p>If your event is happening regularly (e.g. monthly), it's recommended that you create an
                event for each actual event (e.g. have &quot;Pong-a-thon 2013&quot; and &quot;Pong-a-thon
@@ -229,19 +229,19 @@
                    when embedding images: mobile users do not want to download a 5 MB .gif over 3G (actually,
                    pretty much nobody wants .gifs that large).</p>
 
-                <div class="well">
+                <div class="card card-body">
                     <form method="post" action="/-/events/{{ event.id|obscurify('event') }}/description">
                         <div><input type="hidden" id="_method" name="_method" value="PUT"/></div>
                         <fieldset>
 
-                            <div class="form-group{{ utils.formClass(descriptionForm, 'description') }}">
+                            <div class="form-group row{{ utils.formClass(descriptionForm, 'description') }}">
                                 <textarea
                                     class="form-control remarkable"
                                     rows="10"
                                     name="{{ field_name(descriptionForm.description) }}"
                                 >{{ field_value(descriptionForm.description) }}</textarea>
                                 {{ form_errors(descriptionForm.description) }}
-                                <span class="help-block">
+                                <small class="form-text text-muted">
 							The description uses
 							<a href="https://web.archive.org/web/20180328173148/https://packetlife.net/media/library/16/Markdown.pdf"
                                target="_blank">Markdown</a><sup>(PDF)</sup>
@@ -250,21 +250,21 @@
 							<em>*italic*</em>,
 							[link target](https://example.com/),
 							![image description](https://example.com/image.png)
-						</span>
-                                <span class="help-block">
+						</small>
+                                <small class="form-text text-muted">
 							Preview of your description (<strong>Note:</strong> for security reasons, external images will not show up in this preview, but they will on
 							the public event page):
-						</span>
+						</small>
                             </div>
 
-                            <div class="form-group">
-                                <div class="panel panel-default remarkable-preview-panel">
-                                    <div class="panel-body remarkable-preview" id="description-preview"
+                            <div class="form-group row">
+                                <div class="card remarkable-preview-panel">
+                                    <div class="card-body remarkable-preview" id="description-preview"
                                          data-placeholder="{{ macros.asset('images/placeholder.jpg') }}"></div>
                                 </div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group row">
                                 <div class="col-lg-12 text-center">
                                     <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-check"></i>
                                         Update Description
@@ -289,7 +289,7 @@
 
     <div class="row">
         {% for key,name in themes %}
-            <div class="col-lg-2 col-md-3 col-sm-3 col-xs-4 text-center">
+            <div class="col-lg-2 col-md-3 col-sm-3 col-4 text-center">
                 <img src="{{ macros.asset('images/themes/' ~ key ~ '-small.png') }}"
                      alt="Example screenshot of the {{ name }} theme in action" class="img-thumbnail">
                 <h4>{{ name }}</h4>

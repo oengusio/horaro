@@ -25,17 +25,17 @@
 		<td data-bind="attr: { class: 'h-co text-right ' + rowClass() }">
 			<!-- ko if: !deleting() -->
 			<span>
-				<button class="btn btn-link btn-xs" data-bind="click: toggle, activate: toggle, visible: !expanded()"><i class="fa-solid fa-angles-down"></i> more</button>
-				<button class="btn btn-link btn-xs" data-bind="click: toggle, activate: toggle, visible: expanded"><i class="fa-solid fa-angles-up"></i> less</button>
+				<button class="btn btn-link btn-sm" data-bind="click: toggle, activate: toggle, visible: !expanded()"><i class="fa-solid fa-angles-down"></i> more</button>
+				<button class="btn btn-link btn-sm" data-bind="click: toggle, activate: toggle, visible: expanded"><i class="fa-solid fa-angles-up"></i> less</button>
 			</span>
-			<button data-bind="click: moveUp, activate: moveUp, attr: { class: 'btn move-up btn-xs' + (first() && ' disabled' || ' btn-default') }"><i class="fa-solid fa-user"></i></button>
-			<button data-bind="click: moveDown, activate: moveDown, attr: { class: 'btn move-down btn-xs' + (last() && ' disabled' || ' btn-default') }"><i class="fa-solid fa-arrow-down"></i></button>
-			<button data-bind="click: confirmDelete, activate: confirmDelete, attr: { class: 'btn btn-danger btn-xs' + (id() === -1 && ' disabled' || '') }"><i class="fa-solid fa-trash"></i></button>
+			<button data-bind="click: moveUp, activate: moveUp, attr: { class: 'btn move-up btn-sm' + (first() && ' disabled' || ' btn-secondary') }"><i class="fa-solid fa-user"></i></button>
+			<button data-bind="click: moveDown, activate: moveDown, attr: { class: 'btn move-down btn-sm' + (last() && ' disabled' || ' btn-secondary') }"><i class="fa-solid fa-arrow-down"></i></button>
+			<button data-bind="click: confirmDelete, activate: confirmDelete, attr: { class: 'btn btn-danger btn-sm' + (id() === -1 && ' disabled' || '') }"><i class="fa-solid fa-trash"></i></button>
 			<!-- /ko -->
 
 			<!-- ko if: deleting() -->
-			<button class="btn btn-danger btn-xs" data-bind="click: doDelete, activate: doDelete"><i class="fa-solid fa-trash"></i></button>
-			<button class="btn btn-default btn-xs" data-bind="click: cancelDelete, activate: cancelDelete"><i class="fa-solid fa-rotate-left"></i></button>
+			<button class="btn btn-danger btn-sm" data-bind="click: doDelete, activate: doDelete"><i class="fa-solid fa-trash"></i></button>
+			<button class="btn btn-secondary btn-sm" data-bind="click: cancelDelete, activate: cancelDelete"><i class="fa-solid fa-rotate-left"></i></button>
 			<!-- /ko -->
 		</td>
 	</tr>
@@ -43,7 +43,7 @@
 	<!-- ko if: expanded -->
 	<tr class="h-secondary">
 		<td colspan="{{ numCols + 3 }}">
-			<dl class="dl-horizontal">
+			<dl class="row">
 				{% for idx,column in columns.slice(1) %}
 				<dt class="h-e-{{ idx }}">{{ column.name }}:</dt>
 				<dd class="h-e-{{ idx }}"><a href="#" data-bind="editable: col_{{ column.id|obscurify('schedule.column') }}, editableOptions: { hidden: onEditableHidden, display: getDisplayText }"></a></dd>
