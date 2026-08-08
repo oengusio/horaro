@@ -45,27 +45,26 @@
         {% elseif schedules|length != 0 %}
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"><i class="fa-regular fa-calendar-days"></i> Schedules</a>
-                <ul class="dropdown-menu">
+                <div class="dropdown-menu">
                     {% for sched in schedules %}
-                        <li><a href="/{{ event.slug }}/{{ sched.slug ~ appendix }}" class="dropdown-item h-jail">{{ sched.name }}</a>
-                        </li>
+                        <a href="/{{ event.slug }}/{{ sched.slug ~ appendix }}" class="dropdown-item h-jail">{{ sched.name }}</a>
                     {% endfor %}
-                </ul>
+                </div>
             </li>
         {% endif %}
         <li class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"><i class="fa-solid fa-wrench"></i> Tools</a>
-            <ul class="dropdown-menu">
-                <li><a href="/{{ event.slug }}/{{ schedule.slug }}/ical-feed{{ appendix }}" class="dropdown-item"><i
-                            class="fa-regular fa-calendar-days"></i> iCal Feed</a></li>
+            <div class="dropdown-menu">
+                <a href="/{{ event.slug }}/{{ schedule.slug }}/ical-feed{{ appendix }}" class="dropdown-item"><i
+                            class="fa-regular fa-calendar-days"></i> iCal Feed</a>
                 <div class="dropdown-divider"></div>
-                <li><a href="/{{ event.slug }}/{{ schedule.slug }}.json?named=true{{ key ? '&key=' ~ key : '' }}" class="dropdown-item"><i
-                            class="fa-solid fa-download"></i> Export as JSON</a></li>
-                <li><a href="/{{ event.slug }}/{{ schedule.slug }}.xml?named=true{{ key ? '&key=' ~ key : '' }}" class="dropdown-item"><i
-                            class="fa-solid fa-download"></i> Export as XML</a></li>
-                <li><a href="/{{ event.slug }}/{{ schedule.slug }}.csv?named=true{{ key ? '&key=' ~ key : '' }}" class="dropdown-item"><i
-                            class="fa-solid fa-download"></i> Export as CSV</a></li>
-            </ul>
+                <a href="/{{ event.slug }}/{{ schedule.slug }}.json?named=true{{ key ? '&key=' ~ key : '' }}" class="dropdown-item"><i
+                            class="fa-solid fa-download"></i> Export as JSON</a>
+                <a href="/{{ event.slug }}/{{ schedule.slug }}.xml?named=true{{ key ? '&key=' ~ key : '' }}" class="dropdown-item"><i
+                            class="fa-solid fa-download"></i> Export as XML</a>
+                <a href="/{{ event.slug }}/{{ schedule.slug }}.csv?named=true{{ key ? '&key=' ~ key : '' }}" class="dropdown-item"><i
+                            class="fa-solid fa-download"></i> Export as CSV</a>
+            </div>
         </li>
     </ul>
 

@@ -47,30 +47,30 @@
 		<li class="nav-item"><a href="/-/home" class="nav-link"><i class="fa-solid fa-house"></i> Home</a></li>
 		<li class="nav-item dropdown">
 			<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"><i class="fa-solid fa-gamepad"></i> My Events</a>
-			<ul class="dropdown-menu">
+			<div class="dropdown-menu">
 				{% for event in app.user.events %}
-				<li><a href="/-/events/{{ event.id|obscurify('event') }}" class="dropdown-item h-jail">{{ event.name }}</a></li>
+				<a href="/-/events/{{ event.id|obscurify('event') }}" class="dropdown-item h-jail">{{ event.name }}</a>
 				{% endfor %}
 
 				{% if app.user.events|length > 0 %}
 				<div class="dropdown-divider"></div>
 				{% endif %}
-				<li><a href="/-/events/new" class="dropdown-item">New…</a></li>
-			</ul>
+				<a href="/-/events/new" class="dropdown-item">New…</a>
+			</div>
 		</li>
 		<li class="nav-item dropdown">
 			<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"><i class="fa-regular fa-calendar-days"></i> My Schedules</a>
-			<ul class="dropdown-menu">
+			<div class="dropdown-menu">
 				{% for event in app.user.events %}
 					{% for schedule in event.schedules %}
-					<li><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}" class="dropdown-item h-jail">{{ schedule.name|shorten(20) }} <small>({{ event.name|shorten(35) }})</small></a></li>
+					<a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}" class="dropdown-item h-jail">{{ schedule.name|shorten(20) }} <small>({{ event.name|shorten(35) }})</small></a>
 					{% endfor %}
 				{% endfor %}
 
 				{% if app.user.events|length > 0 %}
 				<div class="dropdown-divider"></div>
 				{% endif %}
-			</ul>
+			</div>
 		</li>
 	</ul>
 

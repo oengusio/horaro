@@ -33,11 +33,11 @@
 	{% elseif schedules|length != 0 %}
 	<li class="nav-item dropdown">
 		<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"><i class="fa-regular fa-calendar-days"></i> Schedules</a>
-		<ul class="dropdown-menu">
+		<div class="dropdown-menu">
 			{% for sched in schedules %}
-			<li><a href="/{{ event.slug }}/{{ sched.slug ~ appendix }}" class="dropdown-item h-jail">{{ sched.name }}</a></li>
+			<a href="/{{ event.slug }}/{{ sched.slug ~ appendix }}" class="dropdown-item h-jail">{{ sched.name }}</a>
 			{% endfor %}
-		</ul>
+		</div>
 	</li>
 	{%	endif %}
 </ul>

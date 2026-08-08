@@ -26,17 +26,17 @@
 			<button type="button" class="btn dropdown-toggle btn-sm" data-toggle="dropdown">
 				<i class="fa-solid fa-gear"></i> Actions
 			</button>
-			<ul class="dropdown-menu" role="menu">
-				<li><a class="dropdown-item" href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/edit"><i class="fa-regular fa-calendar-days"></i> Edit schedule…</a></li>
-				<li><a class="dropdown-item" href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/columns/edit"><i class="fa-solid fa-table-columns"></i> Edit columns…</a></li>
+			<div class="dropdown-menu" role="menu">
+				<a class="dropdown-item" href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/edit"><i class="fa-regular fa-calendar-days"></i> Edit schedule…</a>
+				<a class="dropdown-item" href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/columns/edit"><i class="fa-solid fa-table-columns"></i> Edit columns…</a>
 				<div class="dropdown-divider"></div>
-				<li><a class="dropdown-item" href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/export?format=json"><i class="fa-solid fa-floppy-disk"></i> Export as JSON</a></li>
-				<li><a class="dropdown-item" href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/export?format=xml"><i class="fa-solid fa-floppy-disk"></i> Export as XML</a></li>
-				<li><a class="dropdown-item" href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/export?format=ical"><i class="fa-solid fa-floppy-disk"></i> Export as iCal</a></li>
-				<li><a class="dropdown-item" href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/export?format=csv"><i class="fa-solid fa-floppy-disk"></i> Export as CSV</a></li>
+				<a class="dropdown-item" href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/export?format=json"><i class="fa-solid fa-floppy-disk"></i> Export as JSON</a>
+				<a class="dropdown-item" href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/export?format=xml"><i class="fa-solid fa-floppy-disk"></i> Export as XML</a>
+				<a class="dropdown-item" href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/export?format=ical"><i class="fa-solid fa-floppy-disk"></i> Export as iCal</a>
+				<a class="dropdown-item" href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/export?format=csv"><i class="fa-solid fa-floppy-disk"></i> Export as CSV</a>
 				<div class="dropdown-divider"></div>
-				<li><a class="dropdown-item" href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/import"><i class="fa-solid fa-upload"></i> Import…</a></li>
-			</ul>
+				<a class="dropdown-item" href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/import"><i class="fa-solid fa-upload"></i> Import…</a>
+			</div>
 		</div>
 	</div>
 </div>
