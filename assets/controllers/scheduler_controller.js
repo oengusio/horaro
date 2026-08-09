@@ -73,12 +73,14 @@ export default class extends Controller {
     const target = this.element;
     const template = this.itemTemplateTarget;
 
-    for (const itemData of this.itemDataValue) {
+    for (const index in this.itemDataValue) {
+      const itemData = this.itemDataValue[index];
       const clone = document.importNode(template.content, true);
 
       const tbody = clone.querySelector('tbody');
 
       tbody.dataset.scheduleItemItemValue = JSON.stringify(itemData);
+      tbody.dataset.scheduleItemIndexValue = index;
 
       target.appendChild(clone);
     }

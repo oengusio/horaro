@@ -4,6 +4,7 @@ import moment from 'moment';
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
   static values = {
+    index: Number,
     item: Array,
   };
 
@@ -12,8 +13,19 @@ export default class extends Controller {
     console.log('schedule item connected~', this.itemValue);
 
     // TODO: odd/even classes
-    this.element.classList.add('h-item');
+    this.element.classList.add('h-item', this.bodyClass);
     this.element.dataset.itemid = this.id;
+
+    this.update();
+  }
+
+  update() {
+    this.scheduledContainer.innerText = this.formattedSchedule;
+    this.estimateContainer.innerText = this.formattedLength;
+
+    Object.entries(this.dataObj).forEach(([column, value]) => {
+      this.element.querySelector(`#col_${column}`).innerText = value;
+    });
   }
 
   /**
@@ -33,7 +45,41 @@ export default class extends Controller {
   /**
    * @return {Object}
    */
-  get columns() {
-    return this.itemValue[3];
+  get dataObj() {
+    return this.itemValue[2];
+  }
+
+  get formattedSchedule() {
+    return 'test';
+  }
+
+  get formattedLength() {
+    return 'test_length';
+  }
+
+  get bodyClass() {
+    return this.indexValue % 2 === 1 ? 'h-odd' : 'h-even'
+  }
+
+  get rowClass() {
+    return ``;
+  }
+
+
+
+  // element notations
+  /**
+   * @return {HTMLElement}
+   */
+  get scheduledContainer() {
+    return this.element.querySelector('.h-s');
+  }
+
+  /**
+   * Also known as the "length"
+   * @return {HTMLElement}
+   */
+  get estimateContainer() {
+    return this.element.querySelector('.h-l a');
   }
 }

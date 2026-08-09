@@ -1,5 +1,5 @@
 {# Do not use the ternary operator because the secure bindings for Knockout do not support them. #}
-<tbody class="h-schedule-item" {{ stimulus_controller('schedule-item', { 'item': 'ITEM_PLACEHOLDER' }) }} data-bind="attr: {'data-itemid': id, 'class': bodyClass(), 'draggable': 'true' }">
+<tbody class="h-schedule-item" {{ stimulus_controller('schedule-item', { 'item': 'ITEM_PLACEHOLDER', 'index': 'INDEX_PLACEHOLDER' }) }} draggable="true">
 	<!-- ko if: dateSwitch -->
 	<tr class="h-new-day" hidden>
 		<td colspan="{{ numCols + 4 }}" data-bind="text: dateSwitch"></td>
@@ -19,7 +19,9 @@
 		</td>
 
 		{% for idx,column in columns|slice(0,10) %}
-		<td class="h-{{ idx }}" data-bind="attr: { class: 'h-{{ idx }} ' + rowClass() }"><a href="#" data-bind="editable: col_{{ column.id|obscurify('schedule.column') }}, editableOptions: { hidden: onEditableHidden, display: getDisplayText }"></a></td>
+		<td class="h-{{ idx }}" data-bind="attr: { class: 'h-{{ idx }} ' + rowClass() }">
+            <a href="#" id="col_{{ column.id|obscurify('schedule.column') }}" data-bind="editable: col_{{ column.id|obscurify('schedule.column') }}, editableOptions: { hidden: onEditableHidden, display: getDisplayText }"></a>
+        </td>
 		{% endfor %}
 
 		<td class="h-co text-right" data-bind="attr: { class: 'h-co text-right ' + rowClass() }">
