@@ -69,12 +69,6 @@
 	</div>
 </div>
 
-    <div
-    class="h-schedule-item" {{ stimulus_controller('schedule_item', { 'item': 'ITEM_PLACEHOLDER' }) }}
-    >
-        <p>I AM AN SCHEDULE ITEM</p>
-    </div>
-
 <div id="h-scheduler-container">
 	<table class="table h-l{{ numCols }}">
 		<thead>
@@ -98,12 +92,12 @@
             'columns': columns,
             'maxItems': maxItems,
             'itemData': items
-        }, controllerOutlets: { 'item': '.h-schedule-item' }) }}
+        }, controllerOutlets: { 'schedule-item': '.h-schedule-item' }) }}
 		class="table h-scheduler h-l{{ numCols }}"
 	>
 
         <template {{ stimulus_target('scheduler', 'itemTemplate') }}>
-{#            {% include 'schedule/item.twig' with {'schedule': schedule, 'items': schedule.items, 'columns': schedule.columns, 'numCols' : numCols} %}#}
+            {% include 'schedule/item.twig' with {'schedule': schedule, 'items': schedule.items, 'columns': schedule.columns, 'numCols' : numCols} %}
         </template>
 
         {# TODO: each item can be a controller target (how do I template this?) #}

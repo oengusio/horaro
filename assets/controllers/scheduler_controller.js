@@ -1,4 +1,4 @@
-import { Controller } from '@hotwired/stimulus';
+import {Controller} from '@hotwired/stimulus';
 
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
@@ -11,7 +11,7 @@ export default class extends Controller {
     maxItems: Number,
     itemData: Array,
   };
-  static outlets = [ 'item' ];
+  static outlets = ['schedule-item'];
   static targets = [
     // 'item',
     'itemTemplate',
@@ -35,19 +35,19 @@ export default class extends Controller {
 
     console.log(this.emptyTarget);
 
-    console.log('OUTLETS', this.itemOutlets);
+    // console.log('OUTLETS', this.scheduleItemOutlets);
 
-    // this.syncItemTemplates();
+    this.syncItemTemplates();
 
     // todo: actual logic
     this.loadCompleted();
   }
 
-  itemOutletConnected(outlet, element) {
-    console.log('An item outlet was added', element)
+  scheduleItemOutletConnected(outlet, element) {
+    // console.log('An item outlet was added', element)
   }
 
-  itemOutletDisconnected(outlet, element) {
+  scheduleItemOutletDisconnected(outlet, element) {
     //
   }
 
@@ -73,13 +73,14 @@ export default class extends Controller {
     const target = this.element;
     const template = this.itemTemplateTarget;
 
-    const clone = document.importNode(template.content, true);
+    for (const itemData of this.itemDataValue) {
+      const clone = document.importNode(template.content, true);
 
-    // TODO: figure this out
-    // clone.dataset.scheduleItemItemValue = JSON.stringify(this.itemDataValue[0]);
+      const tbody = clone.querySelector('tbody');
 
-    target.appendChild(clone);
+      tbody.dataset.scheduleItemItemValue = JSON.stringify(itemData);
 
-    //
+      target.appendChild(clone);
+    }
   }
 }
