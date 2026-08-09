@@ -69,6 +69,12 @@
 	</div>
 </div>
 
+    <div
+    class="h-schedule-item" {{ stimulus_controller('schedule_item', { 'item': 'ITEM_PLACEHOLDER' }) }}
+    >
+        <p>I AM AN SCHEDULE ITEM</p>
+    </div>
+
 <div id="h-scheduler-container">
 	<table class="table h-l{{ numCols }}">
 		<thead>
@@ -84,27 +90,34 @@
 	</table>
 
 	<table
+        {{ stimulus_controller('scheduler', {
+            'id': schedule.id|obscurify('schedule'),
+            'start': start.format('Y-m-d\\TH:i:sP'),
+            'setupTime': schedule.setupTimeInSeconds,
+            'timeZone': start.format('P'),
+            'columns': columns,
+            'maxItems': maxItems,
+            'itemData': items
+        }, controllerOutlets: { 'item': '.h-schedule-item' }) }}
 		class="table h-scheduler h-l{{ numCols }}"
-		data-id="{{ schedule.id|obscurify('schedule') }}"
-		data-start="{{ start.format('Y-m-d\\TH:i:sP') }}"
-		data-setuptime="{{ schedule.setupTimeInSeconds }}"
-		data-tz="{{ start.format('P') }}"
-		data-columns="{{ columns|join(',') }}"
-		data-maxitems="{{ maxItems }}"
 	>
+
+        <template {{ stimulus_target('scheduler', 'itemTemplate') }}>
+{#            {% include 'schedule/item.twig' with {'schedule': schedule, 'items': schedule.items, 'columns': schedule.columns, 'numCols' : numCols} %}#}
+        </template>
+
+        {# TODO: each item can be a controller target (how do I template this?) #}
 		<!-- ko foreach: items -->
-		{% include 'schedule/item.twig' with {'schedule': schedule, 'items': schedule.items, 'columns': schedule.columns, 'numCols' : numCols} %}
+{#		{% include 'schedule/item.twig' with {'schedule': schedule, 'items': schedule.items, 'columns': schedule.columns, 'numCols' : numCols} %}#}
 		<!-- /ko -->
 
-		<!-- ko if: items().length === 0 -->
-		<tbody>
+		<tbody hidden {{ stimulus_target('scheduler', 'empty') }}>
 			<tr>
 				<td colspan="{{ numCols + 4 }}" class="text-center active">
 					Click on the button below to create the first row in this schedule.
 				</td>
 			</tr>
 		</tbody>
-		<!-- /ko -->
 	</table>
 
 	<!-- ko if: hasNewItem() || isFull() -->

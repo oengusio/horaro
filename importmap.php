@@ -1,37 +1,5 @@
 <?php
 
-$bootswatchThemes = [
-    'cerulean',
-    'cosmo',
-    'cyborg',
-    'darkly',
-    'flatly',
-    'journal',
-    'litera',
-    'lumen',
-    'lux',
-    'materia',
-    'minty',
-    'pulse',
-    'sandstone',
-    'simplex',
-    'sketchy',
-    'slate',
-    'solar',
-    'spacelab',
-    'superhero',
-    'united',
-    'yeti',
-];
-$themesResult = [];
-
-foreach ($bootswatchThemes as $theme) {
-    $themesResult["bootswatch/dist/$theme/bootstrap.min.css"] = [
-        'version' => '4.6.2',
-        'type' => 'css',
-    ];
-}
-
 /**
  * Returns the importmap for this application.
  *
@@ -84,5 +52,99 @@ return [
         'version' => '4.6.2',
         'type' => 'css',
     ],
-    ...$themesResult,
+    'bootswatch/dist/cerulean/bootstrap.min.css' => [
+        'version' => '4.6.2',
+        'type' => 'css',
+    ],
+    'bootswatch/dist/cosmo/bootstrap.min.css' => [
+        'version' => '4.6.2',
+        'type' => 'css',
+    ],
+    'bootswatch/dist/cyborg/bootstrap.min.css' => [
+        'version' => '4.6.2',
+        'type' => 'css',
+    ],
+    'bootswatch/dist/darkly/bootstrap.min.css' => [
+        'version' => '4.6.2',
+        'type' => 'css',
+    ],
+    'bootswatch/dist/flatly/bootstrap.min.css' => [
+        'version' => '4.6.2',
+        'type' => 'css',
+    ],
+    'bootswatch/dist/journal/bootstrap.min.css' => [
+        'version' => '4.6.2',
+        'type' => 'css',
+    ],
+    'bootswatch/dist/litera/bootstrap.min.css' => [
+        'version' => '4.6.2',
+        'type' => 'css',
+    ],
+    'bootswatch/dist/lumen/bootstrap.min.css' => [
+        'version' => '4.6.2',
+        'type' => 'css',
+    ],
+    'bootswatch/dist/lux/bootstrap.min.css' => [
+        'version' => '4.6.2',
+        'type' => 'css',
+    ],
+    'bootswatch/dist/materia/bootstrap.min.css' => [
+        'version' => '4.6.2',
+        'type' => 'css',
+    ],
+    'bootswatch/dist/minty/bootstrap.min.css' => [
+        'version' => '4.6.2',
+        'type' => 'css',
+    ],
+    'bootswatch/dist/pulse/bootstrap.min.css' => [
+        'version' => '4.6.2',
+        'type' => 'css',
+    ],
+    'bootswatch/dist/sandstone/bootstrap.min.css' => [
+        'version' => '4.6.2',
+        'type' => 'css',
+    ],
+    'bootswatch/dist/simplex/bootstrap.min.css' => [
+        'version' => '4.6.2',
+        'type' => 'css',
+    ],
+    'bootswatch/dist/sketchy/bootstrap.min.css' => [
+        'version' => '4.6.2',
+        'type' => 'css',
+    ],
+    'bootswatch/dist/slate/bootstrap.min.css' => [
+        'version' => '4.6.2',
+        'type' => 'css',
+    ],
+    'bootswatch/dist/solar/bootstrap.min.css' => [
+        'version' => '4.6.2',
+        'type' => 'css',
+    ],
+    'bootswatch/dist/spacelab/bootstrap.min.css' => [
+        'version' => '4.6.2',
+        'type' => 'css',
+    ],
+    'bootswatch/dist/superhero/bootstrap.min.css' => [
+        'version' => '4.6.2',
+        'type' => 'css',
+    ],
+    'bootswatch/dist/united/bootstrap.min.css' => [
+        'version' => '4.6.2',
+        'type' => 'css',
+    ],
+    'pickadate' => [
+        'version' => '5.0.0-alpha.3',
+    ],
+    'moment' => [
+        'version' => '2.30.1',
+    ],
+    'knockout' => [
+        'version' => '3.5.3',
+    ],
+    'remarkable' => [
+        'version' => '2.0.1',
+    ],
+    'nativesortable' => [
+        'version' => '0.1.0',
+    ],
 ];

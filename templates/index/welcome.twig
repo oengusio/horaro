@@ -6,17 +6,17 @@
 {# duplicate code and blow up the frontend.js :/                              #}
 {% block scripts %}
     {% if app.user %}
-        <script src="{{ asset('trd_party/jquery.min.js') }}"></script>
-        <script src="{{ asset('trd_party/bootstrap.min.js') }}"></script>
+        <script type="module" src="{{ macros.asset('vendor/jquery/jquery.index.js') }}"></script>
+        <script type="module" src="{{ macros.asset('vendor/bootstrap/bootstrap.index.js') }}"></script>
         <script src="{{ asset('trd_party/knockout-min.js') }}"></script>
-        <script src="{{ asset('trd_party/bootstrap-editable.min.js') }}"></script>
-        <script src="{{ asset('trd_party/select2.min.js') }}"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/x-editable-bs4@1.5.6/dist/bootstrap4-editable/js/bootstrap-editable.min.js"></script>
+{#        <script src="{{ asset('trd_party/select2.min.js') }}"></script>#}
         <script src="{{ asset('trd_party/remarkable.min.js') }}"></script>
 
         <script src="{{ macros.asset('vendor/@fortawesome/fontawesome-free/js/all.min.js') }}"></script>
-        <script src="{{ asset('js/vendor-backend.js') }}"></script>
+{#        <script src="{{ asset('js/vendor-backend.js') }}"></script>#}
         <script src="{{ asset('js/i18n/' ~ app.locale ~ '.js') }}"></script>
-        <script src="{{ asset('js/app-backend.js') }}"></script>
+{#        <script type="module" src="{{ asset('js/app-backend.js') }}"></script>#}
     {% else %}
         {{ parent() }}
     {% endif %}

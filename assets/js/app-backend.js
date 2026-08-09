@@ -1,4 +1,19 @@
-/*global jQuery, ko, horaro, horaroTimeFormat, moment */
+import jQuery from 'jquery';
+import moment from 'moment';
+import { Remarkable } from 'remarkable';
+import nativesortable from 'nativesortable'
+
+globalThis.jQuery = jQuery;
+
+import 'pickadate';
+import ko from 'knockout';
+
+
+globalThis.ko = ko;
+
+// import 'knockout-secure-binding';
+
+/*global horaro, horaroTimeFormat */
 
 jQuery(function($) {
 	'use strict';
@@ -12,18 +27,18 @@ jQuery(function($) {
 
 	// init date and time pickers
 
-	$('#start_date').pickadate({
-		formatSubmit: 'yyyy-mm-dd',
-		hiddenName: true
-	});
+  /*$('#start_date').pickadate({
+    formatSubmit: 'yyyy-mm-dd',
+    hiddenName: true
+  });
 
-	$('#start_time').pickatime({
-		interval: 15,
-		formatSubmit: 'HH:i',
-		format: horaroTimeFormat,
-		formatLabel: horaroTimeFormat,
-		hiddenName: true
-	});
+  $('#start_time').pickatime({
+    interval: 15,
+    formatSubmit: 'HH:i',
+    format: horaroTimeFormat,
+    formatLabel: horaroTimeFormat,
+    hiddenName: true
+  });*/
 
 	// setup back buttons
 
@@ -34,7 +49,7 @@ jQuery(function($) {
 
 	// setup Select2
 
-	$('select.h-fancy').select2();
+	// $('select.h-fancy').select2();
 
 	// insert safety-guard for some forms
 

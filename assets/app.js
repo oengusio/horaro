@@ -1,4 +1,4 @@
-// import './bootstrap.js';
+import './bootstrap.js';
 import jQuery from 'jquery';
 
 // backwards compat for old code

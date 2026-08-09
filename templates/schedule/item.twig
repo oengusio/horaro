@@ -1,5 +1,5 @@
 {# Do not use the ternary operator because the secure bindings for Knockout do not support them. #}
-<tbody data-bind="attr: {'data-itemid': id, 'class': bodyClass(), 'draggable': 'true' }">
+<div class="h-schedule-item" {{ stimulus_controller('schedule_item', { 'item': 'ITEM_PLACEHOLDER' }) }} data-bind="attr: {'data-itemid': id, 'class': bodyClass(), 'draggable': 'true' }">
 	<!-- ko if: dateSwitch -->
 	<tr class="h-new-day">
 		<td colspan="{{ numCols + 4 }}" data-bind="text: dateSwitch"></td>
@@ -28,7 +28,7 @@
 				<button class="btn btn-link btn-sm" data-bind="click: toggle, activate: toggle, visible: !expanded()"><i class="fa-solid fa-angles-down"></i> more</button>
 				<button class="btn btn-link btn-sm" data-bind="click: toggle, activate: toggle, visible: expanded"><i class="fa-solid fa-angles-up"></i> less</button>
 			</span>
-			<button data-bind="click: moveUp, activate: moveUp, attr: { class: 'btn move-up btn-sm' + (first() && ' disabled' || ' btn-secondary') }"><i class="fa-solid fa-user"></i></button>
+			<button data-bind="click: moveUp, activate: moveUp, attr: { class: 'btn move-up btn-sm' + (first() && ' disabled' || ' btn-secondary') }"><i class="fa-solid fa-arrow-up"></i></button>
 			<button data-bind="click: moveDown, activate: moveDown, attr: { class: 'btn move-down btn-sm' + (last() && ' disabled' || ' btn-secondary') }"><i class="fa-solid fa-arrow-down"></i></button>
 			<button data-bind="click: confirmDelete, activate: confirmDelete, attr: { class: 'btn btn-danger btn-sm' + (id() === -1 && ' disabled' || '') }"><i class="fa-solid fa-trash"></i></button>
 			<!-- /ko -->
@@ -52,4 +52,4 @@
 		</td>
 	</tr>
 	<!-- /ko -->
-</tbody>
+</div>
