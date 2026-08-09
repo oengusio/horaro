@@ -69,6 +69,34 @@
 	</div>
 </div>
 
+{# TODO: find a better way of injecting columns #}
+<script>
+window.columns = [
+{% for idx,column in schedule.columns|slice(0,10) %}
+{name: {{ column.name|json_encode|raw }}, id: {{ column.id|obscurify('schedule.column')|json_encode|raw }}},
+{% endfor %}
+];
+</script>
+
+
+<div {{ vue_component('SchedulerContainer', {
+    'numCols': numCols,
+    'scheduledText': schedule.text('col-scheduled')|default('Scheduled'),
+    'estimateText': schedule.text('col-estimate')|default('Estimate'),
+    'columns': schedule.columns|slice(0,10),
+    'itemData': items
+}) }}>
+    <div class="row" id="h-scheduler-loading">
+        <div class="col-lg-12">
+            <div class="spinner">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="h-scheduler-container">
 	<table class="table h-l{{ numCols }}">
 		<thead>

@@ -295,6 +295,18 @@
             "templates/base.html.twig"
         ]
     },
+    "symfony/ux-vue": {
+        "version": "2.36",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "2.9",
+            "ref": "8b87f5866b5af6728a58aaf7f5ba77e3816e35ed"
+        },
+        "files": [
+            "assets/vue/controllers/Hello.vue"
+        ]
+    },
     "symfony/validator": {
         "version": "7.2",
         "recipe": {
