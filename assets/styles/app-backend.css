@@ -134,7 +134,7 @@ table.h-scheduler dt, table.h-scheduler dd {
   line-height: 150%
 }
 
-table.h-scheduler dd {
+table.h-scheduler dd:not(.h-np) {
   margin-left: 15px
 }
 
@@ -204,7 +204,7 @@ table.h-scheduler dd {
     width: 200px
   }
 
-  table.h-scheduler dd {
+  table.h-scheduler dd:not(.h-np) {
     margin-left: 220px
   }
 }

@@ -20,8 +20,8 @@ export default {
       columns: window.columns,
     };
   },
-  template: `
-<div id="h-scheduler-container" style="display: block">
+  // language=vue
+  template: `<div id="h-scheduler-container" style="display: block">
     <table :class="\`table h-l\${numCols}\`">
         <thead>
             <tr>
@@ -36,7 +36,7 @@ export default {
     </table>
 
     <table :class="\`table h-scheduler h-l\${numCols}\`">
-        <ScheduleItem v-for="(item, idx) in items" :item="item" :index="idx" :key="idx" />
+        <ScheduleItem v-for="(item, idx) in items" :item="item" :last="idx === items.length - 1" :numCols="numCols" :index="idx" :key="idx" />
 
         <tbody v-if="!items.length">
             <tr>
@@ -47,6 +47,5 @@ export default {
         </tbody>
 
     </table>
-</div>
-`,
+</div>`,
 }
