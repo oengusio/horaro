@@ -20,7 +20,7 @@ export default {
     const item = props.item;
     const busy = item.busy;
     const deleting = ref(false);
-    const expanded = ref(true);
+    const expanded = ref(false);
 
     // TODO: inline editor component
 
@@ -38,7 +38,7 @@ export default {
       },
     });
 
-    const first = computed(() => props.index === 0);
+    const first = computed(() => item.position.value === 1);
 
     const rowClass = computed(() => {
       if (busy.value) {
@@ -57,7 +57,7 @@ export default {
     });
 
     function getDisplayText(colId) {
-      return props.item[`col_${colId}`]?.value;
+      return props.item[`col_${colId}`];
     }
 
     function doDelete() {}
@@ -73,7 +73,7 @@ export default {
       first,
       columns: window.columns,
       getDisplayText,
-      move: item.move,
+      move: (pos) => item.move(pos),
       doDelete,
       deleting,
     };

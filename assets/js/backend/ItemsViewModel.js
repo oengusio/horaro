@@ -1,4 +1,4 @@
-import { computed, shallowReactive } from 'vue';
+import { computed, ref, watch, shallowRef } from 'vue';
 import { hasNewModel } from '../utils/itemUtils.js';
 import { ReadableTime } from '../readableTimeJs.js';
 import moment from 'moment';
@@ -7,20 +7,17 @@ import moment from 'moment';
  * WARNING: reactive :D (also cursed LOL)
  */
 export default class ItemsViewModel {
-  /**
-   * @type {Item[]}
-   */
-  items = shallowReactive([]);
+  items = shallowRef([]);
   maxItems = 50;
 
-  #computedHasNewItem = computed(() => hasNewModel(this.items));
-  #computedIsFull = computed(() => this.items.length >= maxItems);
+  #computedHasNewItem = computed(() => hasNewModel(this.items.value));
+  #computedIsFull = computed(() => this.items.value.length >= maxItems);
 
   /**
    * @param {Item[]} items
    */
   constructor(items) {
-    this.items = shallowReactive(items);
+    this.items.value = items;
 
     this.calculateSchedule();
   }
@@ -33,8 +30,67 @@ export default class ItemsViewModel {
     return this.#computedIsFull;
   }
 
+  async move(itemId, newPos) {
+    const items = [...this.items.value];
+    const item = items.find((item) => item.id.value === itemId);
+    const data = {
+      item: itemId,
+      position: newPos,
+    };
+    const oldPos = item.position.value;
+
+    // illegal move
+		if (newPos < 1 || newPos > items.length) {
+			return;
+		}
+
+    // Even if we don't actually move the item, we need to re-generate a fresh tbody element
+		// because the old one was detached from the DOM during the dragging.
+
+		const insertAt = newPos - 1; // -1 because splice() uses the internal, 0-based array
+
+    console.log(items.indexOf(item));
+
+		items.splice(items.indexOf(item), 1);
+
+    console.log([...items]);
+
+		items.splice(insertAt, 0, item);
+
+    console.log([...items]);
+
+		// Now we can stop.
+		if (oldPos === newPos) {
+			return;
+		}
+
+		data[csrfTokenName] = csrfToken;
+
+    item.busy.value = true;
+
+    await fetch(`/-/schedules/${scheduleId}/items/move`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    // reset positions
+    let pos = 1;
+    items.forEach((itm) => {
+      console.log('aaaa', itm.position.value);
+      itm.position.value = pos;
+      pos++;
+    });
+
+    item.busy.value = false;
+    this.items.value = [...items];
+  }
+
   calculateSchedule(startIdx = 0) {
-    const items = this.items;
+    const items = this.items.value;
     let start;
 
     if (startIdx === 0) {

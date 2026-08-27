@@ -1,4 +1,3 @@
-import { ref, computed } from 'vue';
 import ScheduleItem from '../components/ScheduleItem.js';
 
 export default {
@@ -11,8 +10,10 @@ export default {
     'estimateText',
   ],
   setup(props) {
+    const items = viewModel.items;
+
     return {
-      items: viewModel.items,
+      items,
       columns: window.columns,
     };
   },
@@ -32,7 +33,7 @@ export default {
     </table>
 
     <table :class="\`table h-scheduler h-l\${numCols}\`">
-        <ScheduleItem v-for="(item, idx) in items" :item="item" :last="idx === items.length - 1" :numCols="numCols" :index="idx" :key="idx" />
+        <ScheduleItem v-for="(item, idx) in items" :item="item" :last="idx === items.length - 1" :numCols="numCols" :index="idx" :key="item.id" />
 
         <tbody v-if="!items.length">
             <tr>

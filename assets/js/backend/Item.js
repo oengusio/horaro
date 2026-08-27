@@ -61,7 +61,9 @@ export default class Item {
   }
 
   move(direction) {
-    //
+    const newPos = this.position.value + (direction === 'up' ? -1 : 1);
+
+    viewModel.move(this.id.value, newPos);
   }
 
   deleteItem() {
