@@ -1,4 +1,4 @@
-class ReadableTime {
+export class ReadableTime {
   static #itemRegex = /(\d+)(hr|h|min|m|sec|s)/g;
 
   /**

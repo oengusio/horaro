@@ -59,31 +59,35 @@
 	</div>
 </div>
 
-<div class="row" id="h-scheduler-loading">
-	<div class="col-lg-12">
-		<div class="spinner">
-			<div class="bounce1"></div>
-			<div class="bounce2"></div>
-			<div class="bounce3"></div>
-		</div>
-	</div>
-</div>
-
 {# TODO: find a better way of injecting columns #}
 <script>
-window.columns = [
+window.scheduleColumns = [
 {% for idx,column in schedule.columns|slice(0,10) %}
-{name: {{ column.name|json_encode|raw }}, id: {{ column.id|obscurify('schedule.column')|json_encode|raw }}},
+    {name: {{ column.name|json_encode|raw }}, id: {{ column.id|obscurify('schedule.column')|json_encode|raw }}},
 {% endfor %}
 ];
+
+// TODO: temp hack
+window.columns = window.scheduleColumns;
+
+// Welcome to the dirtiest hacks, today we will just say fuck it because the application does not have access to the column names
+window.optionsColumnId = '{{ optionsColumnId }}';
+window.scheduleId = '{{ schedule.id|obscurify('schedule') }}';
+window.scheduleStart = new Date('{{ start.format('Y-m-d\\TH:i:sP') }}');
+window.scheduleSetupTime = {{ schedule.setupTimeInSeconds }};
+window.scheduleTZ = '{{ start.format('P') }}';
+window.maxItems = {{ maxItems }};
+
+window.itemData = {{ items|json_encode|raw }};
+
+// TODO: probably not going to use this
+window.testColumns = '{{ columns|join(',') }}';
 </script>
 
 <div {{ vue_component('SchedulerContainer', {
     'numCols': numCols,
     'scheduledText': schedule.text('col-scheduled')|default('Scheduled'),
     'estimateText': schedule.text('col-estimate')|default('Estimate'),
-    'columns': schedule.columns|slice(0,10),
-    'itemData': items
 }) }}>
     <div class="row" id="h-scheduler-loading">
         <div class="col-lg-12">
@@ -111,28 +115,15 @@ window.columns = [
 	</table>
 
 	<table
-        {{ stimulus_controller('scheduler', {
-            'id': schedule.id|obscurify('schedule'),
-            'start': start.format('Y-m-d\\TH:i:sP'),
-            'setupTime': schedule.setupTimeInSeconds,
-            'timeZone': start.format('P'),
-            'columns': columns,
-            'maxItems': maxItems,
-            'itemData': items
-        }, controllerOutlets: { 'schedule-item': '.h-schedule-item' }) }}
 		class="table h-scheduler h-l{{ numCols }}"
 	>
-
-        <template {{ stimulus_target('scheduler', 'itemTemplate') }}>
-            {% include 'schedule/item.twig' with {'schedule': schedule, 'items': schedule.items, 'columns': schedule.columns, 'numCols' : numCols} %}
-        </template>
 
         {# TODO: each item can be a controller target (how do I template this?) #}
 		<!-- ko foreach: items -->
 {#		{% include 'schedule/item.twig' with {'schedule': schedule, 'items': schedule.items, 'columns': schedule.columns, 'numCols' : numCols} %}#}
 		<!-- /ko -->
 
-		<tbody hidden {{ stimulus_target('scheduler', 'empty') }}>
+		<tbody hidden>
 			<tr>
 				<td colspan="{{ numCols + 4 }}" class="text-center active">
 					Click on the button below to create the first row in this schedule.
@@ -159,8 +150,7 @@ window.columns = [
 </div>
 
 <script>
-    // Welcome to the dirtiest hacks, today we will just say fuck it because the application does not have access to the column names
-    window.optionsColumnId = {{ optionsColumnId|json_encode|raw }};
+
 </script>
 <script type="application/json" id="h-item-data">
 {{ items|json_encode|raw }}

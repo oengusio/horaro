@@ -1,4 +1,8 @@
 import { ref, computed } from 'vue';
+import moment from 'moment';
+// imported for IDE type hinting
+import Item from '../../js/backend/Item.js';
+import { parseLength } from '../../js/utils/itemUtils.js';
 
 
 export default {
@@ -10,19 +14,31 @@ export default {
     'numCols',
   ],
   setup(props) {
-    const busy = ref(false);
+    /**
+     * @var {Item}
+     */
+    const item = props.item;
+    const busy = item.busy;
     const errors = ref(false);
     const deleting = ref(false);
     const expanded = ref(true);
 
-    // TODO dateSwitch
     // TODO: inline editor component
 
     // static values
-    const formattedSchedule = ref('aaaa');
-    const formattedLength = ref('PT10M');
+    const formattedSchedule = computed(() => {
+      return moment.unix(item.scheduled.value / 1000).utcOffset(scheduleTZ).format('LT');
+    });
+    // TODO: https://vuejs.org/guide/essentials/computed.html#writable-computed
+    const formattedLength = computed({
+      get() {
+        return moment.unix(item.length.value).utc().format('HH:mm:ss');
+      },
+      set(newValue) {
+        item.length.value = parseLength(newValue);
+      },
+    });
 
-    const position = computed(() => props.index + 1);
     const first = computed(() => props.index === 0);
 
     const rowClass = computed(() => {
@@ -42,26 +58,23 @@ export default {
     });
 
     function getDisplayText(colId) {
-      if (!props.item[2]) {
-        return 'Missing data?';
-      }
-
-      return props.item[2][colId];
+      return props.item[`col_${colId}`]?.value;
     }
 
     function doDelete() {}
 
     function move(direction) {
-        const newPos = position.value + (direction === 'up' ? -1 : 1);
+        const newPos = item.position.value + (direction === 'up' ? -1 : 1);
     }
 
     return {
+      item,
       formattedSchedule,
       formattedLength,
       bodyClass: 'h-item ' + (props.index % 2 === 1 ? 'h-odd' : 'h-even'),
       rowClass,
       expanded,
-      position,
+      position: item.position,
       first,
       columns: window.columns,
       getDisplayText,
@@ -73,6 +86,10 @@ export default {
   // language=vue
   template: `
 <tbody :class="bodyClass" draggable="true">
+    <tr class="h-new-day" v-if="item.dateSwitch.value">
+      <td :colspan="numCols + 4">{{ item.dateSwitch }}</td>
+    </tr>
+
     <tr class="h-primary">
         <td class="h-s" :class="rowClass">{{ formattedSchedule }}</td>
         <td class="h-l" :class="rowClass">

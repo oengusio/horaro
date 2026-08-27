@@ -6,17 +6,13 @@ export default {
     ScheduleItem,
   },
   props: [
-    'itemData',
     'numCols',
     'scheduledText',
     'estimateText',
-    // 'columns',
   ],
   setup(props) {
-    const items = ref(structuredClone(props.itemData));
-
     return {
-      items,
+      items: viewModel.items,
       columns: window.columns,
     };
   },

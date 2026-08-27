@@ -8,6 +8,8 @@
 {% endblock %}
 
 {% block scripts %}
+{% block importmap %}{{ importmap('app') }}{% endblock %}
+
 <script type="module" src="{{ macros.asset('vendor/jquery/jquery.index.js') }}"></script>
 <script type="module" src="{{ macros.asset('vendor/bootstrap/bootstrap.index.js') }}"></script>
 <script src="{{ macros.asset('js/vendor-frontend.js') }}"></script>

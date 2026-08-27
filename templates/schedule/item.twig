@@ -1,5 +1,5 @@
 {# Do not use the ternary operator because the secure bindings for Knockout do not support them. #}
-<tbody class="h-schedule-item" {{ stimulus_controller('schedule-item', { 'item': 'ITEM_PLACEHOLDER', 'index': 'INDEX_PLACEHOLDER' }) }} draggable="true">
+<tbody class="h-schedule-item" draggable="true">
 	<!-- ko if: dateSwitch -->
 	<tr class="h-new-day" hidden>
 		<td colspan="{{ numCols + 4 }}" data-bind="text: dateSwitch"></td>

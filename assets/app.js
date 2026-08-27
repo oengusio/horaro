@@ -1,4 +1,3 @@
-import { registerVueControllerComponents } from '@symfony/ux-vue';
 import './bootstrap.js';
 import jQuery from 'jquery';
 
@@ -15,5 +14,3 @@ window.$ = jQuery;
 // import './styles/app.css';
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
-
-registerVueControllerComponents();

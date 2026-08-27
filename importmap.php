@@ -16,6 +16,10 @@ return [
         'path' => './assets/app.js',
         'entrypoint' => true,
     ],
+    'backend' => [
+        'path' => './assets/app-backend.js',
+        'entrypoint' => true,
+    ],
     '@symfony/stimulus-bundle' => [
         'path' => './vendor/symfony/stimulus-bundle/assets/dist/loader.js',
     ],
