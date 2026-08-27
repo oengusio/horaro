@@ -19,7 +19,6 @@ export default {
      */
     const item = props.item;
     const busy = item.busy;
-    const errors = ref(false);
     const deleting = ref(false);
     const expanded = ref(true);
 
@@ -29,7 +28,7 @@ export default {
     const formattedSchedule = computed(() => {
       return moment.unix(item.scheduled.value / 1000).utcOffset(scheduleTZ).format('LT');
     });
-    // TODO: https://vuejs.org/guide/essentials/computed.html#writable-computed
+
     const formattedLength = computed({
       get() {
         return moment.unix(item.length.value).utc().format('HH:mm:ss');
@@ -46,7 +45,7 @@ export default {
         return 'bg-warning';
       }
 
-      if (errors.value) {
+      if (item.errors.value) {
         return 'bg-danger h-has-errors';
       }
 
@@ -63,10 +62,6 @@ export default {
 
     function doDelete() {}
 
-    function move(direction) {
-        const newPos = item.position.value + (direction === 'up' ? -1 : 1);
-    }
-
     return {
       item,
       formattedSchedule,
@@ -78,7 +73,7 @@ export default {
       first,
       columns: window.columns,
       getDisplayText,
-      move,
+      move: item.move,
       doDelete,
       deleting,
     };
@@ -88,6 +83,10 @@ export default {
 <tbody :class="bodyClass" draggable="true">
     <tr class="h-new-day" v-if="item.dateSwitch.value">
       <td :colspan="numCols + 4">{{ item.dateSwitch }}</td>
+    </tr>
+
+    <tr class="h-new-day" v-if="item.errors.value">
+      <td :colspan="numCols + 4">{{ item.errors }}</td>
     </tr>
 
     <tr class="h-primary">

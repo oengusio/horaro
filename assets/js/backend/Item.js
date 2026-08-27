@@ -1,4 +1,4 @@
-import { reactive, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 
 /**
  * WARNING: this shit is reactive
@@ -12,7 +12,9 @@ export default class Item {
 
   position = ref(0);
   busy = ref(false);
-  suspended = ref(false);
+  errors = ref(false);
+  suspended = false;
+  nextFocus = false;
 
   /**
    *
@@ -68,7 +70,7 @@ export default class Item {
 
   // Old method name "sync"
   async save(patch) {
-    if (this.suspended.value) {
+    if (this.suspended) {
       return;
     }
 
@@ -90,7 +92,7 @@ export default class Item {
         patch.columns[name] = this[name].value;
       });
     } else {
-      url = `/-/schedules/${scheduleId}/items${itemId}`;
+      url = `/-/schedules/${scheduleId}/items/${itemId}?_method=PATCH`;
     }
 
     this.busy.value = true;
@@ -98,9 +100,46 @@ export default class Item {
     patch[csrfTokenName] = csrfToken;
 
     try {
-      //
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify(patch),
+      });
+      const jsonData = await response.json();
+
+      // TODO: proper status code validation, this will do for now
+      if (response.status > 299) {
+        this.errors.value = jsonData.detail;
+        return;
+      }
+
+      const { data } = jsonData;
+
+      this.suspended = true;
+      this.id.value = data.id;
+      this.length.value = data.length;
+      this.errors.value = false;
+
+      scheduleColumns.forEach(({ id: colId }) => {
+        const name = `col_${colId}`;
+
+        this[name].value = colId in data.columns ? data.columns[colId] : '';
+      });
+
+      this.suspended = false;
+
+      // TODO: next focus? Figure out what that is
+      /*if (self.nextFocus) {
+        $('#h-add-model').focus();
+        self.nextFocus = false;
+      }*/
+
     } catch (error) {
-      //
+      console.log(error);
+      this.errors.value = error;
     } finally {
       this.busy.value = false;
     }
