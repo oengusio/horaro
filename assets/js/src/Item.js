@@ -7,6 +7,7 @@ function Item(id, length, columns, pos) {
 	self.length     = ko.observable(length);
 	self.scheduled  = ko.observable();      // will be set by calculateSchedule()
 	self.dateSwitch = ko.observable(false); // will be set by calculateSchedule()
+	self.setupTime = ko.observable(0); // will be set by calculateSchedule()
 
 	// setup simple properties for the schedule columns
 

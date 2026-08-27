@@ -51,6 +51,27 @@ function ItemsViewModel(items) {
 		for (i = startIdx, len = items.length; i < len; ++i) {
 			item = items[i];
 
+			if (optionsColumnId) {
+				const columnId = 'col_' + optionsColumnId;
+				const optionsValue = item[columnId]();
+
+				if (optionsValue) {
+				  try {
+					const { setup } = JSON.parse(optionsValue);
+
+					if (setup) {
+					  const parsedSetup = ReadableTime.parse(setup);
+
+					  item.setupTime(parsedSetup)
+					}
+				  } catch (ignored) {
+					// We are being little shits and silently ignoring user errors
+				  }
+				} else {
+				  item.setupTime(0);
+			    }
+		    }
+
 			item.scheduled(scheduled);
 			item.dateSwitch(false);
 
