@@ -81,6 +81,7 @@ export default {
   // language=vue
   template: `
 <tbody :class="bodyClass" draggable="true">
+    <!-- vue sure makes choices sometimes -->
     <tr class="h-new-day" v-if="item.dateSwitch.value">
       <td :colspan="numCols + 4">{{ item.dateSwitch }}</td>
     </tr>
