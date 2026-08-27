@@ -77,7 +77,10 @@ function ItemsViewModel(items) {
 
 			date       = moment.unix(scheduled / 1000).utcOffset(scheduleTZ);
 			dayOfYear  = date.dayOfYear();
-			scheduled += ((item.length() + scheduleSetupTime) * 1000);
+
+			const pickedSetupTime = item.setupTime() || scheduleSetupTime;
+
+			scheduled += ((item.length() + pickedSetupTime) * 1000);
 
 			if (prev !== null && prev !== dayOfYear) {
 				item.dateSwitch(date.format('dddd, ll'));
