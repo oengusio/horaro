@@ -640,6 +640,18 @@ table.h-columnist tbody .h-handle {
   font-size: 12px
 }
 
+.h-editor {
+  position: relative;
+  display: inline;
+}
+
+.h-editor .input-holder {
+  /*position: absolute;*/
+  padding: 9px 14px;
+  background: black;
+  /*top: -20px;*/
+}
+
 a.editable-click {
   border-bottom: dashed 1px #5bc0de;
   cursor: pointer;

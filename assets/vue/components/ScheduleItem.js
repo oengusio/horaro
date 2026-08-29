@@ -1,11 +1,15 @@
 import { ref, computed } from 'vue';
 import moment from 'moment';
+import HoraroEditor from './HoraroEditor.js';
 // imported for IDE type hinting
 import Item from '../../js/backend/Item.js';
 import { parseLength } from '../../js/utils/itemUtils.js';
 
 
 export default {
+  components: {
+    HoraroEditor,
+  },
   props: [
     'item',
     'index',
@@ -56,8 +60,18 @@ export default {
       return '';
     });
 
-    function getDisplayText(colId) {
-      return props.item[`col_${colId}`];
+    function computeDisplayText(colId) {
+      const column = props.item[`col_${colId}`];
+
+      return computed({
+        get() {
+          return column.value;
+        },
+
+        set(newVal) {
+          column.value = newVal;
+        },
+      });
     }
 
     function doDelete() {}
@@ -72,7 +86,7 @@ export default {
       position: item.position,
       first,
       columns: window.columns,
-      getDisplayText,
+      computeDisplayText,
       move: (pos) => item.move(pos),
       doDelete,
       deleting,
@@ -80,7 +94,7 @@ export default {
   },
   // language=vue
   template: `
-<tbody :class="bodyClass" draggable="true">
+<tbody :class="bodyClass" :draggable="!expanded">
     <!-- vue sure makes choices sometimes -->
     <tr class="h-new-day" v-if="item.dateSwitch.value">
       <td :colspan="numCols + 4">{{ item.dateSwitch }}</td>
@@ -96,9 +110,10 @@ export default {
             <a href="#">{{ formattedLength }}</a>
         </td>
         <td :class="\`h-\${idx} \${rowClass}\`" v-for="(col, idx) in columns" :key="col.id">
-            <a href="#"
-               :id="\`col_\${col.id}\`"
-            >{{ getDisplayText(col.id) }}</a>
+            <HoraroEditor
+              :id="\`col_\${col.id}\`"
+              v-model="computeDisplayText(col.id).value"
+            />
         </td>
 
       <td class="h-co text-right" :class="rowClass">
@@ -144,10 +159,9 @@ export default {
           <template v-for="(col, idx) in columns.slice(1)">
             <dt :class="\`h-e-\${idx + 1} col-2 h-np\`">{{ col.name }}:</dt>
             <dd :class="\`h-e-\${idx + 1} col-10 h-np\`">
-              <a href="#"
-                 data-bind="editable: col_{{ column.id|obscurify('schedule.column') }}, editableOptions: { hidden: onEditableHidden, display: getDisplayText }">
-                {{ getDisplayText(col.id) }}
-              </a>
+              <HoraroEditor
+                v-model="computeDisplayText(col.id).value"
+              />
             </dd>
           </template>
         </dl>
