@@ -1,4 +1,4 @@
-import { computed, ref, watch, shallowRef } from 'vue';
+import { computed, shallowRef } from 'vue';
 import { hasNewModel } from '../utils/itemUtils.js';
 import { ReadableTime } from '../readableTimeJs.js';
 import moment from 'moment';
@@ -49,15 +49,8 @@ export default class ItemsViewModel {
 
 		const insertAt = newPos - 1; // -1 because splice() uses the internal, 0-based array
 
-    console.log(items.indexOf(item));
-
 		items.splice(items.indexOf(item), 1);
-
-    console.log([...items]);
-
 		items.splice(insertAt, 0, item);
-
-    console.log([...items]);
 
 		// Now we can stop.
 		if (oldPos === newPos) {
@@ -80,7 +73,6 @@ export default class ItemsViewModel {
     // reset positions
     let pos = 1;
     items.forEach((itm) => {
-      console.log('aaaa', itm.position.value);
       itm.position.value = pos;
       pos++;
     });
