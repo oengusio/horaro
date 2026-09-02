@@ -1,8 +1,8 @@
 import { ref } from 'vue';
 
 const focus = {
-  mounted: (el) => el.focus()
-}
+  mounted: (el) => el.focus(),
+};
 
 export default {
   props: ['modelValue'],
