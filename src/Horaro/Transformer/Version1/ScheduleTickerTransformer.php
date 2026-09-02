@@ -21,9 +21,10 @@ class ScheduleTickerTransformer extends BaseTransformer
 
     public function transform(array $ticker): array
     {
+        /** @var \App\Entity\Schedule $schedule */
         $schedule = $ticker['schedule'];
         $transformer = new JsonTransformer($this->obscurityCodec, $this->requestStack);
-        $data = $transformer->transformTicker($schedule, $ticker, $this->includeHiddenColumns);
+        $data = $transformer->transformTicker($schedule, $ticker, $schedule->isPublic(), $this->includeHiddenColumns);
 
         // replace "url" with an absolute "link"
         $data['schedule']['link'] = $this->base().$data['schedule']['url'];
