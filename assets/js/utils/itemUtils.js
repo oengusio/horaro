@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 export function parseLength(str) {
 	const parts = str.split(':');
 
@@ -21,4 +23,18 @@ export function parseLength(str) {
 
 export function hasNewModel(models) {
 	return models.filter((model) => model.id === -1).length > 0;
+}
+
+// this is cursed, but ICBA to rewrite it in plain js
+export function mirrorColumnWidths(sourceTable, targets) {
+	const sources = $('tr:first > *', sourceTable);
+
+	for (let i = 0, len = sources.length; i < len; ++i) {
+		const w = $(sources[i]).innerWidth();
+
+		$(targets[i]).css({
+			maxWidth: w,
+			width: w
+		});
+	}
 }

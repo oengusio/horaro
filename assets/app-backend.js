@@ -4,6 +4,9 @@ import './bootstrap.js';
 import jQuery from 'jquery';
 import 'bootstrap';
 import { initScheduler } from './js/backend/scheduler.js';
+import { mirrorColumnWidths } from './js/utils/itemUtils.js';
+
+jQuery('#h-scheduler-container-old').remove();
 
 // backwards compat for old code
 window.jQuery = jQuery;
@@ -18,8 +21,22 @@ registerVueControllerComponents();
 
 const ui = document.body.dataset.ui;
 
+function resizeColumns() {
+    const dataNode = $('.h-scheduler');
+    mirrorColumnWidths(dataNode, $('tr:first > *', dataNode.prev()));
+}
+
 if (ui) {
   if (ui === 'scheduler') {
     initScheduler();
+
+
+    window.addEventListener('resize', () => {
+      resizeColumns();
+    });
+
+    setTimeout(() => {
+      resizeColumns();
+    }, 250);
   }
 }
