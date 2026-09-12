@@ -26,6 +26,8 @@ export default {
     const deleting = ref(false);
     const expanded = ref(false);
 
+    // TODO: item deleting
+
     // static values
     const formattedSchedule = computed(() => {
       return moment.unix(item.scheduled.value / 1000).utcOffset(scheduleTZ).format('LT');
