@@ -12,6 +12,9 @@ export default {
   setup(props) {
     const items = viewModel.items;
 
+    // TODO: Add button
+    // TODO: editor auto next
+
     return {
       items,
       columns: window.columns,

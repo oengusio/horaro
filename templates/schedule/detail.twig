@@ -84,6 +84,8 @@ window.itemData = {{ items|json_encode|raw }};
 window.testColumns = '{{ columns|join(',') }}';
 </script>
 
+<div {{ vue_component('HoraroInputPopover') }}></div>
+
 <div {{ vue_component('SchedulerContainer', {
     'numCols': numCols,
     'scheduledText': schedule.text('col-scheduled')|default('Scheduled'),

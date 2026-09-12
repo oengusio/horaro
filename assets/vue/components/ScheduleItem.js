@@ -26,8 +26,6 @@ export default {
     const deleting = ref(false);
     const expanded = ref(false);
 
-    // TODO: inline editor component
-
     // static values
     const formattedSchedule = computed(() => {
       return moment.unix(item.scheduled.value / 1000).utcOffset(scheduleTZ).format('LT');
@@ -107,7 +105,9 @@ export default {
     <tr class="h-primary">
         <td class="h-s" :class="rowClass">{{ formattedSchedule }}</td>
         <td class="h-l" :class="rowClass">
-            <a href="#">{{ formattedLength }}</a>
+          <HoraroEditor
+            v-model="formattedLength"
+          />
         </td>
         <td :class="\`h-\${idx} \${rowClass}\`" v-for="(col, idx) in columns" :key="col.id">
             <HoraroEditor

@@ -645,11 +645,24 @@ table.h-columnist tbody .h-handle {
   display: inline;
 }
 
-.h-editor .input-holder {
-  /*position: absolute;*/
+.h-popover-editor {
+  position: absolute;
   padding: 9px 14px;
   background: black;
+  z-index: 999999;
   /*top: -20px;*/
+}
+
+.h-popover-editor .arrow {
+  width: 0;
+  height: 0;
+  /*background: orange;*/
+  position: absolute;
+  top: 45px;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+
+  border-top: 20px solid black;
 }
 
 a.editable-click {
@@ -710,7 +723,7 @@ a.editable-click:hover {
   flex-grow: 1
 }
 
-/*@media (min-width: 350px) {
+@media (min-width: 350px) {
   .editableform .editable-input input {
     width: 250px
   }
@@ -744,7 +757,31 @@ a.editable-click:hover {
   .editableform .editable-input input {
     width: 1250px
   }
-}*/
+}
+
+@media (min-width: 1800px) {
+  .editableform .editable-input input {
+    width: 1450px
+  }
+}
+
+@media (min-width: 2000px) {
+  .editableform .editable-input input {
+    width: 1650px
+  }
+}
+
+@media (min-width: 2200px) {
+  .editableform .editable-input input {
+    width: 1850px
+  }
+}
+
+@media (min-width: 2400px) {
+  .editableform .editable-input input {
+    width: 2050px
+  }
+}
 
 body[data-ui="columnist"] .editableform .editable-input input {
   width: 300px

@@ -39,12 +39,19 @@ export default class Item {
       this[name] = ref(value);
 
       // and make sure to watch for changes
-      watch(this[name], (newValue) => {
-        this.save({
+      watch(this[name], async (newValue) => {
+        await this.save({
           columns: {
             [colId]: newValue,
           },
         });
+
+        // When they've edited the options there's a big chance the setup-time was updated.
+        // Recalc the schedule in that case.
+        if (colId === window.optionsColumnId) {
+          // TODO: use pos - 1?
+          viewModel.calculateSchedule(0);
+        }
       });
     });
 
