@@ -59,7 +59,7 @@ export default class Item {
 
     watch(this.id, (newValue, oldValue) => {
       console.log(`ID UPDATED (is ${newValue}, was ${oldValue})`);
-    })
+    });
 
     watch(this.length, (newValue) => {
       this.save({ length: newValue });
@@ -73,8 +73,34 @@ export default class Item {
     viewModel.move(this.id.value, newPos);
   }
 
-  deleteItem() {
-    //
+  async deleteItem() {
+    if (this.suspended) {
+      return;
+    }
+
+    const data = {
+      [csrfTokenName]: csrfToken,
+    };
+
+    this.busy.value = true;
+
+    try {
+      await fetch(
+        `/-/schedules/${scheduleId}/items/${this.id.value}?_method=DELETE`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify(data),
+        },
+      );
+
+      viewModel.remove(this);
+    } finally {
+      this.busy.value = false;
+    }
   }
 
   // Old method name "sync"

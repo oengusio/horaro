@@ -30,6 +30,13 @@ export default class ItemsViewModel {
     return this.#computedIsFull;
   }
 
+  remove(item) {
+    const items = [...this.items.value];
+
+    items.splice(items.indexOf(item), 1);
+    this.items.value = [...items];
+  }
+
   async move(itemId, newPos) {
     const items = [...this.items.value];
     const item = items.find((item) => item.id.value === itemId);

@@ -26,8 +26,6 @@ export default {
     const deleting = ref(false);
     const expanded = ref(false);
 
-    // TODO: item deleting
-
     // static values
     const formattedSchedule = computed(() => {
       return moment.unix(item.scheduled.value / 1000).utcOffset(scheduleTZ).format('LT');
@@ -74,7 +72,9 @@ export default {
       });
     }
 
-    function doDelete() {}
+    function doDelete() {
+      item.deleteItem();
+    }
 
     return {
       item,
@@ -121,7 +121,8 @@ export default {
       <td class="h-co text-right" :class="rowClass">
         <template v-if="deleting">
           <button class="btn btn-danger btn-sm"
-                  data-bind="click: doDelete, activate: doDelete"><i class="fa-solid fa-trash"></i></button>
+                  @click.prevent="doDelete"
+          ><i class="fa-solid fa-trash"></i></button>
           <button @click.prevent="deleting = false"
                   class="btn btn-secondary btn-sm"><i class="fa-solid fa-rotate-left"></i></button>
         </template>
