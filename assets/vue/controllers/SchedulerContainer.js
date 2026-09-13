@@ -9,15 +9,19 @@ export default {
     'scheduledText',
     'estimateText',
   ],
-  setup(props) {
+  setup() {
     const items = viewModel.items;
+    const hasNewItem = viewModel.hasNewItem;
+    const isFull = viewModel.isFull;
 
-    // TODO: Add button
     // TODO: editor auto next
 
     return {
       items,
+      hasNewItem,
+      isFull,
       columns: window.columns,
+      addItem: () => viewModel.add(),
     };
   },
   // language=vue
@@ -47,5 +51,25 @@ export default {
         </tbody>
 
     </table>
+
+    (full: {{isFull}} | hasNew: {{hasNewItem}})
+    <div class="row">
+      <div
+        class="col-lg-2 col-lg-offset-5 col-md-2 col-md-offset-5 col-sm-4 col-sm-offset-4 col-4 offset-4 text-center"
+      >
+        <a href="#"
+           id="h-add-model"
+           data-bind="click: add, activate: add"
+           class="btn btn-success btn-block btn-sm"
+           :class="{
+            'disabled': isFull || hasNewItem,
+           }"
+           :disabled="isFull || hasNewItem"
+           @click.prevent="addItem"
+        >
+          <i class="fa-solid fa-plus"></i> add row
+        </a>
+      </div>
+    </div>
 </div>`,
 }

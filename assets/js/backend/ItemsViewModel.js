@@ -2,16 +2,16 @@ import { computed, shallowRef } from 'vue';
 import { hasNewModel } from '../utils/itemUtils.js';
 import { ReadableTime } from '../readableTimeJs.js';
 import moment from 'moment';
+import Item from './Item.js';
 
 /**
  * WARNING: reactive :D (also cursed LOL)
  */
 export default class ItemsViewModel {
   items = shallowRef([]);
-  maxItems = 50;
 
   #computedHasNewItem = computed(() => hasNewModel(this.items.value));
-  #computedIsFull = computed(() => this.items.value.length >= maxItems);
+  #computedIsFull = computed(() => this.items.value.length >= window.maxItems);
 
   /**
    * @param {Item[]} items
@@ -28,6 +28,25 @@ export default class ItemsViewModel {
 
   get isFull() {
     return this.#computedIsFull;
+  }
+
+  async add() {
+    if (this.#computedIsFull.value) {
+      return;
+    }
+
+    const data = {};
+    const items = [...this.items.value];
+
+    scheduleColumns.forEach((col) => {
+      data[col.id] = '';
+    });
+
+    const item = new Item(-1, 30*60, data, items.length + 1);
+		await item.save();
+
+    items.push(item);
+    this.items.value = [...items];
   }
 
   remove(item) {

@@ -22,7 +22,7 @@ export function parseLength(str) {
 }
 
 export function hasNewModel(models) {
-	return models.filter((model) => model.id === -1).length > 0;
+	return models.filter((model) => model.id.value === -1).length > 0;
 }
 
 // this is cursed, but ICBA to rewrite it in plain js
