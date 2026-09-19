@@ -1,8 +1,6 @@
 import { ref, computed } from 'vue';
 import moment from 'moment';
 import HoraroEditor from './HoraroEditor.js';
-// imported for IDE type hinting
-import Item from '../../js/backend/Item.js';
 import { parseLength } from '../../js/utils/itemUtils.js';
 
 
@@ -19,6 +17,7 @@ export default {
   ],
   setup(props) {
     /**
+     * @typedef {import('../../js/backend/Item.js')}
      * @var {Item}
      */
     const item = props.item;
@@ -85,7 +84,7 @@ export default {
       expanded,
       position: item.position,
       first,
-      columns: window.columns,
+      columns: window.scheduleColumns,
       computeDisplayText,
       move: (pos) => item.move(pos),
       doDelete,

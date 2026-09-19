@@ -21,6 +21,12 @@ export function parseLength(str) {
 	return 0;
 }
 
+/**
+ * @typedef {import('../../js/backend/Item.js')}
+ *
+ * @param {Item[]} models
+ * @return {boolean}
+ */
 export function hasNewModel(models) {
 	return models.filter((model) => model.id.value === -1).length > 0;
 }

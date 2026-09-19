@@ -67,9 +67,6 @@ window.scheduleColumns = [
 {% endfor %}
 ];
 
-// TODO: temp hack
-window.columns = window.scheduleColumns;
-
 // Welcome to the dirtiest hacks, today we will just say fuck it because the application does not have access to the column names
 window.optionsColumnId = '{{ optionsColumnId }}';
 window.scheduleId = '{{ schedule.id|obscurify('schedule') }}';

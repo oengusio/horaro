@@ -20,7 +20,7 @@ export default {
       items,
       hasNewItem,
       isFull,
-      columns: window.columns,
+      columns: window.scheduleColumns,
       addItem: () => viewModel.add(),
     };
   },
