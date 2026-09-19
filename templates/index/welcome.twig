@@ -14,9 +14,8 @@
         <script src="{{ asset('trd_party/remarkable.min.js') }}"></script>
 
         <script src="{{ macros.asset('vendor/@fortawesome/fontawesome-free/js/all.min.js') }}"></script>
-{#        <script src="{{ asset('js/vendor-backend.js') }}"></script>#}
         <script src="{{ asset('js/i18n/' ~ app.locale ~ '.js') }}"></script>
-{#        <script type="module" src="{{ asset('js/app-backend.js') }}"></script>#}
+        {% block importmap %}{{ importmap('backend') }}{% endblock %}
     {% else %}
         {{ parent() }}
     {% endif %}

@@ -6,8 +6,6 @@ import 'bootstrap';
 import { initScheduler } from './js/backend/scheduler.js';
 import { mirrorColumnWidths } from './js/utils/itemUtils.js';
 
-jQuery('#h-scheduler-container-old').remove();
-
 // backwards compat for old code
 window.jQuery = jQuery;
 window.$ = jQuery;
