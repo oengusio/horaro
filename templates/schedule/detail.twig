@@ -76,9 +76,6 @@ window.scheduleTZ = '{{ start.format('P') }}';
 window.maxItems = {{ maxItems }};
 
 window.itemData = {{ items|json_encode|raw }};
-
-// TODO: probably not going to use this
-window.testColumns = '{{ columns|join(',') }}';
 </script>
 
 <div {{ vue_component('HoraroInputPopover') }}></div>
@@ -101,8 +98,5 @@ window.testColumns = '{{ columns|join(',') }}';
 
 <script>
 
-</script>
-<script type="application/json" id="h-item-data">
-{{ items|json_encode|raw }}
 </script>
 {% endblock %}
