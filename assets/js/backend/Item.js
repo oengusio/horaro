@@ -166,11 +166,10 @@ export default class Item {
 
       this.suspended = false;
 
-      // TODO: next focus? Figure out what that is
-      /*if (self.nextFocus) {
+      if (this.nextFocus) {
         $('#h-add-model').focus();
-        self.nextFocus = false;
-      }*/
+        this.nextFocus = false;
+      }
 
     } catch (error) {
       console.log(error);

@@ -31,6 +31,7 @@ export default {
     }
 
     return {
+      customId: `h-e-${customId}`,
       displayValue,
       openEditor,
     };
@@ -39,7 +40,7 @@ export default {
   // language=vue
   template: `<div class="h-editor">
     <!-- TODO: render markdown -->
-    <a href="#" ref="targetEl" @click.prevent="openEditor" class="editable-click" :class="{
+    <a href="#" ref="targetEl" :id="customId" @click.prevent="openEditor" class="editable-click" :class="{
       'editable-empty': !displayValue,
     }">
       {{ displayValue || 'Empty' }}

@@ -44,7 +44,19 @@ export default {
 
     function cancelEdit() {
       isOpen.value = false;
+      const storedEditorId = `${currentEditId.value}`;
       currentEditId.value = ''
+
+      nextTick(() => {
+        window.dispatchEvent(new CustomEvent(
+          'editorCanceled',
+          {
+            detail: {
+              id: storedEditorId,
+            },
+          },
+        ));
+      });
     }
 
     function clearValue() {
@@ -60,17 +72,23 @@ export default {
         return;
       }
 
-      window.dispatchEvent(new CustomEvent(
-        'editorSaved',
-        {
-          detail: {
-            id: currentEditId.value,
-            content: inputCache.value,
-          },
-        },
-      ));
+      // clone it
+      const storedValue = `${inputCache.value}`;
+      const storedEditorId = `${currentEditId.value}`;
       isOpen.value = false;
       currentEditId.value = ''
+
+      nextTick(() => {
+        window.dispatchEvent(new CustomEvent(
+          'editorSaved',
+          {
+            detail: {
+              id: storedEditorId,
+              content: storedValue,
+            },
+          },
+        ));
+      });
     }
 
     return {
