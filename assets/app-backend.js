@@ -5,6 +5,7 @@ import $ from 'jquery';
 import 'bootstrap';
 import { initScheduler } from './js/backend/scheduler.js';
 import { mirrorColumnWidths } from './js/utils/itemUtils.js';
+import SpatialNavigation from './js/backend/SpatialNavigation.js';
 
 // backwards compat for old code
 window.jQuery = $;
@@ -17,19 +18,20 @@ console.log('This log comes from assets/app-backend.js. IF assetmapper did not s
 
 registerVueControllerComponents();
 
+let dataNode;
+
 const ui = document.body.dataset.ui;
 
 function resizeColumns() {
-  const dataNode = $('.h-scheduler');
   mirrorColumnWidths(dataNode, $('tr:first > *', dataNode.prev()));
 }
 
 function openNextEditor(currentId) {
   const current = $(`#h-e-${currentId}`);
-  const root    = current.closest('table')
-  const links   = root.find('a.editable-click:visible');
+  const root = current.closest('table');
+  const links = root.find('a.editable-click:visible');
   const selfIdx = links.index(current);
-  const next    = (selfIdx < (links.length - 1)) ? $(links[selfIdx+1]) : $('#h-add-model');
+  const next = (selfIdx < (links.length - 1)) ? $(links[selfIdx + 1]) : $('#h-add-model');
 
   if (next.is('.editable-click')) {
     next[0].click();
@@ -53,6 +55,11 @@ if (ui) {
   if (ui === 'scheduler') {
     initScheduler();
 
+    window.addEventListener('ui-ready', () => {
+      dataNode = $('.h-scheduler');
+      resizeColumns();
+    }, { once: true });
+
     window.addEventListener('editorSaved', (e) => {
       setTimeout(() => {
         resizeColumns();
@@ -63,9 +70,10 @@ if (ui) {
     window.addEventListener('resize', () => {
       resizeColumns();
     });
-
-    setTimeout(() => {
-      resizeColumns();
-    }, 100);
   }
+
+  // wait for vue
+  window.addEventListener('ui-ready', () => {
+    new SpatialNavigation(dataNode);
+  }, { once: true });
 }

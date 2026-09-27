@@ -1,3 +1,4 @@
+import { onMounted } from 'vue';
 import ScheduleItem from '../components/ScheduleItem.js';
 
 export default {
@@ -14,7 +15,9 @@ export default {
     const hasNewItem = viewModel.hasNewItem;
     const isFull = viewModel.isFull;
 
-    // TODO: editor auto next
+    onMounted(() => {
+      window.dispatchEvent(new CustomEvent('ui-ready'));
+    });
 
     return {
       items,

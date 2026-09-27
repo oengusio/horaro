@@ -18,7 +18,7 @@
         <div class="col-lg-8 col-md-7">
             <div class="row h-tiles">
                 {% for schedule in event.schedules %}
-                    <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+                    <div class="col-lg-4 col-md-6 col-sm-6 col-12 mb-3">
                         <div class="card card-body">
                             <h4><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}">
                                     <span><i class="fa-regular fa-calendar-days fa-3x"></i></span>
