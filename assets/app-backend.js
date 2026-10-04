@@ -6,6 +6,7 @@ import 'bootstrap';
 import { initScheduler } from './js/backend/scheduler.js';
 import { mirrorColumnWidths } from './js/utils/itemUtils.js';
 import SpatialNavigation from './js/backend/SpatialNavigation.js';
+import { initColumnist } from './js/backend/columnist.js';
 
 // backwards compat for old code
 window.jQuery = $;
@@ -70,6 +71,8 @@ if (ui) {
     window.addEventListener('resize', () => {
       resizeColumns();
     });
+  } else if (ui === 'columnist') {
+    initColumnist();
   }
 
   // wait for vue
