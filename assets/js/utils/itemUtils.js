@@ -23,8 +23,9 @@ export function parseLength(str) {
 
 /**
  * @typedef {import('../../js/backend/Item.js')}
+ * @typedef {import('../../js/backend/Column.js')}
  *
- * @param {Item[]} models
+ * @param {Item[]|Column[]} models
  * @return {boolean}
  */
 export function hasNewModel(models) {

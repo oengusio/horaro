@@ -3,6 +3,9 @@ import $ from 'jquery';
 
 export const OPTIONS_NAME = '[[options]]';
 
+/**
+ * WARNING: reactive :D
+ */
 export default class Column {
   id = ref(-1);
   name = ref('MISSINGNO');

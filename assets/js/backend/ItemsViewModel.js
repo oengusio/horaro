@@ -145,6 +145,7 @@ export default class ItemsViewModel {
       item.scheduled.value = scheduled;
       item.dateSwitch.value = false;
 
+      // TODO: get rid of moment
       const date = moment.unix(scheduled / 1000).utcOffset(scheduleTZ);
       const dayOfYear = date.dayOfYear();
       const pickedSetupTime = item.setupTime.value || scheduleSetupTime;
