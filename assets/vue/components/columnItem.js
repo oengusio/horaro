@@ -12,6 +12,7 @@ export default {
     const fixed = column.fixed;
     const hidden = column.hidden;
     const isOptionsColumn = column.isOptionsColumn;
+    const isFull = window.viewModel.computedIsFull;
 
     const deleting = ref(false);
 
@@ -32,6 +33,8 @@ export default {
     });
 
     return {
+      column,
+      isFull,
       isOptionsColumn,
       bodyClass: 'h-column ' + (props.index % 2 === 1 ? 'h-odd' : 'h-even'),
       rowClass,
@@ -42,9 +45,11 @@ export default {
   },
   // language=vue
   template: `
-  <div :class="bodyClass">
+  <tbody :class="bodyClass" draggable="false">
     <tr class="h-primary">
-      <td :class="\`h-name \${rowClass}\`"></td>
+      <td :class="\`h-name \${rowClass}\`">
+        {{ column.name }}
+      </td>
       <td :class="\`h-ishidden \${rowClass}\`">
         <input v-if="!fixed"
                type="checkbox"
@@ -86,6 +91,6 @@ export default {
         </template>
       </td>
     </tr>
-  </div>
+  </tbody>
 `,
 }

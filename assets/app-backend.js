@@ -73,10 +73,17 @@ if (ui) {
     });
   } else if (ui === 'columnist') {
     initColumnist();
+
+    window.addEventListener('ui-ready', () => {
+      dataNode = $('.h-columnist');
+      $('#h-columnist-container-old').remove();
+    }, { once: true });
   }
 
   // wait for vue
   window.addEventListener('ui-ready', () => {
+    window.viewModel.initDragAndDrop();
+
     new SpatialNavigation(dataNode);
   }, { once: true });
 }

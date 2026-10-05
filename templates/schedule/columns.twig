@@ -27,27 +27,23 @@
 
 <script>
     window.scheduleId = '{{ schedule.id|obscurify('schedule')|raw }}';
-    window.columns = {{ columns|json_encode|raw }};
+    window.columnData = {{ columns|json_encode|raw }};
 </script>
 
 <div {{ vue_component('HoraroInputPopover') }}></div>
 
-<div {{ vue_component('ColumnsEditorController', {
-
-}) }}>
-    <div class="row" >
-        <div class="col-lg-12">
-            <div class="spinner">
-                <div class="bounce1"></div>
-                <div class="bounce2"></div>
-                <div class="bounce3"></div>
+<div class="row">
+    <div {{ vue_component('ColumnsEditorController') }} class="col-lg-5 col-md-6 col-sm-6" id="h-columnist-container" >
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="spinner">
+                    <div class="bounce1"></div>
+                    <div class="bounce2"></div>
+                    <div class="bounce3"></div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-
-<div class="row">
-	<div class="col-lg-5 col-md-6 col-sm-6" id="h-columnist-container">
+	    <div id="h-columnist-container-old">
 		<table class="table">
 			<thead>
 				<tr>
@@ -84,6 +80,7 @@
 		</div>
 		<!-- /ko -->
 	</div>
+    </div>
 
 	<div class="col-lg-7 col-md-6 col-sm-6 h-formhelp-columnist">
 		<p>Each schedule has its own set of columns, which control what data you can edit in the schedule
@@ -104,6 +101,10 @@
 
 		<p>You want to move the most important columns at the top, so they are always visible. Also,
 		keep the column names short and simple.</p>
+
+        <h4>Setup time</h4>
+
+        <p>TODO: explain &quot;<kbd>[[options]]</kbd>&quot; column</p>
 
 		<h4>Mobile Devices Considerations</h4>
 

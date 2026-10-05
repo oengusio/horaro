@@ -159,4 +159,8 @@ export default class ItemsViewModel {
 			prev = dayOfYear;
     }
   }
+
+  initDragAndDrop() {
+    console.log('TODO: Implement drag and drop for scheduler');
+  }
 }

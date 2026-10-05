@@ -24,7 +24,7 @@ export default class Column {
     this.id.value = id;
     this.name.value = name;
     this.position.value = pos;
-    this.hidden.value = hidden;
+    this.hidden.value = hidden || name === OPTIONS_NAME;
     this.fixed = !!fixed; // force boolean just in case
 
     this.#startChangeListener();
