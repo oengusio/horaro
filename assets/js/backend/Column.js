@@ -63,7 +63,7 @@ export default class Column {
 			url += `/${colId}?_method=PUT`;
 		}
 
-    const data = {
+    const patchData = {
 			name: this.name.value,
 			hidden: this.hidden.value,
       [csrfTokenName]: csrfToken,
@@ -78,7 +78,7 @@ export default class Column {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(patchData),
       });
       const jsonData = await response.json();
 

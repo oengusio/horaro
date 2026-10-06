@@ -6,11 +6,10 @@ export default {
     ColumnItem,
   },
   setup() {
-    const columns = viewModel.rawColumns;
     const fixedColumns = viewModel.computedFixedColumns;
     const flexibleColumns = viewModel.computedFlexibleColumns;
     const hasNewColumn = viewModel.computedHasNew;
-
+    const isFull = viewModel.computedIsFull;
 
     onMounted(() => {
       window.dispatchEvent(new CustomEvent('ui-ready'));
@@ -20,6 +19,7 @@ export default {
       hasNewColumn,
       fixedColumns,
       flexibleColumns,
+      isFull,
       addModel: () => viewModel.add(),
     };
   },
@@ -47,8 +47,8 @@ export default {
        id="h-add-model"
        @click.prevent="addModel"
        class="btn btn-success btn-block btn-sm"
-       :class="{'disabled': hasNewColumn}"
-       :disabled="hasNewColumn"
+       :class="{'disabled': hasNewColumn || isFull}"
+       :disabled="hasNewColumn || isFull"
     ><i class="fa-solid fa-plus"></i> add column</a>
   </div>
 </div>

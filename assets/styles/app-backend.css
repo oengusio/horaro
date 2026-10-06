@@ -510,8 +510,12 @@ tbody.h-odd td {
 
 #h-columnist-container .h-controls {
   white-space: nowrap;
-  max-width: 110px;
-  width: 110px
+  /*max-width: 110px;*/  /*TODO: I don't even know at this point why this solves that jumping*/
+  width: 110px;
+}
+
+#h-columnist-container .h-controls button:not(:last-of-type) {
+  margin-right: 5px;
 }
 
 #h-columnist-container .h-ishidden {

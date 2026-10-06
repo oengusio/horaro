@@ -3,6 +3,7 @@ import { hasNewModel } from '../utils/itemUtils.js';
 import Column from './Column.js';
 
 const MAX_COLUMN = 10;
+// const MAX_COLUMN = 9;
 
 /**
  * WARNING: reactive :D
@@ -19,8 +20,10 @@ export default class ColumnsViewModel {
 
   computedNumFlexColumns = computed(() => this.computedFixedColumns.value.length);
 
+  // TODO: seems to have some whacky behaviour where it counts 9 instead of 10.
+  // This could also be weird backend behaviour, haven't quite figured that out
   computedIsFull = computed(() => this.rawColumns.value.filter(
-    (col) => col.fixed === false && !col.hidden.value,
+    (col) => col.fixed === false && col.hidden.value === false,
   ).length >= MAX_COLUMN);
 
   computedIsMinimal = computed(() => {
