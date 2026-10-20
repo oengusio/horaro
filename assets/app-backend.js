@@ -76,8 +76,14 @@ if (ui) {
 
     window.addEventListener('ui-ready', () => {
       dataNode = $('.h-columnist');
-      $('#h-columnist-container-old').remove();
     }, { once: true });
+
+    window.addEventListener('editorSaved', (e) => {
+      setTimeout(() => {
+        resizeColumns();
+        openNextEditor(e.detail.id);
+      }, 100);
+    });
   }
 
   // wait for vue

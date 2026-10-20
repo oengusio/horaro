@@ -46,6 +46,42 @@ export default class Column {
     });
   }
 
+  move(direction) {
+    const newPos = this.position.value + (direction === 'up' ? -1 : 1);
+
+    viewModel.move(this.id.value, newPos);
+  }
+
+  async deleteColumn() {
+    if (this.suspended) {
+      return;
+    }
+
+    const data = {
+      [csrfTokenName]: csrfToken,
+    };
+
+    this.busy.value = true;
+
+    try {
+      await fetch(
+        `/-/schedules/${scheduleId}/columns/${this.id.value}?_method=DELETE`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify(data),
+        },
+      );
+
+      viewModel.remove(this);
+    } finally {
+      this.busy.value = false;
+    }
+  }
+
   async updateColumn() {
     if (this.suspended) {
       return;

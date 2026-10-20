@@ -55,7 +55,7 @@ export default {
 
     </table>
 
-    (full: {{isFull}} | hasNew: {{hasNewItem}})
+<!--    (full: {{isFull}} | hasNew: {{hasNewItem}})-->
     <div class="row">
       <div
         class="col-lg-2 col-lg-offset-5 col-md-2 col-md-offset-5 col-sm-4 col-sm-offset-4 col-4 offset-4 text-center"

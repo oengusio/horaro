@@ -1,7 +1,11 @@
 import { ref, computed } from 'vue';
+import HoraroEditor from './HoraroEditor.js';
 
 export default {
-  props: ['column', 'index'],
+  components: {
+    HoraroEditor,
+  },
+  props: ['column', 'index', 'last'],
   setup(props) {
      /**
      * @typedef {import('../../js/backend/Column.js')}
@@ -36,6 +40,10 @@ export default {
       return column.fixed || column.id.value === -1 || window.viewModel.computedIsMinimal.value;
     });
 
+    function doDelete() {
+      column.deleteColumn();
+    }
+
     return {
       column,
       isFull,
@@ -46,6 +54,8 @@ export default {
       hidden,
       deleting,
       deleteButtonDisabled,
+      move: (pos) => column.move(pos),
+      doDelete,
     };
   },
   // language=vue
@@ -53,19 +63,23 @@ export default {
   <tbody :class="bodyClass" draggable="false">
     <tr class="h-primary">
       <td :class="\`h-name \${rowClass}\`">
-        {{ column.name }}
+        <HoraroEditor
+          :id="\`col_\${column.id.value}\`"
+          v-model="column.name.value"
+        />
       </td>
       <td :class="\`h-ishidden \${rowClass}\`">
         <input v-if="!fixed"
                type="checkbox"
                v-model="hidden"
-               :disabled="isOptionsColumn || (hidden && isFull)"
+               :disabled="isOptionsColumn || (hidden && isFull) || deleting"
         />
       </td>
       <td :class="\`text-right h-controls \${rowClass}\`">
         <template v-if="deleting">
           <button class="btn btn-danger btn-sm"
-                  data-bind="click: doDelete, activate: doDelete">
+                  @click.prevent="doDelete"
+          >
             <i class="fa-solid fa-trash"></i>
           </button>
           <button class="btn btn-secondary btn-sm"
@@ -78,12 +92,18 @@ export default {
           <template v-if="!fixed">
             <button
               class="btn btn-move-up btn-sm btn-secondary"
-              data-bind="click: moveUp, activate: moveUp, attr: { class: 'btn move-up btn-sm' + (first() && ' disabled' || ' btn-secondary') }">
+              :disabled="index === 0"
+              :class="{ 'disabled': index === 0 }"
+              @click.prevent="move('up')"
+            >
               <i class="fa-solid fa-arrow-up"></i>
             </button>
             <button
               class="btn btn-move-down btn-sm btn-secondary"
-              data-bind="click: moveDown, activate: moveDown, attr: { class: 'btn move-down btn-sm' + (last() && ' disabled' || ' btn-secondary') }">
+              :disabled="last"
+              :class="{ 'disabled': last }"
+              @click.prevent="move('down')"
+            >
               <i class="fa-solid fa-arrow-down"></i>
             </button>
           </template>

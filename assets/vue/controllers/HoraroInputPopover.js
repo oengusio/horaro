@@ -37,7 +37,7 @@ export default {
         const rect = element.getBoundingClientRect();
 
         itemTop.value = rect.top - 70;
-        arrowLeft.value = rect.left;
+        arrowLeft.value = rect.left; // TODO: this is wrong for column editor
         isOpen.value = true;
       });
     });

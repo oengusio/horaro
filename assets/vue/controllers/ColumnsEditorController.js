@@ -38,7 +38,7 @@ export default {
 </table>
 
 <table class="table h-columnist">
-  <ColumnItem v-for="(column, idx) in flexibleColumns" :column="column" :index="idx" :key="column.id" />
+  <ColumnItem v-for="(column, idx) in flexibleColumns" :last="idx === flexibleColumns.length - 1" :column="column" :index="idx" :key="column.id" />
 </table>
 
 <div class="row">
