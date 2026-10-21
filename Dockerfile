@@ -78,3 +78,4 @@ RUN chown -R horaro:horaro .
 EXPOSE 80
 USER root
 CMD ["sh", "entrypoint.sh"]
+#CMD ["php", "--info"]
