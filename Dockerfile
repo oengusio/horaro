@@ -1,4 +1,6 @@
-FROM alpine:3.24 AS builder
+ARG alpine_version=3.24
+
+FROM alpine:${alpine_version} AS builder
 LABEL maintainer="duncte123"
 
 # link to search for packages https://pkgs.alpinelinux.org/packages?name=php85&branch=v3.24&repo=&arch=x86_64&origin=&flagged=&maintainer=
@@ -37,7 +39,7 @@ RUN rm -rf assets .git .gitignore tests var
 ###################################################################################
 # second stage: final image
 
-FROM alpine:3.21
+FROM alpine:${alpine_version}
 LABEL maintainer="Sgt. Kabukiman"
 
 # install packages
