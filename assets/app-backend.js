@@ -9,6 +9,7 @@ import { initColumnist } from './js/backend/columnist.js';
 import './trd_party/pickadate/picker.js';
 import './trd_party/pickadate/picker.date.js';
 import './trd_party/pickadate/picker.time.js';
+import moment from 'moment';
 
 window.csrfToken = $('meta[name="csrf_token"]').attr('content');
 window.csrfTokenName = $('meta[name="csrf_token_name"]').attr('content');
@@ -95,6 +96,8 @@ if (ui) {
 // const horaroTimeFormat = "H:i a";
 
 document.addEventListener('DOMContentLoaded', () => {
+  // $('select.h-fancy').select2();
+
   $('#start_date').pickadate({
 		formatSubmit: 'yyyy-mm-dd',
 		hiddenName: true
@@ -106,5 +109,15 @@ document.addEventListener('DOMContentLoaded', () => {
 		format: horaroTimeFormat,
 		formatLabel: horaroTimeFormat,
 		hiddenName: true
+	});
+
+  $('form.h-confirmation').on('submit', function() {
+		return confirm($(this).data('confirmation') || 'Are you sure?');
+	});
+
+  $('time.h-fancy').each(function() {
+		// do not convert into the user's timezone, but leave the given one
+		// (i.e. the schedule's timezone)
+		$(this).text(moment.parseZone($(this).attr('datetime')).format('llll'));
 	});
 }, {  once: true })
