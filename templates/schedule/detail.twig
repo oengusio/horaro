@@ -53,7 +53,7 @@
 			Click on an item to edit its details. Use the buttons on the right to move rows up and down or delete them entirely.<br>
 			You can use basic Markdown (<strong>**bold**</strong>, <em>*italic*</em>, [link name](http://example.com/)) for formatting.
 			{% if schedule.setupTime %}
-			<br>Note: The <strong>{{ utils.readableTime(schedule.setupTime) }} setup time</strong> in between all rows is added automatically.
+			<br>Note: The <strong>{{ utils.readableTime(schedule.setupTime) }} setup time</strong> in between all rows is added automatically to rows that do not have a custom setup time.
 			{% endif %}
 		</small></p>
 	</div>

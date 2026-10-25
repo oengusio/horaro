@@ -28,6 +28,12 @@ export default class Column {
     this.fixed = !!fixed; // force boolean just in case
 
     this.#startChangeListener();
+
+    // Old bug resulted in broken state options columns.
+    // This force fixes it, even if users manually re-enable the checkbox.
+    if (name === OPTIONS_NAME && !hidden) {
+      this.updateColumn();
+    }
   }
 
   #startChangeListener() {
@@ -41,7 +47,13 @@ export default class Column {
       this.updateColumn();
     });
 
-    watch(this.hidden, () => {
+    watch(this.hidden, (newVal, oldVal) => {
+      // Prevent a user manually overwriting the hidden value.
+      // It's jank, but works.
+      if (this.name.value === OPTIONS_NAME && oldVal) {
+        return;
+      }
+
       this.updateColumn();
     });
   }

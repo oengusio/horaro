@@ -65,10 +65,14 @@
 		<p>You want to move the most important columns at the top, so they are always visible. Also,
 		keep the column names short and simple.</p>
 
-        <h4>Setup time</h4>
+        <h4>Per-row Setup time</h4>
 
-        <p>TODO: explain &quot;<kbd>[[options]]</kbd>&quot; column</p>
-        <p>Horaro supports adding setup time through a special column named &quot;[[options]]&quot;</p>
+        <p>Horaro supports adding row specific setup time through a special column named &quot;[[options]]&quot;.
+        Inside the options column you need to add a special value in order to work, this value looks something like this <kbd>{&quot;setup&quot;:&quot;10m&quot;}</kbd>.</p>
+
+        <p>Just like with the global setup time, enter something like &quot;5min&quot; for 5 minutes or &quot;5m30s&quot; for 5 minutes and 30 seconds. It is important to not use spaces.</p>
+
+        <p>The options column will always be hidden, you can't make it public.</p>
 
 		<h4>Mobile Devices Considerations</h4>
 
