@@ -12,7 +12,7 @@ export default class SpatialNavigation {
   #addBtn;
 
   constructor(root) {
-    console.log(root);
+    // console.log(root);
 
     this.#root = root;
     this.#addBtn = $('#h-add-model');
@@ -20,7 +20,7 @@ export default class SpatialNavigation {
     root.on('keydown', (e) => {
       const target = $(e.target);
 
-      console.log(target);
+      // console.log(target);
 
       // do nothing on elements we don't care about
       if (!target.is('.editable') && !target.is('.h-co button')) {
