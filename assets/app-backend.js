@@ -7,10 +7,9 @@ import { initScheduler } from './js/backend/scheduler.js';
 import { mirrorColumnWidths } from './js/utils/itemUtils.js';
 import SpatialNavigation from './js/backend/SpatialNavigation.js';
 import { initColumnist } from './js/backend/columnist.js';
-
-// backwards compat for old code
-window.jQuery = $;
-window.$ = $;
+import './trd_party/pickadate/picker.js';
+import './trd_party/pickadate/picker.date.js';
+import './trd_party/pickadate/picker.time.js';
 
 window.csrfToken = $('meta[name="csrf_token"]').attr('content');
 window.csrfTokenName = $('meta[name="csrf_token_name"]').attr('content');
@@ -93,3 +92,20 @@ if (ui) {
     new SpatialNavigation(dataNode);
   }, { once: true });
 }
+
+// const horaroTimeFormat = "H:i a";
+
+document.addEventListener('DOMContentLoaded', () => {
+  $('#start_date').pickadate({
+		formatSubmit: 'yyyy-mm-dd',
+		hiddenName: true
+	});
+
+	$('#start_time').pickatime({
+		interval: 15,
+		formatSubmit: 'HH:i',
+		format: horaroTimeFormat,
+		formatLabel: horaroTimeFormat,
+		hiddenName: true
+	});
+}, {  once: true })

@@ -136,9 +136,6 @@ return [
         'version' => '4.6.2',
         'type' => 'css',
     ],
-    'pickadate' => [
-        'version' => '5.0.0-alpha.3',
-    ],
     'moment' => [
         'version' => '2.30.1',
     ],
