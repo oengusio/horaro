@@ -2,7 +2,6 @@ import { registerVueControllerComponents } from '@symfony/ux-vue';
 // I NEED MOTHER FUCKING STIMULUS FOR VUE TO WORK SYMFONY PLS
 import './bootstrap.js';
 import $ from 'jquery';
-import 'bootstrap';
 import { initScheduler } from './js/backend/scheduler.js';
 import { mirrorColumnWidths } from './js/utils/itemUtils.js';
 import SpatialNavigation from './js/backend/SpatialNavigation.js';

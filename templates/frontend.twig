@@ -10,10 +10,10 @@
 {% block scripts %}
 {% block importmap %}{{ importmap('app') }}{% endblock %}
 
-<script type="module" src="{{ macros.asset('vendor/jquery/jquery.index.js') }}"></script>
-<script type="module" src="{{ macros.asset('vendor/bootstrap/bootstrap.index.js') }}"></script>
-<script src="{{ macros.asset('js/vendor-frontend.js') }}"></script>
+{#<script type="module" src="{{ macros.asset('vendor/jquery/jquery.index.js') }}"></script>#}
+{#<script type="module" src="{{ macros.asset('vendor/bootstrap/bootstrap.index.js') }}"></script>#}
+{#<script src="{{ macros.asset('js/vendor-frontend.js') }}"></script>#}
 {# TODO: find a way to get rid of fontawesome scripts, I don't like them and it should not be needed #}
 <script src="{{ macros.asset('vendor/@fortawesome/fontawesome-free/js/all.min.js') }}"></script>
-<script type="module" src="{{ macros.asset('js/app-frontend.js') }}"></script>
+{#<script type="module" src="{{ macros.asset('js/app-frontend.js') }}"></script>#}
 {% endblock %}

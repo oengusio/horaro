@@ -1,4 +1,5 @@
 # TODO:
+- all fixes in front end (FUCK MY LIFE)
 - new themes
 - switch removed old themes to compatible new themes.
   - Deleted:

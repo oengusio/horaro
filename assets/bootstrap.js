@@ -1,3 +1,4 @@
+import 'bootstrap';
 import { startStimulusApp } from '@symfony/stimulus-bundle';
 import $ from 'jquery';
 

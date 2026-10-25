@@ -1163,11 +1163,15 @@ tbody tr:last-child .h-cal-cell:last-child {
   display: none
 }
 
-.h-ticker .panel-heading, .h-ticker .panel-body {
-  padding: 6px
+.h-ticker .card-header, .h-ticker .card-body {
+  padding: 6px;
 }
 
-.h-ticker .panel {
+.h-ticker .card-title {
+  margin-bottom: 0;
+}
+
+.h-ticker .card {
   margin-bottom: 10px
 }
 
@@ -1216,6 +1220,10 @@ button[disabled] {
 
 .h-odd td {
   background: #f9f9f9
+}
+
+.h-odd .h-new-day td {
+  background: transparent !important;
 }
 
 @media screen and (max-width: 991px) {
