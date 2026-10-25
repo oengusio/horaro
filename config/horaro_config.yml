@@ -9,7 +9,7 @@ parameters:
     de_de: Deutsch
     en_us: English (US)
   horaro.themes:
-    amelia: Amelia
+#    amelia: Amelia
     cerulean: Cerulean
     cosmo: Cosmo
     cyborg: Cyborg
@@ -17,11 +17,17 @@ parameters:
     flatly: Flatly
     journal: Journal
     lumen: Lumen
-    paper: Paper
-    readable: Readable
+    lux: Lux
+    materia: Materia
+    minty: Minty
+    pulse: Pulse
+#    paper: Paper
+#    readable: Readable
     sandstone: Sandstone
     simplex: Simplex
+    sketchy: Sketchy
     slate: Slate
+    solar: Solar
     spacelab: Spacelab
     superhero: Superhero
     united: United

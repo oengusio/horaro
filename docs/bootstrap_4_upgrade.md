@@ -1,6 +1,17 @@
 # TODO:
 - new themes
 - switch removed old themes to compatible new themes.
+  - Deleted:
+    - Amelia
+    - Paper
+    - Readable
+  - New (need images):
+    - Lux
+    - Materia
+    - Minty
+    - Pulse
+    - Sketchy
+    - Solar
 - make fontawesome self-hosted
 - fix arrow on popup editor in column editor (grrrrrr)
 - growl flashes
