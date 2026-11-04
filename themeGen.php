@@ -24,7 +24,11 @@ $bootswatchThemes = [
     'yeti',
 ];
 
-$themesResult = [];
+$themesResult = [
+    'bootstrap' => [
+        'version' => '4.6.2',
+    ],
+];
 
 foreach ($bootswatchThemes as $theme) {
     $themesResult["bootswatch/dist/$theme/bootstrap.min.css"] = [

@@ -9,7 +9,11 @@ import { initColumnist } from './js/backend/columnist.js';
 import './trd_party/pickadate/picker.js';
 import './trd_party/pickadate/picker.date.js';
 import './trd_party/pickadate/picker.time.js';
+import 'select2';
+import initSelect2 from 'select2';
 import moment from 'moment';
+
+initSelect2($);
 
 window.csrfToken = $('meta[name="csrf_token"]').attr('content');
 window.csrfTokenName = $('meta[name="csrf_token_name"]').attr('content');
@@ -110,6 +114,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		formatLabel: horaroTimeFormat,
 		hiddenName: true
 	});
+
+  $('body').on('click', '.h-back-btn', function() {
+		history.back();
+		return false;
+	});
+
+	$('select.h-fancy').select2();
 
   $('form.h-confirmation').on('submit', function() {
 		return confirm($(this).data('confirmation') || 'Are you sure?');

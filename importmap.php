@@ -41,9 +41,6 @@ return [
         'version' => '7.2.0',
         'type' => 'css',
     ],
-    'bootstrap' => [
-        'version' => '4.6.2',
-    ],
     'jquery' => [
         'version' => '3.6.0',
     ],
@@ -88,4 +85,11 @@ return [
         'path' => './vendor/symfony/ux-vue/assets/dist/loader.js',
     ],
     ...$bootsThemes,
+    'select2' => [
+        'version' => '4.1.0',
+    ],
+    'select2/dist/css/select2.min.css' => [
+        'version' => '4.1.0',
+        'type' => 'css',
+    ],
 ];
