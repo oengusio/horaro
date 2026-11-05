@@ -1222,7 +1222,7 @@ button[disabled] {
   background: #f9f9f9
 }
 
-.h-odd .h-new-day td {
+.h-new-day td {
   background: transparent !important;
 }
 
