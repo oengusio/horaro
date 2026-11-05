@@ -27,7 +27,7 @@ parameters:
     simplex: Simplex
     sketchy: Sketchy
     slate: Slate
-    solar: Solar
+    solar: Solar # Oengus theme! (very broken lmao)
     spacelab: Spacelab
     superhero: Superhero
     united: United

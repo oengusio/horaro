@@ -3,10 +3,10 @@
 - new themes
 - switch removed old themes to compatible new themes.
   - Deleted:
-    - Amelia
-    - Paper
-    - Readable
-  - New (need images):
+    - Amelia -> sketchy
+    - Paper -> cosmo
+    - Readable -> journal
+  - New:
     - Lux *
     - Materia *
     - Minty *
