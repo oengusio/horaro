@@ -1,6 +1,7 @@
+import $ from 'jquery';
 import 'bootstrap';
 import { startStimulusApp } from '@symfony/stimulus-bundle';
-import $ from 'jquery';
+import './js/bootstrap-notify.js';
 
 // backwards compat for old code
 window.jQuery = $;

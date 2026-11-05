@@ -18,7 +18,7 @@ initSelect2($);
 window.csrfToken = $('meta[name="csrf_token"]').attr('content');
 window.csrfTokenName = $('meta[name="csrf_token_name"]').attr('content');
 
-console.log('This log comes from assets/app-backend.js. IF assetmapper did not screw me over :D');
+console.log('Backend scripts loaded');
 
 registerVueControllerComponents();
 
@@ -97,38 +97,61 @@ if (ui) {
   }, { once: true });
 }
 
+const defaultGrowlOpt = {
+  type: 'info',
+  placement: { from: 'top', align: 'center' },
+  offset: 26,
+  width: 350,
+  delay: 3000,
+  spacing: 5,
+  animate: { enter: '', exit: '' },
+};
+
+function growl(msg, growlOpt = {}) {
+  $.notify({ message: msg }, Object.assign({}, defaultGrowlOpt, growlOpt));
+}
+
 // const horaroTimeFormat = "H:i a";
 
 document.addEventListener('DOMContentLoaded', () => {
-  // $('select.h-fancy').select2();
-
   $('#start_date').pickadate({
-		formatSubmit: 'yyyy-mm-dd',
-		hiddenName: true
-	});
+    formatSubmit: 'yyyy-mm-dd',
+    hiddenName: true,
+  });
 
-	$('#start_time').pickatime({
-		interval: 15,
-		formatSubmit: 'HH:i',
-		format: horaroTimeFormat,
-		formatLabel: horaroTimeFormat,
-		hiddenName: true
-	});
+  $('#start_time').pickatime({
+    interval: 15,
+    formatSubmit: 'HH:i',
+    format: horaroTimeFormat,
+    formatLabel: horaroTimeFormat,
+    hiddenName: true,
+  });
 
-  $('body').on('click', '.h-back-btn', function() {
-		history.back();
-		return false;
-	});
+  $('body').on('click', '.h-back-btn', function () {
+    history.back();
+    return false;
+  });
 
-	$('select.h-fancy').select2();
+  $('select.h-fancy').select2();
 
-  $('form.h-confirmation').on('submit', function() {
-		return confirm($(this).data('confirmation') || 'Are you sure?');
-	});
+  $('form.h-confirmation').on('submit', function () {
+    return confirm($(this).data('confirmation') || 'Are you sure?');
+  });
 
-  $('time.h-fancy').each(function() {
-		// do not convert into the user's timezone, but leave the given one
-		// (i.e. the schedule's timezone)
-		$(this).text(moment.parseZone($(this).attr('datetime')).format('llll'));
-	});
-}, {  once: true })
+  $('time.h-fancy').each(function () {
+    // do not convert into the user's timezone, but leave the given one
+    // (i.e. the schedule's timezone)
+    $(this).text(moment.parseZone($(this).attr('datetime')).format('llll'));
+  });
+
+  const flashesSel = $('#h-flashes');
+
+  if (flashesSel.length > 0) {
+		const flashes = JSON.parse(flashesSel.text());
+
+		for (const flashType in flashes) {
+			flashes[flashType].forEach((msg) => growl(msg, { type: flashType }));
+		}
+	}
+
+}, { once: true });
