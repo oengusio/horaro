@@ -1,18 +1,5 @@
 # TODO:
 - all fixes in front end (FUCK MY LIFE)
-- new themes
-- switch removed old themes to compatible new themes.
-  - Deleted:
-    - Amelia -> sketchy
-    - Paper -> cosmo
-    - Readable -> journal
-  - New:
-    - Lux *
-    - Materia *
-    - Minty *
-    - Pulse *
-    - Sketchy *
-    - Solar *
 - make fontawesome self-hosted (https://docs.fontawesome.com/web/setup/host-yourself/webfonts) (can be done in different pr)
 - fix arrow on popup editor in column editor (grrrrrr)
 - Replace moment with native temporal api (can be done in different PR)
