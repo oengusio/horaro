@@ -657,16 +657,19 @@ table.h-columnist tbody .h-handle {
   /*top: -20px;*/
 }
 
-.h-popover-editor .arrow {
+.h-popover-editor-arrow {
+  --top-offset: 0px;
+
   width: 0;
   height: 0;
   /*background: orange;*/
   position: absolute;
-  top: 45px;
+  top: calc(45px + var(--top-offset));
   border-left: 15px solid transparent;
   border-right: 15px solid transparent;
 
   border-top: 20px solid black;
+  z-index: 999999;
 }
 
 a.editable-click {

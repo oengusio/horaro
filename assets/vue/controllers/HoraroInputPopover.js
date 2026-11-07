@@ -139,10 +139,11 @@ export default {
           <i class="fa-solid fa-ban"></i>
         </button>
       </div>
-
-      <span class="arrow" :style="{
-        left: \`\${arrowLeft}px\`,
-      }"></span>
     </div>
+
+    <span class="h-popover-editor-arrow" v-if="isOpen" :style="{
+        left: \`\${arrowLeft}px\`,
+        '--top-offset': \`\${itemTop}px\`,
+      }"></span>
   `,
 };
