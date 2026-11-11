@@ -7,7 +7,7 @@
 {% block body_attr %} class="theme-{{ theme }}"{% endblock %}
 
 {% block meta %}
-<meta name="description" content="A list of schedules created for {{ event.name }}">
+    <meta name="description" content="A list of schedules created for {{ event.name }}">
 	<meta name="author" content="{{ event.owner.displayName }}">
 	<link rel="canonical" href="{{ app.request.scheme }}://{{ app.request.host }}/{{ event.slug ~ appendix }}">
 	<link rel="index" href="{{ app.request.scheme }}://{{ app.request.host }}/{{ event.slug ~ appendix }}">
@@ -16,8 +16,10 @@
 {% endblock %}
 
 {% block styles %}
-    <link href="{{ asset('vendor/bootswatch/dist/' ~ theme ~ '/bootstrap.min.css') }}" rel="stylesheet">
-	<link href="{{ asset('styles/app-frontend.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/bootswatch/dist/' ~ theme ~ '/bootstrap.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('styles/theme/' ~ theme ~ '-fixes.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ macros.asset('vendor/@fortawesome/fontawesome-free/css/fontawesome.min.css') }}" />
+	<link href="{{ asset('styles/app-frontend.css') }}" rel="stylesheet" />
 {% endblock %}
 
 {% block navheader %}
