@@ -50,14 +50,8 @@ return [
     'moment' => [
         'version' => '2.30.1',
     ],
-    'knockout' => [
-        'version' => '3.5.3',
-    ],
     'remarkable' => [
         'version' => '2.0.1',
-    ],
-    'nativesortable' => [
-        'version' => '0.1.0',
     ],
     'vue' => [
         'version' => '3.5.41',
