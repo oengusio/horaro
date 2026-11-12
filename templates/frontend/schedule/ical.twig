@@ -59,6 +59,7 @@
 {% set website = schedule.website|default(event.website) %}
 {% set twitch  = schedule.twitch|default(event.twitch)   %}
 {% set twitter = schedule.twitter|default(event.twitter) %}
+{% set bluesky = schedule.bluesky|default(event.bluesky) %}
 
 <ul class="navbar-nav ml-auto">
     {% if website %}
@@ -67,9 +68,9 @@
     {% if twitch %}
         <li class="nav-item"><a href="https://twitch.tv/{{ twitch }}" target="_blank" title="{{ twitch }}" class="nav-link"><i
                 class="fa-brands fa-twitch"></i> <span class="d-none d-md-inline">{{ twitch }}</span></a></li>{% endif %}
-    {% if event.bluesky %}
-        <li class="nav-item"><a href="https://bsky.app/profile/{{ event.bluesky }}" target="_blank" title="@{{ event.bluesky }}" class="nav-link"><i
-                class="fa-brands fa-bluesky"></i> <span class="d-none d-md-inline">@{{ event.bluesky }}</span></a>
+    {% if bluesky %}
+        <li class="nav-item"><a href="https://bsky.app/profile/{{ bluesky }}" target="_blank" title="@{{ bluesky }}" class="nav-link"><i
+                class="fa-brands fa-bluesky"></i> <span class="d-none d-md-inline">@{{ bluesky }}</span></a>
         </li>{% endif %}
     {% if twitter %}
         <li class="nav-item"><a href="https://twitter.com/{{ twitter }}" target="_blank" title="@{{ twitter }}" class="nav-link"><i
