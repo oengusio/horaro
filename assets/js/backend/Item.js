@@ -1,0 +1,181 @@
+import { ref, watch } from 'vue';
+
+/**
+ * WARNING: this shit is reactive
+ */
+export default class Item {
+  id = ref(-1);
+  length = ref(0);
+  scheduled = ref(0); // will be set by ViewModel.calculateSchedule()
+  dateSwitch = ref(false); // will be set by ViewModel.calculateSchedule()
+  setupTime = ref(0); // will be set by ViewModel.calculateSchedule()
+
+  position = ref(0);
+  busy = ref(false);
+  errors = ref(false);
+  suspended = false;
+  nextFocus = false;
+
+  /**
+   *
+   * @param id
+   * @param length
+   * @param columns
+   * @param pos
+   */
+  constructor(id, length, columns, pos) {
+    this.id.value = id;
+    this.length.value = length;
+
+    scheduleColumns.forEach(({ id: colId }) => {
+      const name = `col_${colId}`;
+      let value = '';
+
+      if (columns.hasOwnProperty(colId)) {
+        value = columns[colId];
+      }
+
+      // TODO: make this less cursed :D
+      this[name] = ref(value);
+
+      // and make sure to watch for changes
+      watch(this[name], async (newValue) => {
+        await this.save({
+          columns: {
+            [colId]: newValue,
+          },
+        });
+
+        // When they've edited the options there's a big chance the setup-time was updated.
+        // Recalc the schedule in that case.
+        if (colId === window.optionsColumnId) {
+          // TODO: use pos - 1?
+          viewModel.calculateSchedule(0);
+        }
+      });
+    });
+
+    this.position.value = pos;
+
+    watch(this.id, (newValue, oldValue) => {
+      console.log(`ID UPDATED (is ${newValue}, was ${oldValue})`);
+    });
+
+    watch(this.length, (newValue) => {
+      this.save({ length: newValue });
+      viewModel.calculateSchedule(0);
+    });
+  }
+
+  move(direction) {
+    const newPos = this.position.value + (direction === 'up' ? -1 : 1);
+
+    viewModel.move(this.id.value, newPos);
+  }
+
+  async deleteItem() {
+    if (this.suspended) {
+      return;
+    }
+
+    const data = {
+      [csrfTokenName]: csrfToken,
+    };
+
+    this.busy.value = true;
+
+    try {
+      await fetch(
+        `/-/schedules/${scheduleId}/items/${this.id.value}?_method=DELETE`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify(data),
+        },
+      );
+
+      viewModel.remove(this);
+    } finally {
+      this.busy.value = false;
+    }
+  }
+
+  // Old method name "sync"
+  async save(patch) {
+    if (this.suspended) {
+      return;
+    }
+
+    const itemId = this.id.value;
+    const isNew = itemId === -1;
+    let url = '';
+
+    if (isNew) {
+      url = `/-/schedules/${scheduleId}/items`;
+
+      patch = {
+        length: this.length.value,
+        columns: {},
+      };
+
+      scheduleColumns.forEach(({ id: colId }) => {
+        const name = `col_${colId}`;
+
+        patch.columns[name] = this[name].value;
+      });
+    } else {
+      url = `/-/schedules/${scheduleId}/items/${itemId}?_method=PATCH`;
+    }
+
+    this.busy.value = true;
+
+    patch[csrfTokenName] = csrfToken;
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify(patch),
+      });
+      const jsonData = await response.json();
+
+      // TODO: proper status code validation, this will do for now
+      if (response.status > 299) {
+        this.errors.value = jsonData.detail;
+        return;
+      }
+
+      const { data } = jsonData;
+
+      this.suspended = true;
+      this.id.value = data.id;
+      this.length.value = data.length;
+      this.errors.value = false;
+
+      scheduleColumns.forEach(({ id: colId }) => {
+        const name = `col_${colId}`;
+
+        this[name].value = colId in data.columns ? data.columns[colId] : '';
+      });
+
+      this.suspended = false;
+
+      if (this.nextFocus) {
+        $('#h-add-model').focus();
+        this.nextFocus = false;
+      }
+
+    } catch (error) {
+      console.log(error);
+      this.errors.value = error;
+    } finally {
+      this.busy.value = false;
+    }
+  }
+}

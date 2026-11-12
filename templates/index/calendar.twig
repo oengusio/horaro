@@ -13,9 +13,9 @@
 		<nav class="h-calendar-nav text-center">{% apply spaceless %}
 			<span>
 				{% if prevMonth.format('Y') < minYear %}
-					<span class="btn btn-link btn-xs disabled"><i class="fa-solid fa-ban"></i></span>
+					<span class="btn btn-link btn-sm disabled"><i class="fa-solid fa-ban"></i></span>
 				{% else %}
-					<a href="/-/calendar/{{ prevMonth.format('Y/m') }}" class="btn btn-link btn-xs"><i class="fa-solid fa-backward"></i></a>
+					<a href="/-/calendar/{{ prevMonth.format('Y/m') }}" class="btn btn-link btn-sm"><i class="fa-solid fa-backward"></i></a>
 				{% endif %}
 
 				<select name="month" id="month" class="form-control">
@@ -26,17 +26,17 @@
 				</select>
 
 				{% if nextMonth.format('Y') > maxYear %}
-					<span class="btn btn-link btn-xs disabled"><i class="fa-solid fa-ban"></i></span>
+					<span class="btn btn-link btn-sm disabled"><i class="fa-solid fa-ban"></i></span>
 				{% else %}
-					<a href="/-/calendar/{{ nextMonth.format('Y/m') }}" class="btn btn-link btn-xs"><i class="fa-solid fa-forward"></i></a>
+					<a href="/-/calendar/{{ nextMonth.format('Y/m') }}" class="btn btn-link btn-sm"><i class="fa-solid fa-forward"></i></a>
 				{% endif %}
 			</span>
 
 			<span>
 				{% if prevYear.format('Y') < minYear %}
-					<span class="btn btn-link btn-xs disabled"><i class="fa-solid fa-ban"></i></span>
+					<span class="btn btn-link btn-sm disabled"><i class="fa-solid fa-ban"></i></span>
 				{% else %}
-					<a href="/-/calendar/{{ prevYear.format('Y/m') }}" class="btn btn-link btn-xs"><i class="fa-solid fa-backward"></i></a>
+					<a href="/-/calendar/{{ prevYear.format('Y/m') }}" class="btn btn-link btn-sm"><i class="fa-solid fa-backward"></i></a>
 				{% endif %}
 
 				<select name="month" id="month" class="form-control">
@@ -48,14 +48,14 @@
 				</select>
 
 				{% if nextYear.format('Y') > maxYear %}
-					<span class="btn btn-link btn-xs disabled"><i class="fa-solid fa-ban"></i></span>
+					<span class="btn btn-link btn-sm disabled"><i class="fa-solid fa-ban"></i></span>
 				{% else %}
-					<a href="/-/calendar/{{ nextYear.format('Y/m') }}" class="btn btn-link btn-xs"><i class="fa-solid fa-forward"></i></a>
+					<a href="/-/calendar/{{ nextYear.format('Y/m') }}" class="btn btn-link btn-sm"><i class="fa-solid fa-forward"></i></a>
 				{% endif %}
 			</span>
 		{% endapply %}</nav>
 
-		<div class="hidden-xs">
+		<div class="d-none d-sm-block">
 			<table class="h-calendar res-month">
 				<thead>{% apply spaceless %}
 					<tr>
@@ -95,7 +95,7 @@
 			</table>
 		</div>
 
-		<div class="visible-xs">
+		<div class="d-block d-sm-none">
 			<table class="h-calendar-vertical res-month">{% apply spaceless %}
 			{% for week in month.weeks %}
 				<tbody class="week">

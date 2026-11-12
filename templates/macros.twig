@@ -1,11 +1,11 @@
 {% macro form_errors(result, field) %}
 {#<h1>FORM ERRORS MACRO IS STILL USED, PLEASE REMOVE</h1>#}
 {% if result and result[field] is defined and result[field].errors and result[field].messages %}
-<span class="help-block"><strong>
+<small class="form-text text-muted"><strong>
 	{% for message in result[field].messages %}
 		{{ message }}<br>
 	{% endfor %}
-</strong></span>
+</strong></small>
 {% endif %}
 {% endmacro %}
 
@@ -40,7 +40,7 @@
 {% endmacro %}
 
 {% macro back_button() %}
-<button class="h-back-btn btn btn-default btn-sm"><i class="fa-solid fa-arrow-left"></i> Go Back</button>
+<button class="h-back-btn btn btn-secondary btn-sm"><i class="fa-solid fa-arrow-left"></i> Go Back</button>
 {% endmacro %}
 
 {% macro backend_date(date) %}

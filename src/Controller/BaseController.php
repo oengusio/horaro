@@ -82,6 +82,7 @@ abstract class BaseController extends AbstractController
     }
 
     protected function exceedsMaxScheduleColumns(Schedule $s): bool {
+//        dd($s->getId(), $this->entityManager->getRepository(ScheduleColumn::class)->count(['schedule' => $s, 'hidden' => false]));
         return $this->entityManager->getRepository(ScheduleColumn::class)->count(['schedule' => $s, 'hidden' => false]) >= 10;
     }
 

@@ -1163,11 +1163,15 @@ tbody tr:last-child .h-cal-cell:last-child {
   display: none
 }
 
-.h-ticker .panel-heading, .h-ticker .panel-body {
-  padding: 6px
+.h-ticker .card-header, .h-ticker .card-body {
+  padding: 6px;
 }
 
-.h-ticker .panel {
+.h-ticker .card-title {
+  margin-bottom: 0;
+}
+
+.h-ticker .card {
   margin-bottom: 10px
 }
 
@@ -1218,6 +1222,10 @@ button[disabled] {
   background: #f9f9f9
 }
 
+.h-new-day td {
+  background: transparent !important;
+}
+
 @media screen and (max-width: 991px) {
   body table.h-schedule td, body table.h-schedule th {
     font-size: 12px;
@@ -1229,7 +1237,7 @@ button[disabled] {
     padding: 3px 0
   }
 
-  body table.h-schedule dd {
+  body table.h-schedule dd:not(.h-np) {
     margin-left: 15px
   }
 
@@ -1251,7 +1259,7 @@ button[disabled] {
     width: 200px
   }
 
-  body table.h-schedule dd {
+  body table.h-schedule dd:not(.h-np) {
     margin-left: 220px
   }
 }
@@ -1324,12 +1332,24 @@ button[disabled] {
   background: #353a41
 }
 
+.theme-solar tbody.h-odd td {
+  background: #073c49;
+}
+
+.theme-solar tbody td.bg-success {
+  color: white;
+}
+
+.theme-solar .h-ticker .bg-success .card-title {
+  color: white;
+}
+
 .theme-superhero tbody.h-odd td {
-  background: #4e5d6c
+  background: #4e5d6c;
 }
 
 .theme-superhero .text-muted {
-  color: #8e9dac
+  color: #8e9dac;
 }
 
 .form-group.has-error li {

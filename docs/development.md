@@ -16,3 +16,15 @@
 7. Visit `http://localhost:8000` in your browser
 
 You should now have a working local instance of Horaro. You will be able to log in with "operator" as username and password.
+
+
+## Note on vue controllers
+
+When you add, rename or remove a vue controller you will need to run `php bin/console cache:clear`. Symfony caches known vue components.
+
+## Resizing theme images
+uses imagemagick
+
+```bash
+convert minty.png -resize 300x225^ -gravity north -extent 300x225 minty-small.png
+```

@@ -1,5 +1,7 @@
 <?php
 
+$bootsThemes = require __DIR__ . '/themeGen.php';
+
 /**
  * Returns the importmap for this application.
  *
@@ -16,6 +18,10 @@ return [
         'path' => './assets/app.js',
         'entrypoint' => true,
     ],
+    'backend' => [
+        'path' => './assets/app-backend.js',
+        'entrypoint' => true,
+    ],
     '@symfony/stimulus-bundle' => [
         'path' => './vendor/symfony/stimulus-bundle/assets/dist/loader.js',
     ],
@@ -28,15 +34,56 @@ return [
     '@popperjs/core' => [
         'version' => '2.11.8',
     ],
-    'bootswatch/yeti/bootstrap.min.css' => [
-        'version' => '3.2.0',
-        'type' => 'css',
-    ],
     '@fortawesome/fontawesome-free/js/all.min.js' => [
         'version' => '7.2.0',
     ],
     '@fortawesome/fontawesome-free/css/fontawesome.min.css' => [
         'version' => '7.2.0',
+        'type' => 'css',
+    ],
+    'jquery' => [
+        'version' => '3.6.0',
+    ],
+    'popper.js' => [
+        'version' => '1.16.1',
+    ],
+    'moment' => [
+        'version' => '2.30.1',
+    ],
+    'remarkable' => [
+        'version' => '2.0.1',
+    ],
+    'vue' => [
+        'version' => '3.5.41',
+        'package_specifier' => 'vue/dist/vue.esm-bundler.js',
+    ],
+    '@vue/runtime-dom' => [
+        'version' => '3.5.41',
+    ],
+    '@vue/compiler-dom' => [
+        'version' => '3.5.41',
+    ],
+    '@vue/shared' => [
+        'version' => '3.5.41',
+    ],
+    '@vue/runtime-core' => [
+        'version' => '3.5.41',
+    ],
+    '@vue/compiler-core' => [
+        'version' => '3.5.41',
+    ],
+    '@vue/reactivity' => [
+        'version' => '3.5.41',
+    ],
+    '@symfony/ux-vue' => [
+        'path' => './vendor/symfony/ux-vue/assets/dist/loader.js',
+    ],
+    ...$bootsThemes,
+    'select2' => [
+        'version' => '4.1.0',
+    ],
+    'select2/dist/css/select2.min.css' => [
+        'version' => '4.1.0',
         'type' => 'css',
     ],
 ];

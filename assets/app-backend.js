@@ -1,0 +1,157 @@
+import { registerVueControllerComponents } from '@symfony/ux-vue';
+// I NEED MOTHER FUCKING STIMULUS FOR VUE TO WORK SYMFONY PLS
+import './bootstrap.js';
+import $ from 'jquery';
+import { initScheduler } from './js/backend/scheduler.js';
+import { mirrorColumnWidths } from './js/utils/itemUtils.js';
+import SpatialNavigation from './js/backend/SpatialNavigation.js';
+import { initColumnist } from './js/backend/columnist.js';
+import './trd_party/pickadate/picker.js';
+import './trd_party/pickadate/picker.date.js';
+import './trd_party/pickadate/picker.time.js';
+import 'select2';
+import initSelect2 from 'select2';
+import moment from 'moment';
+
+initSelect2($);
+
+window.csrfToken = $('meta[name="csrf_token"]').attr('content');
+window.csrfTokenName = $('meta[name="csrf_token_name"]').attr('content');
+
+console.log('Backend scripts loaded');
+
+registerVueControllerComponents();
+
+let dataNode;
+
+const ui = document.body.dataset.ui;
+
+function resizeColumns() {
+  mirrorColumnWidths(dataNode, $('tr:first > *', dataNode.prev()));
+}
+
+function openNextEditor(currentId) {
+  const current = $(`#h-e-${currentId}`);
+  const root = current.closest('table');
+  const links = root.find('a.editable-click:visible');
+  const selfIdx = links.index(current);
+  const next = (selfIdx < (links.length - 1)) ? $(links[selfIdx + 1]) : $('#h-add-model');
+
+  if (next.is('.editable-click')) {
+    next[0].click();
+  } else {
+    next.focus();
+
+    // in case this saving triggers an ajax call to create the element,
+    // the add button is still disabled right now. We set a flag to let
+    // the success handler of the create call do the focussing.
+    // TODO: self.nextFocus = true; (doesn't actually seem needed?)
+  }
+}
+
+window.addEventListener('editorCanceled', (e) => {
+  const current = $(`#h-e-${e.detail.id}`);
+
+  current.focus();
+});
+
+if (ui) {
+  if (ui === 'scheduler') {
+    initScheduler();
+
+    window.addEventListener('ui-ready', () => {
+      dataNode = $('.h-scheduler');
+      resizeColumns();
+    }, { once: true });
+
+    window.addEventListener('editorSaved', (e) => {
+      setTimeout(() => {
+        resizeColumns();
+        openNextEditor(e.detail.id);
+      }, 100);
+    });
+
+    window.addEventListener('resize', () => {
+      resizeColumns();
+    });
+  } else if (ui === 'columnist') {
+    initColumnist();
+
+    window.addEventListener('ui-ready', () => {
+      dataNode = $('.h-columnist');
+    }, { once: true });
+
+    window.addEventListener('editorSaved', (e) => {
+      setTimeout(() => {
+        resizeColumns();
+        openNextEditor(e.detail.id);
+      }, 100);
+    });
+  }
+
+  // wait for vue
+  window.addEventListener('ui-ready', () => {
+    window.viewModel.initDragAndDrop();
+
+    new SpatialNavigation(dataNode);
+  }, { once: true });
+}
+
+const defaultGrowlOpt = {
+  type: 'info',
+  placement: { from: 'top', align: 'center' },
+  offset: 26,
+  width: 350,
+  delay: 3000,
+  spacing: 5,
+  animate: { enter: '', exit: '' },
+};
+
+function growl(msg, growlOpt = {}) {
+  $.notify({ message: msg }, Object.assign({}, defaultGrowlOpt, growlOpt));
+}
+
+// const horaroTimeFormat = "H:i a";
+
+document.addEventListener('DOMContentLoaded', () => {
+  $('#start_date').pickadate({
+    formatSubmit: 'yyyy-mm-dd',
+    hiddenName: true,
+  });
+
+  $('#start_time').pickatime({
+    interval: 15,
+    formatSubmit: 'HH:i',
+    format: horaroTimeFormat,
+    formatLabel: horaroTimeFormat,
+    hiddenName: true,
+  });
+
+  $('body').on('click', '.h-back-btn', function () {
+    history.back();
+    return false;
+  });
+
+  $('select.h-fancy').select2();
+
+  $('form.h-confirmation').on('submit', function () {
+    return confirm($(this).data('confirmation') || 'Are you sure?');
+  });
+
+  $('time.h-fancy').each(function () {
+    // do not convert into the user's timezone, but leave the given one
+    // (i.e. the schedule's timezone)
+    $(this).text(moment.parseZone($(this).attr('datetime')).format('llll'));
+  });
+
+  const flashesSel = $('#h-flashes');
+
+  if (flashesSel.length > 0) {
+		const flashes = JSON.parse(flashesSel.text());
+
+		for (const flashType in flashes) {
+			flashes[flashType].forEach((msg) => growl(msg, { type: flashType }));
+		}
+	}
+
+}, { once: true });

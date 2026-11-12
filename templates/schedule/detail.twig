@@ -8,33 +8,35 @@
 {% block body_attr %} class="theme-horaro" data-ui="scheduler"{% endblock %}
 
 {% block content %}
-<ul class="breadcrumb h-jail">
-	<li><a href="/-/home">Home</a></li>
-	<li><a href="/-/events/{{ schedule.event.id|obscurify('event') }}">{{ schedule.event.name|shorten(45) }}</a></li>
-	<li>{{ schedule.name|shorten(45) }}</li>
-</ul>
+<nav aria-label="breadcrumb">
+<ol class="breadcrumb h-jail">
+	<li class="breadcrumb-item"><a href="/-/home">Home</a></li>
+	<li class="breadcrumb-item"><a href="/-/events/{{ schedule.event.id|obscurify('event') }}">{{ schedule.event.name|shorten(45) }}</a></li>
+	<li class="breadcrumb-item active">{{ schedule.name|shorten(45) }}</li>
+</ol>
+</nav>
 
 <div class="row h-scheduler-header">
-	<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+	<div class="col-lg-8 col-md-8 col-sm-8 col-8">
 		<h2 class="h-jail"><a href="{{ schedule.link }}" target="_blank">{{ schedule.name|shorten(45) }}</a> <sup><small><i class="fa-solid fa-arrow-up-right-from-square"></i></small></sup></h2>
 	</div>
 
-	<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-		<div class="btn-group pull-right">
+	<div class="col-lg-4 col-md-4 col-sm-4 col-4">
+		<div class="btn-group float-right dropleft">
 			<button type="button" class="btn dropdown-toggle btn-sm" data-toggle="dropdown">
-				<i class="fa-solid fa-gear"></i> Actions <span class="caret"></span>
+				<i class="fa-solid fa-gear"></i> Actions
 			</button>
-			<ul class="dropdown-menu" role="menu">
-				<li><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/edit"><i class="fa-regular fa-calendar-days"></i> Edit schedule…</a></li>
-				<li><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/columns/edit"><i class="fa-solid fa-table-columns"></i> Edit columns…</a></li>
-				<li class="divider"></li>
-				<li><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/export?format=json"><i class="fa-solid fa-floppy-disk"></i> Export as JSON</a></li>
-				<li><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/export?format=xml"><i class="fa-solid fa-floppy-disk"></i> Export as XML</a></li>
-				<li><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/export?format=ical"><i class="fa-solid fa-floppy-disk"></i> Export as iCal</a></li>
-				<li><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/export?format=csv"><i class="fa-solid fa-floppy-disk"></i> Export as CSV</a></li>
-				<li class="divider"></li>
-				<li><a href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/import"><i class="fa-solid fa-upload"></i> Import…</a></li>
-			</ul>
+			<div class="dropdown-menu" role="menu">
+				<a class="dropdown-item" href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/edit"><i class="fa-regular fa-calendar-days"></i> Edit schedule…</a>
+				<a class="dropdown-item" href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/columns/edit"><i class="fa-solid fa-table-columns"></i> Edit columns…</a>
+				<div class="dropdown-divider"></div>
+				<a class="dropdown-item" href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/export?format=json"><i class="fa-solid fa-floppy-disk"></i> Export as JSON</a>
+				<a class="dropdown-item" href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/export?format=xml"><i class="fa-solid fa-floppy-disk"></i> Export as XML</a>
+				<a class="dropdown-item" href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/export?format=ical"><i class="fa-solid fa-floppy-disk"></i> Export as iCal</a>
+				<a class="dropdown-item" href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/export?format=csv"><i class="fa-solid fa-floppy-disk"></i> Export as CSV</a>
+				<div class="dropdown-divider"></div>
+				<a class="dropdown-item" href="/-/schedules/{{ schedule.id|obscurify('schedule') }}/import"><i class="fa-solid fa-upload"></i> Import…</a>
+			</div>
 		</div>
 	</div>
 </div>
@@ -51,82 +53,50 @@
 			Click on an item to edit its details. Use the buttons on the right to move rows up and down or delete them entirely.<br>
 			You can use basic Markdown (<strong>**bold**</strong>, <em>*italic*</em>, [link name](http://example.com/)) for formatting.
 			{% if schedule.setupTime %}
-			<br>Note: The <strong>{{ utils.readableTime(schedule.setupTime) }} setup time</strong> in between all rows is added automatically.
+			<br>Note: The <strong>{{ utils.readableTime(schedule.setupTime) }} setup time</strong> in between all rows is added automatically to rows that do not have a custom setup time.
 			{% endif %}
 		</small></p>
 	</div>
 </div>
 
-<div class="row" id="h-scheduler-loading">
-	<div class="col-lg-12">
-		<div class="spinner">
-			<div class="bounce1"></div>
-			<div class="bounce2"></div>
-			<div class="bounce3"></div>
-		</div>
-	</div>
-</div>
+{# TODO: find a better way of injecting columns #}
+<script>
+window.scheduleColumns = [
+{% for idx,column in schedule.columns|slice(0,10) %}
+    {name: {{ column.name|json_encode|raw }}, id: {{ column.id|obscurify('schedule.column')|json_encode|raw }}},
+{% endfor %}
+];
 
-<div id="h-scheduler-container">
-	<table class="table h-l{{ numCols }}">
-		<thead>
-			<tr>
-				<th class="h-s">{{ schedule.text('col-scheduled')|default('Scheduled') }}</th>
-				<th class="h-l">{{ schedule.text('col-estimate')|default('Estimate') }}</th>
-				{% for idx,column in schedule.columns|slice(0,10) %}
-				<th class="h-{{ idx }}">{{ column.name }}</th>
-				{% endfor %}
-				<th class="h-co">&nbsp;</th>
-			</tr>
-		</thead>
-	</table>
+// Welcome to the dirtiest hacks, today we will just say fuck it because the application does not have access to the column names
+window.optionsColumnId = '{{ optionsColumnId }}';
+window.scheduleId = '{{ schedule.id|obscurify('schedule') }}';
+window.scheduleStart = new Date('{{ start.format('Y-m-d\\TH:i:sP') }}');
+window.scheduleSetupTime = {{ schedule.setupTimeInSeconds }};
+window.scheduleTZ = '{{ start.format('P') }}';
+window.maxItems = {{ maxItems }};
 
-	<table
-		class="table h-scheduler h-l{{ numCols }}"
-		data-id="{{ schedule.id|obscurify('schedule') }}"
-		data-start="{{ start.format('Y-m-d\\TH:i:sP') }}"
-		data-setuptime="{{ schedule.setupTimeInSeconds }}"
-		data-tz="{{ start.format('P') }}"
-		data-columns="{{ columns|join(',') }}"
-		data-maxitems="{{ maxItems }}"
-	>
-		<!-- ko foreach: items -->
-		{% include 'schedule/item.twig' with {'schedule': schedule, 'items': schedule.items, 'columns': schedule.columns, 'numCols' : numCols} %}
-		<!-- /ko -->
+window.itemData = {{ items|json_encode|raw }};
+</script>
 
-		<!-- ko if: items().length === 0 -->
-		<tbody>
-			<tr>
-				<td colspan="{{ numCols + 4 }}" class="text-center active">
-					Click on the button below to create the first row in this schedule.
-				</td>
-			</tr>
-		</tbody>
-		<!-- /ko -->
-	</table>
+<div {{ vue_component('HoraroInputPopover') }}></div>
 
-	<!-- ko if: hasNewItem() || isFull() -->
-	<div class="row">
-		<div class="col-lg-2 col-lg-offset-5 col-md-2 col-md-offset-5 col-sm-4 col-sm-offset-4 col-xs-4 col-xs-offset-4 text-center">
-			<a href="#" id="h-add-model" class="btn btn-success btn-block btn-sm disabled"><i class="fa-solid fa-plus"></i> add row</a>
-		</div>
-	</div>
-	<!-- /ko -->
-
-	<!-- ko if: !hasNewItem() && !isFull() -->
-	<div class="row">
-		<div class="col-lg-2 col-lg-offset-5 col-md-2 col-md-offset-5 col-sm-4 col-sm-offset-4 col-xs-4 col-xs-offset-4 text-center">
-			<a href="#" id="h-add-model" data-bind="click: add, activate: add" class="btn btn-success btn-block btn-sm"><i class="fa-solid fa-plus"></i> add row</a>
-		</div>
-	</div>
-	<!-- /ko -->
+<div {{ vue_component('SchedulerContainer', {
+    'numCols': numCols,
+    'scheduledText': schedule.text('col-scheduled')|default('Scheduled'),
+    'estimateText': schedule.text('col-estimate')|default('Estimate'),
+}) }}>
+    <div class="row" id="h-scheduler-loading">
+        <div class="col-lg-12">
+            <div class="spinner">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
-    // Welcome to the dirtiest hacks, today we will just say fuck it because the application does not have access to the column names
-    window.optionsColumnId = {{ optionsColumnId|json_encode|raw }};
-</script>
-<script type="application/json" id="h-item-data">
-{{ items|json_encode|raw }}
+
 </script>
 {% endblock %}
