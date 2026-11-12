@@ -21,9 +21,8 @@
 
 {% block styles %}
     <link href="{{ asset('vendor/bootswatch/dist/' ~ theme ~ '/bootstrap.min.css') }}" rel="stylesheet" />
-    <link href="{{ asset('styles/theme/' ~ theme ~ '-fixes.css') }}" rel="stylesheet" />
-    <link rel="stylesheet" href="{{ macros.asset('vendor/@fortawesome/fontawesome-free/css/fontawesome.min.css') }}"/>
-	<link href="{{ asset('styles/app-frontend.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ macros.asset('vendor/@fortawesome/fontawesome-free/css/fontawesome.min.css') }}" />
+	<link href="{{ asset('styles/app-frontend.css') }}" rel="stylesheet" />
 {% endblock %}
 
 {% block navheader %}

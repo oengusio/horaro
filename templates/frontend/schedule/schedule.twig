@@ -27,7 +27,6 @@
 
 {% block styles %}
     <link href="{{ asset('vendor/bootswatch/dist/' ~ theme ~ '/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('styles/theme/' ~ theme ~ '-fixes.css') }}" rel="stylesheet" />
     <link rel="stylesheet" href="{{ macros.asset('vendor/@fortawesome/fontawesome-free/css/fontawesome.min.css') }}"/>
     <link href="{{ asset('styles/app-frontend.css') }}" rel="stylesheet">
 {% endblock %}
@@ -219,7 +218,7 @@
     {% if numCols > 1 %}
         <script type="text/html" id="toggler">
             <div class="text-right h-l{{ schedule.getMaxItemWidth(columns) }}">
-                <button class="btn-link btn-sm btn-secondary h-co" id="h-toggle-usability"><i class="fa-solid fa-table"></i>
+                <button class="btn btn-sm btn-secondary h-co" id="h-toggle-usability"><i class="fa-solid fa-table"></i>
                     Toggle full view
                 </button>
             </div>
@@ -240,8 +239,8 @@
                         <dt class="h-e-l">{{ schedule.text('col-estimate')|default('Estimate') }}:</dt>
                         <dd class="h-e-l">&nbsp;</dd>
                         {% for idx,column in columns.slice(1) %}
-                            <dt class="h-e-{{ idx }}">{{ column.name }}:</dt>
-                            <dd class="h-e-{{ idx }}">&nbsp;</dd>
+                            <dt class="h-e-{{ idx }} col-2 h-np">{{ column.name }}:</dt>
+                            <dd class="h-e-{{ idx }} col-10 h-np">&nbsp;</dd>
                         {% endfor %}
                     </dl>
                 </td>
