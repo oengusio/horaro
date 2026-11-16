@@ -27,7 +27,7 @@ readonly class EventObscureIdValueResolver implements ValueResolverInterface
     public function resolve(Request $request, ArgumentMetadata $argument): array
     {
         [$options] = $argument->getAttributes(ValueResolver::class, ArgumentMetadata::IS_INSTANCEOF);
-        $eventId = $request->get($options->resolver);
+        $eventId = $request->attributes->get($options->resolver);
 
         $decoded = $this->obscurityCodec->decode($eventId, 'event');
 

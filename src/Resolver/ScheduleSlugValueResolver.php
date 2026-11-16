@@ -33,7 +33,7 @@ readonly class ScheduleSlugValueResolver implements ValueResolverInterface
         [$options] = $argument->getAttributes(ValueResolver::class, ArgumentMetadata::IS_INSTANCEOF);
 
         $eventSlug = $request->attributes->get('eventSlug');
-        $scheduleSlug = $request->get($options->resolver);
+        $scheduleSlug = $request->attributes->get($options->resolver);
         $origSlug = $scheduleSlug;
         $scheduleSlug = mb_strtolower($scheduleSlug);
 
