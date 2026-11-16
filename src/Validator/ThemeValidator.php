@@ -6,7 +6,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-use function key_exists;
+use function array_key_exists;
 
 final class ThemeValidator extends ConstraintValidator
 {
