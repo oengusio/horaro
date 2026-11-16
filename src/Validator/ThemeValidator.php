@@ -22,7 +22,7 @@ final class ThemeValidator extends ConstraintValidator
 
         $themes = $this->params->get('horaro.themes');
 
-        if (!key_exists($value, $themes)) {
+        if (!array_key_exists($value, $themes)) {
             $this->context->buildViolation($constraint->message)
                           ->setParameter('{{ value }}', $value)
                           ->addViolation();

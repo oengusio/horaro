@@ -266,7 +266,7 @@ final class ScheduleColumnController extends BaseController
         $schedRepo = $this->scheduleRepository;
         $colRepo = $this->columnRepository;
 
-        $this->entityManager->wrapInTransaction(static function (EntityManagerInterface $em) use ($schedule, $column, $schedRepo, $colRepo) {
+        $this->entityManager->wrapInTransaction(static function (EntityManagerInterface $em) use ($schedule, $column, $schedRepo, $colRepo): void {
             $schedRepo->transientLock($schedule);
 
             $columnId = $column->getId();

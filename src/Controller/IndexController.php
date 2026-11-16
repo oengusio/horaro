@@ -406,7 +406,7 @@ final class IndexController extends BaseController
 
         shuffle($colorsNeverUsed);
 
-        foreach ($stacks as $day => &$stack) {
+        foreach ($stacks as &$stack) {
             $colorsAvailable = $colors;
 
             shuffle($colorsAvailable);
@@ -450,7 +450,7 @@ final class IndexController extends BaseController
 
         // fill in gaps with filler elements
 
-        foreach ($stacks as $day => &$stack) {
+        foreach ($stacks as &$stack) {
             $fill = false;
 
             for ($i = $height - 1; $i >= 0; --$i) {

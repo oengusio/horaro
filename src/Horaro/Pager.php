@@ -233,7 +233,7 @@ class Pager
         $links  = $this->getRawLinks($getParams, $pageParamName, $filename, $specialSymbols);
         $result = "\n<$tag class=\"pagination\">";
 
-        foreach ($links as $idx => $data) {
+        foreach ($links as $data) {
             foreach ($data['attributes'] as $name => $value) {
                 if ($name == 'class' && $value == 'first') unset($data['attributes'][$name]);
                 else $data['attributes'][$name] = $name.'="'.$value.'"';

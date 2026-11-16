@@ -192,7 +192,7 @@ final class ScheduleItemController extends BaseController
         $schedRepo = $this->scheduleRepository;
         $itemRepo = $this->scheduleItemRepository;
 
-        $this->entityManager->wrapInTransaction(static function (EntityManagerInterface $em) use ($schedule, $scheduleItem, $schedRepo, $itemRepo) {
+        $this->entityManager->wrapInTransaction(static function (EntityManagerInterface $em) use ($schedule, $scheduleItem, $schedRepo, $itemRepo): void {
             $schedRepo->transientLock($schedule);
 
             // TODO: do we need to refetch for info about the item's actual current position?
