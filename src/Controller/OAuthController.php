@@ -190,13 +190,9 @@ final class OAuthController extends BaseController
 
         switch ($providerName) {
             case 'twitch':
-            {
-                return new TwitchHelixOAuthProvider($params);
-            }
+            return new TwitchHelixOAuthProvider($params);
             default:
-            {
-                throw new \Exception('Invalid provider "'.$providerName.'" configured.');
-            }
+            throw new \Exception('Invalid provider "'.$providerName.'" configured.');
         }
     }
 }

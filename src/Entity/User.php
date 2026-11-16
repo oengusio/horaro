@@ -42,7 +42,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $twitch_oauth = null;
 
     #[ORM\Column(type: Types::DATETIMETZ_MUTABLE)]
-    private ?\DateTimeInterface $created_at = null;
+    private ?\DateTimeInterface $created_at;
 
     #[ORM\Column]
     private ?int $max_events = null;

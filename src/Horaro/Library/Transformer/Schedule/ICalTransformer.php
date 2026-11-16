@@ -10,7 +10,7 @@ class ICalTransformer extends BaseTransformer
 {
     const DATE_FORMAT = 'Ymd\THis\Z';
 
-    private $md = null; // TODO: markdown
+    private $md; // TODO: markdown
 
     function getContentType(): string
     {

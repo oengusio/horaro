@@ -28,7 +28,7 @@ class Optimus implements ObscurityCodec
 
     public function decode(string $hash, ?string $entityType = null): ?int
     {
-        $s = (string) $hash;
+        $s = $hash;
 
         if (!ctype_alnum($s) || strlen($s) !== 18) {
             return null;
