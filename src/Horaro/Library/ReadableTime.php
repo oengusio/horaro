@@ -50,7 +50,7 @@ class ReadableTime
         return \DateTime::createFromFormat('U', $time);
     }
 
-    public function stringify(\DateTime $time) {
+    public function stringify(\DateTime $time): string {
         // do not use format('U') and then decode down, because we often read times
         // from the database, which is read using the system timezone, which is not
         // UTC (at least we don't enforce it).
@@ -92,7 +92,7 @@ class ReadableTime
         return $iso;
     }
 
-    public static function dateTimeToDateInterval(?\DateTime $dt = null) {
+    public static function dateTimeToDateInterval(?\DateTime $dt = null): \DateInterval {
         return new \DateInterval(static::dateTimeToISODuration($dt));
     }
 }

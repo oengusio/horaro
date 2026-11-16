@@ -6,7 +6,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-use function key_exists;
+use function array_key_exists;
 
 final class ThemeValidator extends ConstraintValidator
 {
@@ -22,7 +22,7 @@ final class ThemeValidator extends ConstraintValidator
 
         $themes = $this->params->get('horaro.themes');
 
-        if (!key_exists($value, $themes)) {
+        if (!array_key_exists($value, $themes)) {
             $this->context->buildViolation($constraint->message)
                           ->setParameter('{{ value }}', $value)
                           ->addViolation();

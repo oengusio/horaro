@@ -88,7 +88,7 @@ class ToolsController extends BaseController
         $users = $repo->findInactiveOAuthAccounts();
         $em = $this->entityManager;
 
-        $em->wrapInTransaction(function(EntityManagerInterface $em) use ($users) {
+        $em->wrapInTransaction(function(EntityManagerInterface $em) use ($users): void {
             foreach ($users as $user) {
                 $em->remove($user);
             }

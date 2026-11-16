@@ -25,12 +25,12 @@ class Pager
     private int $pages; ///< int
 
     public function __construct(int $currentPage, int $totalElements, int $perPage = 10, int $maxLinks = 10, int $linksLeftRight = 2, int $linksOnEnds = 2) {
-        $this->currentPage    = abs((int) $currentPage);
-        $this->totalElements  = abs((int) $totalElements);
-        $this->perPage        = abs((int) $perPage);
-        $this->maxLinks       = abs((int) $maxLinks);
-        $this->linksLeftRight = abs((int) $linksLeftRight);
-        $this->linksOnEnd     = abs((int) $linksOnEnds);
+        $this->currentPage    = abs($currentPage);
+        $this->totalElements  = abs($totalElements);
+        $this->perPage        = abs($perPage);
+        $this->maxLinks       = abs($maxLinks);
+        $this->linksLeftRight = abs($linksLeftRight);
+        $this->linksOnEnd     = abs($linksOnEnds);
 
         $this->pages = ceil($this->totalElements / $this->perPage);
 
@@ -233,7 +233,7 @@ class Pager
         $links  = $this->getRawLinks($getParams, $pageParamName, $filename, $specialSymbols);
         $result = "\n<$tag class=\"pagination\">";
 
-        foreach ($links as $idx => $data) {
+        foreach ($links as $data) {
             foreach ($data['attributes'] as $name => $value) {
                 if ($name == 'class' && $value == 'first') unset($data['attributes'][$name]);
                 else $data['attributes'][$name] = $name.'="'.$value.'"';

@@ -70,8 +70,8 @@ final class ScheduleImportController extends BaseController
         }
 
         $filePath = (string) $upload;
-        $ignoreErrors   = !!$request->request->get('ignore');
-        $updateMetadata = !!$request->request->get('metadata');
+        $ignoreErrors   = (bool) $request->request->get('ignore');
+        $updateMetadata = (bool) $request->request->get('metadata');
 
         $importer = match ($fileType) {
             'json' => $jsonImporter,

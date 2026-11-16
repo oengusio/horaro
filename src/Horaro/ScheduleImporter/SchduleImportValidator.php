@@ -77,7 +77,7 @@ class SchduleImportValidator
         return $slug;
     }
 
-    public function validateTimezone($timezone, Event $event, Schedule $ref = null, $throwUp = false) {
+    public function validateTimezone($timezone, Event $event, Schedule $ref = null, $throwUp = false): string {
         $timezone  = trim($timezone);
         $timezones = \DateTimeZone::listIdentifiers();
 

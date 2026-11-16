@@ -28,13 +28,11 @@ class Optimus implements ObscurityCodec
 
     public function decode(string $hash, ?string $entityType = null): ?int
     {
-        $s = (string) $hash;
-
-        if (!ctype_alnum($s) || strlen($s) !== 18) {
+        if (!ctype_alnum($hash) || strlen($hash) !== 18) {
             return null;
         }
 
-        $parts = str_split($s, 2); // [AA, H1, ZY, BB, XW, CC, VU, H20, DD]
+        $parts = str_split($hash, 2); // [AA, H1, ZY, BB, XW, CC, VU, H20, DD]
 
         // check the entity hash
 

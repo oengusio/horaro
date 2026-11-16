@@ -27,7 +27,7 @@ readonly class EventSlugValueResolver implements ValueResolverInterface
     public function resolve(Request $request, ArgumentMetadata $argument): array
     {
         [$options] = $argument->getAttributes(ValueResolver::class, ArgumentMetadata::IS_INSTANCEOF);
-        $eventSlug = $request->get($options->resolver);
+        $eventSlug = $request->attributes->get($options->resolver);
         $eventSlug = mb_strtolower($eventSlug);
 
         if ($eventSlug === '-' || $eventSlug === 'assets') {

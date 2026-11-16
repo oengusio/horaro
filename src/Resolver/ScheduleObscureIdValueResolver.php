@@ -27,7 +27,7 @@ readonly class ScheduleObscureIdValueResolver implements ValueResolverInterface
     public function resolve(Request $request, ArgumentMetadata $argument): array
     {
         [$options] = $argument->getAttributes(ValueResolver::class, ArgumentMetadata::IS_INSTANCEOF);
-        $scheduleId = $request->get($options->resolver);
+        $scheduleId = $request->attributes->get($options->resolver);
 
         $decoded = $this->obscurityCodec->decode($scheduleId, 'schedule');
 
