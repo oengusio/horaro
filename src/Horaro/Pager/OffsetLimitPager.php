@@ -115,7 +115,7 @@ class OffsetLimitPager implements PagerInterface
         ];
     }
 
-    protected function getUrl($offset) {
+    protected function getUrl($offset): string {
         $size    = $this->getPageSize();
         $request = clone $this->request;
         $query   = $request->query;

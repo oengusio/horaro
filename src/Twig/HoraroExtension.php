@@ -20,11 +20,11 @@ class HoraroExtension extends AbstractExtension
         return [
             new TwigFilter(
                 'obscurify',
-                fn (int $id, string $entityType) => $this->obscurify($id, $entityType),
+                fn (int $id, string $entityType): string => $this->obscurify($id, $entityType),
             ),
             new TwigFilter(
                 'shorten',
-                fn (?string $string, int $maxlen) => $this->shorten($string, $maxlen),
+                fn (?string $string, int $maxlen): string => $this->shorten($string, $maxlen),
             ),
         ];
     }

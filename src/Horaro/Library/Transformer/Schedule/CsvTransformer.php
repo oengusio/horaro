@@ -23,7 +23,7 @@ class CsvTransformer extends BaseTransformer
     {
         $rows  = [];
         $cols  = $this->getEffectiveColumns($schedule, $withHiddenColumns);
-        $toCSV = fn ($val) => '"'.addcslashes($val, '"').'"';
+        $toCSV = fn ($val): string => '"'.addcslashes($val, '"').'"';
 
         $header = [$toCSV('Scheduled'), $toCSV('Length')];
 
