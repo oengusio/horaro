@@ -50,7 +50,7 @@
         "symfony/string": "*",
         "symfony/translation": "*",
         "symfony/twig-bundle": "*",
-        "symfony/ux-vue": "^2.36",
+        "symfony/ux-vue": "^3.7",
         "symfony/validator": "*",
         "symfony/web-link": "*",
         "symfony/yaml": "*",
